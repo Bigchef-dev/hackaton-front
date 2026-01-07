@@ -1,34 +1,38 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+import type { PropType } from 'vue';
+import type { CalendarEventType } from '../../utils/types';
 import CalendarEvent from './CalandarEvent.vue';
 
 const props = defineProps({
   events: {
-    type: Array,
+    type: Array as PropType<CalendarEventType[]>,
     required: true,
   },
   weekDays: {
-    type: Array,
+    type: Array as PropType<Date[]>,
     required: true,
   },
   isToday: {
-    type: Function,
+    type: Function as PropType<(date: Date) => boolean>,
     required: true,
   },
 });
 
-const emit = defineEmits(['event-click']);
+const emit = defineEmits<{
+  'event-click': [event: CalendarEventType]
+}>();
 
 // Heures d'affichage (8h - 20h)
 const hours = Array.from({ length: 13 }, (_, i) => i + 8);
 
 // Organiser les événements par jour et par heure
 const eventsByDay = computed(() => {
-  const map = new Map();
+  const map = new Map<string, CalendarEventType[]>();
   
-  props.weekDays.forEach(day => {
+  props.weekDays.forEach((day:Date) => {
     const dayKey = day.toDateString();
-    const dayEvents = props.events.filter(event => {
+    const dayEvents = props.events.filter((event:CalendarEventType) => {
       const eventDate = new Date(event.start);
       return eventDate.toDateString() === dayKey;
     });
@@ -39,15 +43,15 @@ const eventsByDay = computed(() => {
 });
 
 // Formatage des jours
-const formatDayShort = (date) => {
+const formatDayShort = (date: Date): string => {
   return date.toLocaleDateString('fr-FR', { weekday: 'short' })[0].toUpperCase();
 };
 
-const formatDayMedium = (date) => {
+const formatDayMedium = (date: Date): string => {
   return date.toLocaleDateString('fr-FR', { weekday: 'short' }).toUpperCase();
 };
 
-const formatDate = (date) => {
+const formatDate = (date: Date): number => {
   return date.getDate();
 };
 </script>
@@ -70,13 +74,13 @@ const formatDate = (date) => {
       
       <!-- Grille des jours scrollable -->
       <div class="flex-1 overflow-y-auto w-full">
-        <div class="grid w-full week-grid" :style="{ gridTemplateColumns: `repeat(${weekDays.length}, 1fr)` }">
+        <div class="grid w-full week-grid" :style="{ gridTemplateColumns: `repeat(${props.weekDays.length}, 1fr)` }">
           <!-- En-tête des jours sticky en haut -->
-          <template v-for="day in weekDays" :key="`header-${day.toISOString()}`">
+          <template v-for="day in props.weekDays" :key="`header-${day.toISOString()}`">
             <div
               :class="[
                 'border-l border-b border-neutral-200 sticky top-0 z-20 bg-neutral-50 h-16 sm:h-20 flex flex-col items-center justify-center',
-                isToday(day) && 'bg-primary-50'
+                props.isToday(day) && 'bg-primary-50'
               ]"
             >
               <div class="text-xs sm:text-xs font-medium text-neutral-500">
@@ -86,7 +90,7 @@ const formatDate = (date) => {
               <div
                 :class="[
                   'text-sm sm:text-lg font-semibold',
-                  isToday(day) ? 'text-primary-600' : 'text-neutral-900'
+                  props.isToday(day) ? 'text-primary-600' : 'text-neutral-900'
                 ]"
               >
                 {{ formatDate(day) }}
@@ -96,7 +100,7 @@ const formatDate = (date) => {
           
           <!-- Cellules horaires -->
           <template v-for="hour in hours" :key="`cells-${hour}`">
-            <template v-for="day in weekDays" :key="`${day.toISOString()}-${hour}`">
+            <template v-for="day in props.weekDays" :key="`${day.toISOString()}-${hour}`">
               <div
                 class="relative border-l border-b border-neutral-200 p-1 sm:p-2 min-h-[60px] sm:min-h-[80px] hover:bg-neutral-50 transition-colors"
               >

@@ -1,7 +1,8 @@
-<script setup>
-import { ref, computed } from 'vue';
-import { useCalendar } from '../composables/useCalendar';
-import { useModal } from '../composables/useModal';
+<script setup lang="ts">
+import {computed } from 'vue';
+import type { CalendarEventType } from '../../utils/types';
+import { useCalendar } from '../../utils/composabes/calandar/useCalendar';
+import { useModal } from '../../utils/composabes/calandar/useModal';
 import CalendarHeader from './CalandarHeader.vue';
 import CalendarWeekView from './CalandarWeekView.vue';
 import CalendarMonthView from './CalandarMonthView.vue';
@@ -10,7 +11,7 @@ import EventDetailsModal from './EventDetailsModal.vue';
 // Props
 const props = defineProps({
   events: {
-    type: Array,
+    type: Array as () => CalendarEventType[],
     default: () => [],
   },
 });
@@ -48,17 +49,17 @@ const visibleEvents = computed(() => {
 });
 
 // Handlers
-const handleViewChange = (mode) => {
+const handleViewChange = (mode: 'week' | 'month'): void => {
   setViewMode(mode);
 };
 
-const handleNavigate = (direction) => {
+const handleNavigate = (direction: 'today' | 'prev' | 'next'): void => {
   if (direction === 'today') goToToday();
   else if (direction === 'prev') goToPrevious();
   else if (direction === 'next') goToNext();
 };
 
-const handleEventClick = (event) => {
+const handleEventClick = (event: CalendarEventType): void => {
   openModal(event);
 };
 </script>

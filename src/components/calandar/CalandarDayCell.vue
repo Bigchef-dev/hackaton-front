@@ -1,4 +1,5 @@
-<script setup>
+<script setup lang="ts">
+import type { CalendarEventType } from '../../utils/types';
 import CalendarEvent from './CalandarEvent.vue';
 
 const props = defineProps({
@@ -7,7 +8,7 @@ const props = defineProps({
     required: true,
   },
   events: {
-    type: Array,
+    type: Array as () => CalendarEventType[],
     default: () => [],
   },
   isCurrentMonth: {
@@ -20,7 +21,9 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['event-click']);
+const emit = defineEmits<{
+  'event-click': [event: CalendarEventType]
+}>();
 
 // Mobile: afficher 2 événements, Tablette: 3
 const visibleEventsMobile = props.events.slice(0, 2);

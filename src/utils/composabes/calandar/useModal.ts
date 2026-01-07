@@ -1,19 +1,20 @@
 import { ref } from 'vue';
+import type { CalendarEventType } from '../../types';
 
 export interface ModalState {
     isOpen: boolean;
-    modalData: Record<string, any> | null;
+    modalData: CalendarEventType | null;
 }
 
 export function useModal() {
     // State
     const isOpen = ref<boolean>(false);
-    const modalData = ref<Record<string, any> | null>(null);
+    const modalData = ref<CalendarEventType | null>(null);
 
     /**
      * Ouvre le modal avec les données optionnelles
      */
-    const open = (data?: Record<string, any>): void => {
+    const open = (data?: CalendarEventType): void => {
         modalData.value = data || null;
         isOpen.value = true;
     };
@@ -32,7 +33,7 @@ export function useModal() {
     /**
      * Bascule l'état du modal
      */
-    const toggle = (data?: Record<string, any>): void => {
+    const toggle = (data?: CalendarEventType): void => {
         if (isOpen.value) {
             close();
         } else {
@@ -43,11 +44,13 @@ export function useModal() {
     /**
      * Met à jour les données du modal
      */
-    const updateData = (data: Record<string, any>): void => {
-        modalData.value = {
-            ...modalData.value,
-            ...data,
-        };
+    const updateData = (data: Partial<CalendarEventType>): void => {
+        if (modalData.value) {
+            modalData.value = {
+                ...modalData.value,
+                ...data,
+            };
+        }
     };
 
     /**

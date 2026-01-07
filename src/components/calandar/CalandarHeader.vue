@@ -1,5 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+
+type ViewMode = 'week' | 'month';
+type NavigationDirection = 'today' | 'prev' | 'next';
 
 const props = defineProps({
   currentDate: {
@@ -7,15 +10,27 @@ const props = defineProps({
     required: true,
   },
   viewMode: {
-    type: String,
+    type: String as () => ViewMode,
     required: true,
   },
-  weekStart: Date,
-  weekEnd: Date,
-  monthStart: Date,
+  weekStart: {
+    type: Date,
+    required: true,
+  },
+  weekEnd: {
+    type: Date,
+    required: true,
+  },
+  monthStart: {
+    type: Date,
+    required: true,
+  },
 });
 
-const emit = defineEmits(['view-change', 'navigate']);
+const emit = defineEmits<{
+  'view-change': [mode: ViewMode],
+  'navigate': [direction: NavigationDirection]
+}>();
 
 const title = computed(() => {
   if (props.viewMode === 'week') {

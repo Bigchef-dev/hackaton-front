@@ -1,19 +1,28 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+import type { CalendarEventType } from '../../utils/types';
+
+interface TypeConfig {
+  color: string;
+  label: string;
+  short: string;
+}
+
+type Size = 'xs' | 'sm' | 'md';
 
 const props = defineProps({
   event: {
-    type: Object,
+    type: Object as () => CalendarEventType,
     required: true,
   },
   size: {
-    type: String,
+    type: String as () => Size,
     default: 'md', // 'xs' | 'sm' | 'md'
   },
 });
 
 // Mapping des types vers classes de badge
-const typeConfig = {
+const typeConfig: Record<string, TypeConfig> = {
   cours: { color: 'primary', label: 'Cours', short: 'C' },
   td: { color: 'secondary', label: 'TD', short: 'TD' },
   tp: { color: 'warning', label: 'TP', short: 'TP' },
@@ -21,6 +30,9 @@ const typeConfig = {
   projet: { color: 'success', label: 'Projet', short: 'P' },
   conference: { color: 'purple', label: 'Conf', short: 'C' },
   reunion: { color: 'neutral', label: 'Réunion', short: 'R' },
+  training: { color: 'primary', label: 'Entraînement', short: 'T' },
+  match: { color: 'error', label: 'Match', short: 'M' },
+  recovery: { color: 'success', label: 'Récupération', short: 'Rec' },
 };
 
 const config = computed(() => typeConfig[props.event.type] || typeConfig.cours);
@@ -36,7 +48,7 @@ const badgeClass = computed(() => {
 const timeRange = computed(() => {
   const start = new Date(props.event.start);
   const end = new Date(props.event.end);
-  const format = (date) => date.toLocaleTimeString('fr-FR', { 
+  const format = (date: Date): string => date.toLocaleTimeString('fr-FR', { 
     hour: '2-digit', 
     minute: '2-digit' 
   });

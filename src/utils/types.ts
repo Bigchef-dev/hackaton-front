@@ -59,3 +59,14 @@ export interface Club {
     name: string;
     id_sport: number;
 }
+
+export interface CalendarEventType {
+    id: number;
+    title: string;
+    description?: string;
+    start: string; // ISO date string
+    end: string; // ISO date string
+    type: 'training' | 'match' | 'recovery' | 'cours' | 'td' | 'tp' | 'examen' | 'projet' | 'conference' | 'reunion';
+    location?: string;
+    instructor?: string;
+}

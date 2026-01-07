@@ -1,5 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+import type { CalendarEvent } from '../../utils/types';
+
+interface TypeConfig {
+  color: string;
+  label: string;
+  icon: string;
+}
 
 const props = defineProps({
   isOpen: {
@@ -7,15 +14,17 @@ const props = defineProps({
     required: true,
   },
   event: {
-    type: Object,
+    type: Object as () => CalendarEvent | null,
     default: null,
   },
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits<{
+  'close': []
+}>();
 
 // Mapping des types
-const typeConfig = {
+const typeConfig: Record<string, TypeConfig> = {
   cours: { color: 'primary', label: 'Cours', icon: '📚' },
   td: { color: 'secondary', label: 'TD', icon: '✍️' },
   tp: { color: 'warning', label: 'TP', icon: '💻' },
@@ -23,6 +32,9 @@ const typeConfig = {
   projet: { color: 'success', label: 'Projet', icon: '🎯' },
   conference: { color: 'purple', label: 'Conférence', icon: '🎤' },
   reunion: { color: 'neutral', label: 'Réunion', icon: '👥' },
+  training: { color: 'primary', label: 'Entraînement', icon: '💪' },
+  match: { color: 'error', label: 'Match', icon: '⚽' },
+  recovery: { color: 'success', label: 'Récupération', icon: '🏥' },
 };
 
 const config = computed(() => 
@@ -45,7 +57,7 @@ const formattedTime = computed(() => {
   if (!props.event) return '';
   const start = new Date(props.event.start);
   const end = new Date(props.event.end);
-  const format = (date) => date.toLocaleTimeString('fr-FR', { 
+  const format = (date: Date): string => date.toLocaleTimeString('fr-FR', { 
     hour: '2-digit', 
     minute: '2-digit' 
   });
@@ -57,7 +69,7 @@ const duration = computed(() => {
   if (!props.event) return '';
   const start = new Date(props.event.start);
   const end = new Date(props.event.end);
-  const diff = end - start;
+  const diff = end.getTime() - start.getTime();
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   
@@ -67,7 +79,7 @@ const duration = computed(() => {
 });
 
 // Fermeture au clic sur overlay
-const handleOverlayClick = (e) => {
+const handleOverlayClick = (e: MouseEvent): void => {
   if (e.target === e.currentTarget) {
     emit('close');
   }

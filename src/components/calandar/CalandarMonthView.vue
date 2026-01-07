@@ -1,14 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+import type { CalendarEvent } from '../../utils/types';
 import CalendarDayCell from './CalandarDayCell.vue';
 
 const props = defineProps({
   events: {
-    type: Array,
+    type: Array as () => CalendarEvent[],
     required: true,
   },
   monthGrid: {
-    type: Array,
+    type: Array as () => Date[],
     required: true,
   },
   currentMonth: {
@@ -16,20 +17,22 @@ const props = defineProps({
     required: true,
   },
   isSameMonth: {
-    type: Function,
+    type: Function as (date1: Date, date2: Date) => boolean,
     required: true,
   },
   isToday: {
-    type: Function,
+    type: Function as (date: Date) => boolean,
     required: true,
   },
 });
 
-const emit = defineEmits(['event-click']);
+const emit = defineEmits<{
+  'event-click': [event: CalendarEvent]
+}>();
 
 // Organiser les événements par jour
 const eventsByDay = computed(() => {
-  const map = new Map();
+  const map = new Map<string, CalendarEvent[]>();
   
   props.events.forEach(event => {
     const eventDate = new Date(event.start);
@@ -38,7 +41,7 @@ const eventsByDay = computed(() => {
     if (!map.has(dayKey)) {
       map.set(dayKey, []);
     }
-    map.get(dayKey).push(event);
+    map.get(dayKey)!.push(event);
   });
   
   return map;
