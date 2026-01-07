@@ -1,4 +1,3 @@
-
 export interface Session {
     id: number;
     date_session: string;
@@ -23,11 +22,12 @@ export interface UserInfo {
     id: number;
     name: string;
     lastName: string;
-    birthDate: string;
+    birthDate: Date;
     phoneNumber: string;
     adress: string;
-    email: string;
+    email: string; // Validation logic for email format should be implemented in the application layer
     gender: "M" | "F" | "X";
+    
 }
 
 export interface Athlete extends UserInfo {
