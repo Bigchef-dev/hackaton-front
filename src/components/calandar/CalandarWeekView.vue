@@ -23,6 +23,8 @@ const emit = defineEmits<{
   'event-click': [event: CalendarEventType]
 }>();
 
+console.log('Events reçus:', props.events);
+
 // Heures d'affichage (8h - 20h)
 const hours = Array.from({ length: 13 }, (_, i) => i + 8);
 
