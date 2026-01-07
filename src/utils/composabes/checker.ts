@@ -16,6 +16,10 @@ export class CheckerComposable  {
         return !isNaN(date.getTime());
     }
 
+    isLeagueIdValid(leagueId: number | undefined): boolean {
+        return typeof leagueId === 'number' && leagueId > 0;
+    }
+
     isUserInfoValid(userInfo: Partial<UserInfo>): boolean {
         if (userInfo.email && !this.isValidEmail(userInfo.email)) {
             return false;
@@ -60,5 +64,9 @@ export class CheckerComposable  {
             return false;
         }
         return true;
+    }
+
+    isAtheleteValid(athlete: Partial<UserInfo>): boolean {
+        return this.isUserInfoValid(athlete) && this.isUserInfoComplete(athlete) && this.isLeagueIdValid(athlete.id);
     }
 }
