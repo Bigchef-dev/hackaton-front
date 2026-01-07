@@ -1,4 +1,4 @@
-import type { UserInfo } from "../types";
+import type { Session, UserInfo } from "../types";
 
 
 export class CheckerComposable  {
@@ -43,5 +43,22 @@ export class CheckerComposable  {
             return false;
         }
         return requiredFields.every(field => userInfo[field] !== undefined && userInfo[field] !== null);
+    }
+
+
+    isSessionValid(session: Session): boolean {
+        if (typeof session.reccurcivite !== 'number' || session.reccurcivite < 0) {
+            return false;
+        }
+        if (typeof session.duree !== 'number' || session.duree <= 0) {
+            return false;
+        }
+        if (typeof session.id_sport !== 'number' || session.id_sport <= 0) {
+            return false;
+        }
+        if (!this.isValidDate(session.date_session)) {
+            return false;
+        }
+        return true;
     }
 }

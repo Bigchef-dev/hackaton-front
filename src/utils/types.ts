@@ -1,6 +1,6 @@
 export interface Session {
     id: number;
-    date_session: string;
+    date_session: Date;
     reccurcivite: number;
     duree: number;
     id_sport: number;
