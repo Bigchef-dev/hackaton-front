@@ -26,6 +26,24 @@ export class API {
         }
     }
 
+    async put(endpoint: string, data = {}) {
+        try {
+            const response = await axios.put(`${this.baseuri}/${endpoint}`, data);
+            return response.data;
+        } catch (error) {
+            throw new Error(`PUT request failed: ${error}`);
+        }
+    }
+
+    async delete(endpoint: string) {
+        try {
+            const response = await axios.delete(`${this.baseuri}/${endpoint}`);
+            return response.data;
+        } catch (error) {
+            throw new Error(`DELETE request failed: ${error}`);
+        }
+    }
+
 }
 
 export const apiInstance = new API("http://localhost:5000");
