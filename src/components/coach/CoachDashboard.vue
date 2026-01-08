@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CreationTraining from './CreationTraining.vue';
 import CreationCompetition from './CreationCompetition.vue';
-import GestionAthlete from './GestionAthlete.vue';
+import GestionAthlete from './GestionGroupe.vue';
 import CoachStat from './CoachStat.vue';
 
 const router = useRouter();
@@ -163,7 +163,7 @@ const activeAction = ref<Action>(null);
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
             </div>
-            <span class="font-semibold text-gray-800">Gérer les athlètes</span>
+            <span class="font-semibold text-gray-800">Gérer les groupes</span>
           </div>
         </button>
 
