@@ -1,4 +1,4 @@
-import type { Session, UserInfo } from "../types";
+import type { Club, Session, UserInfo } from "../types";
 
 
 export class CheckerComposable  {
@@ -11,11 +11,7 @@ export class CheckerComposable  {
         const phoneRegex = /^\+?[1-9]\d{1,14}$/;
         return phoneRegex.test(phoneNumber);
     }
-    isValidDate(dateString: Date): boolean {
-        const date = new Date(dateString);
-        return !isNaN(date.getTime());
-    }
-
+    
     isLeagueIdValid(leagueId: number | undefined): boolean {
         return typeof leagueId === 'number' && leagueId > 0;
     }
@@ -27,7 +23,7 @@ export class CheckerComposable  {
         if (userInfo.phoneNumber && !this.isValidPhoneNumber(userInfo.phoneNumber)) {
             return false;
         }
-        if (userInfo.birthDate && !this.isValidDate(userInfo.birthDate)) {
+        if (userInfo.birthDate){
             return false;
         }
         return true;
@@ -43,9 +39,9 @@ export class CheckerComposable  {
             "email",
             "gender",
         ];
-        if (!this.isUserInfoValid(userInfo)) {
-            return false;
-        }
+        // if (!this.isUserInfoValid(userInfo)) {
+        //     return false;
+        // }
         return requiredFields.every(field => userInfo[field] !== undefined && userInfo[field] !== null);
     }
 
@@ -60,13 +56,18 @@ export class CheckerComposable  {
         if (typeof session.id_sport !== 'number' || session.id_sport <= 0) {
             return false;
         }
-        if (!this.isValidDate(session.date_session)) {
-            return false;
-        }
+        
         return true;
     }
 
     isAtheleteValid(athlete: Partial<UserInfo>): boolean {
         return this.isUserInfoValid(athlete) && this.isUserInfoComplete(athlete) && this.isLeagueIdValid(athlete.id);
+    }
+
+    isValidClub(club: {name: string}): boolean {
+        if (typeof club.name !== 'string' || club.name.trim() === '') {
+            return false;
+        }
+        return true;
     }
 }

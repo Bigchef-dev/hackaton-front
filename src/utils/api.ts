@@ -3,8 +3,8 @@ import axios from "axios";
 export class API {
     baseuri: string;
 
-    constructor(url="default") {
-    this.baseuri = url;
+    constructor(url = "default") {
+        this.baseuri = url;
 
     }
 
@@ -46,5 +46,5 @@ export class API {
 
 }
 
-export const apiInstance = new API("http://localhost:5000");
+export const apiInstance = new API("http://localhost:3001");
 
