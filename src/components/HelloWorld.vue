@@ -1,0 +1,17 @@
+<script setup lang="ts">
+import AdminDashboard from './AdminDashboard.vue';
+import { ref } from 'vue'
+
+defineProps<{ msg: string }>()
+
+</script>
+
+<template>
+  
+</template>
+
+<style scoped>
+.read-the-docs {
+  color: #888;
+}
+</style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NavigationBar from './components/NavigationBar.vue'
-import { useSidebar } from './utils/composabes/useNavBar'
+import { useSidebar } from './utils/composables/useNavBar'
 import { computed } from 'vue'
 
 const { isSidebarOpen, mobileMenuHeight } = useSidebar()

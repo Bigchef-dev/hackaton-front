@@ -1,4 +1,4 @@
-import type { Club, Session, UserInfo } from "../types";
+import type { Session, UserInfo } from "../types";
 
 
 export class CheckerComposable  {
@@ -35,7 +35,6 @@ export class CheckerComposable  {
             "lastName",
             "birthDate",
             "phoneNumber",
-            "adress",
             "email",
             "gender",
         ];
