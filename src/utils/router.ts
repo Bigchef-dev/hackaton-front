@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import Home from '../components/Home.vue';
+import HomeConnect from '../components/HomeConnect.vue';
 
 import AdminDashboard from '../components/AdminDashboard.vue';
 import Profile from '../components/profile/Profile.vue';
@@ -17,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/',
+    name: 'homeconnect',
+    component: HomeConnect,
   },
   {
     path: '/admin/dashboard',
