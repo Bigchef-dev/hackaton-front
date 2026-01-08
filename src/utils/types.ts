@@ -101,4 +101,30 @@ export interface CalendarEventType {
     type: 'training' | 'match' | 'recovery' | 'cours' | 'td' | 'tp' | 'examen' | 'projet' | 'conference' | 'reunion';
     location?: string;
     instructor?: string;
+// Authentication types*
+}
+export interface LoginCredentials {
+    email: string;
+    password: string;
+}
+
+export interface AdminLoginCredentials {
+    password: string;
+}
+
+export interface AuthToken {
+    token: string;
+    expiresAt?: Date;
+}
+
+export interface LoginResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+}
+
+export interface AuthState {
+    user: UserInfo | null;
+    token: string | null;
+    isAuthenticated: boolean;
 }

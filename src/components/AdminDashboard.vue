@@ -121,18 +121,71 @@
                 </div>
             </div>
         </div>
+
+        <!-- Admin Login Modal -->
+        <div v-if="showAdminModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+                <h2 class="text-2xl font-bold text-white mb-4">Admin Login</h2>
+                
+                <div v-if="adminError" class="bg-red-500/20 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-4">
+                    {{ adminError }}
+                </div>
+                
+                <form @submit.prevent="handleAdminLogin" class="space-y-4">
+                    <div>
+                        <label for="adminPassword" class="block text-gray-300 mb-2 font-semibold">Mot de passe Admin</label>
+                        <input
+                            id="adminPassword"
+                            v-model="adminPassword"
+                            type="password"
+                            placeholder="••••••••"
+                            class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-yellow-500 focus:outline-none"
+                            required
+                        />
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <button
+                            type="submit"
+                            :disabled="isAdminLoading"
+                            class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition disabled:opacity-50"
+                        >
+                            {{ isAdminLoading ? 'Connexion...' : 'Confirmer' }}
+                        </button>
+                        <button
+                            type="button"
+                            @click="closeAdminModal"
+                            class="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+                        >
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import type { Athlete, Club, CreateAthletePayload, CreatePresidentPayload, President, Sport, UserInfo } from '../utils/types';
-import { UserComposable } from '../utils/composabes/user';
-import { ClubComposable } from '../utils/composabes/club';
 import UserFormModal from './UserFormModal.vue';
-import { SportComposable } from '../utils/composabes/sport';
 import ButtonAdd from './ButtonAdd.vue';
 import GenericButton from './GenericButton.vue';
+import { useRouter } from 'vue-router';
+import { useAuth } from '../utils/composables/auth';
+import { ClubComposable } from '../utils/composables/club';
+import { UserComposable } from '../utils/composables/user';
+import { SportComposable } from '../utils/composables/sport';
+
+const router = useRouter();
+const { currentUser, logout, adminLogin } = useAuth();
+
+// Admin login modal state
+const showAdminModal = ref(false);
+const adminPassword = ref('');
+const adminError = ref('');
+const isAdminLoading = ref(false);
 
 /* VISIBILITY */
 const showUsers = ref(true);
@@ -153,6 +206,35 @@ onMounted(async () => {
     clubs.value = await ClubController.getAllClubs();
     sports.value = await SportController.getAllSports();
 });
+
+const handleLogout = () => {
+    logout();
+    router.push('/login');
+};
+
+const handleAdminLogin = async () => {
+    adminError.value = '';
+    isAdminLoading.value = true;
+    
+    try {
+        await adminLogin(adminPassword.value);
+        closeAdminModal();
+    } catch (error) {
+        adminError.value = error instanceof Error ? error.message : 'Échec de l\'authentification admin.';
+    } finally {
+        isAdminLoading.value = false;
+    }
+};
+
+const closeAdminModal = () => {
+    showAdminModal.value = false;
+    adminPassword.value = '';
+    adminError.value = '';
+};
+// Icon components (simplified SVG)
+const Users = {
+    template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`
+};
 
 /* CLUBS */
 
