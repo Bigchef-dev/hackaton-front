@@ -128,3 +128,18 @@ export interface AuthState {
     token: string | null;
     isAuthenticated: boolean;
 }
+
+export interface Measure {
+    id: number;
+    name: string;
+    value: number;
+    unit: string;
+    activityId: number;
+}
+
+export interface TypeMeasure {
+    id: number;
+    name: string;
+    unit: string;
+    activityId: number;
+}

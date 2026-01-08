@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import CreationTraining from './CreationTraining.vue';
 import CreationCompetition from './CreationCompetition.vue';
 import GestionGroupes from './GestionGroupe.vue';
 import CoachStat from './CoachStat.vue';
 import InfosPersoCoach from './InfosPersoCoach.vue';
+import type { CalendarEventType } from '../../utils/types';
+import CalandarContainer from '../calandar/CalandarContainer.vue';
 
 const router = useRouter();
 
@@ -92,6 +94,49 @@ type Action =
 
 const activeAction = ref<Action>(null);
 
+const events = ref<CalendarEventType[]>([]);
+
+onMounted(() => {
+  events.value = [
+    {
+      id: 1,
+      title: 'Entraînement Technique',
+      description: 'Session de travail technique',
+      start: new Date(2026, 0, 10, 10, 0).toISOString(),
+      end: new Date(2026, 0, 10, 12, 0).toISOString(),
+      type: 'training',
+      location: 'Stade Central',
+    },
+    {
+      id: 2,
+      title: 'Match Officiel',
+      description: 'Match contre rival',
+      start: new Date(2026, 0, 12, 15, 0).toISOString(),
+      end: new Date(2026, 0, 12, 17, 0).toISOString(),
+      type: 'match',
+      location: 'Stade Municipal',
+    },
+    {
+      id: 3,
+      title: 'Récupération',
+      description: 'Séance de récupération',
+      start: new Date(2026, 0, 13, 9, 0).toISOString(),
+      end: new Date(2026, 0, 13, 10, 30).toISOString(),
+      type: 'recovery',
+      location: 'Centre de Récupération',
+    },
+    {
+      id: 4,
+      title: 'Préparation Physique',
+      description: 'Renforcement musculaire',
+      start: new Date(2026, 0, 15, 14, 0).toISOString(),
+      end: new Date(2026, 0, 15, 15, 30).toISOString(),
+      type: 'training',
+      location: 'Gymnase',
+    },
+  ];
+});
+
 </script>
 
 <template>
@@ -113,7 +158,14 @@ const activeAction = ref<Action>(null);
       </div>
     </div>
 
+    <!-- Calendrier TODO : link -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Mon Calendrier d'Entraînement</h2>
+      <CalandarContainer :events="events" />
+    </div>
+
     <!-- Actions rapides -->
+    <br/>
     <div class="mb-8">
       <h2 class="text-2xl font-bold text-gray-800 mb-4">Actions rapides</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -164,8 +216,6 @@ const activeAction = ref<Action>(null);
     </div>
 
     <!-- Statistiques des Athlètes -->
-
-    <!-- Calendrier TODO : link -->
 
     <!-- Interface dynamique -->
     <div v-if="activeAction" class="mt-12 bg-white rounded-lg shadow-md p-8">
