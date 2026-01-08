@@ -2,43 +2,27 @@
   <div class="login-container">
     <div class="login-card">
       <h1 class="login-title">Connexion</h1>
-      
+
       <!-- Message d'erreur -->
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
-      
+
       <!-- Formulaire de connexion -->
       <form @submit.prevent="handleLogin" class="login-form">
         <div class="form-group">
           <label for="email">Email</label>
-          <input
-            id="email"
-            v-model="credentials.email"
-            type="email"
-            placeholder="exemple@email.com"
-            required
-            autocomplete="email"
-          />
+          <input id="email" v-model="credentials.email" type="email" placeholder="exemple@email.com" required
+            autocomplete="email" />
         </div>
-        
+
         <div class="form-group">
           <label for="password">Mot de passe</label>
-          <input
-            id="password"
-            v-model="credentials.password"
-            type="password"
-            placeholder="••••••••"
-            required
-            autocomplete="current-password"
-          />
+          <input id="password" v-model="credentials.password" type="password" placeholder="••••••••" required
+            autocomplete="current-password" />
         </div>
-        
-        <button 
-          type="submit" 
-          class="login-button"
-          :disabled="isLoading"
-        >
+
+        <button type="submit" class="login-button" :disabled="isLoading">
           {{ isLoading ? 'Connexion...' : 'Se connecter' }}
         </button>
       </form>
@@ -66,16 +50,16 @@ const isLoading = ref<boolean>(false);
 const handleLogin = async () => {
   errorMessage.value = '';
   isLoading.value = true;
-  
+
   try {
     await login(credentials.value);
-    
+
     // Redirection après connexion réussie
     const redirectPath = (route.query.redirect as string) || '/admin';
     router.push(redirectPath);
   } catch (error) {
-    errorMessage.value = error instanceof Error 
-      ? error.message 
+    errorMessage.value = error instanceof Error
+      ? error.message
       : 'Une erreur est survenue lors de la connexion.';
   } finally {
     isLoading.value = false;
