@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-import HelloWorld from '../components/Home.vue';
+import Home from '../components/Home.vue';
 
 import AdminDashboard from '../components/AdminDashboard.vue';
 import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
@@ -13,8 +13,8 @@ const routes: Array<RouteRecordRaw> = [
 
   {
     path: '/',
-    name: 'dashboard',
-    component: HelloWorld,
+    name: 'home',
+    component: Home,
   },
   {
     path: '/admin/dashboard',
