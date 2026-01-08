@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import CreationAthlete from './CreationAthlete.vue';
+import CreationCoach from './CreationCoach.vue';
 
 const router = useRouter();
 
@@ -153,11 +155,11 @@ const activeAction = ref<Action>(null);
     <div v-if="activeAction" class="mt-12 bg-white rounded-lg shadow-md p-8">
 
       <div v-if="activeAction === 'coach'" class="space-y-6">
-        <CreationTraining />
+        <CreationCoach />
       </div>
 
       <div v-else-if="activeAction === 'athletes'">
-        <GestionAthlete />
+        <CreationAthlete />
       </div>
 
       <div v-else-if="activeAction === 'stats'">
