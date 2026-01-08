@@ -2,8 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HelloWorld from '../components/HelloWorld.vue';
 import Profile from '../components/profile/Profile.vue';
 import Coach from '../components/coach/CoachDashboard.vue';
-
-
+import President from '../components/president/PresidentDashboard.vue';
 
 const routes: Array<RouteRecordRaw> = [
 
@@ -25,7 +24,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Coach',
     component: Coach,
   },
-  
+  {
+    path: '/president',
+    name: 'President',
+    component: President,
+  },
 ];
 
 const router = createRouter({

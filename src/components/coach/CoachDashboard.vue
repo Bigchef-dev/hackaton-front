@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import CreationTraining from './CreationTraining.vue';
+import CreationCompetition from './CreationCompetition.vue';
+import GestionAthlete from './GestionAthlete.vue';
+import CoachStat from './CoachStat.vue';
 
 const router = useRouter();
 
@@ -77,6 +81,16 @@ const coach = ref<Coach>({
     },
   ],
 });
+
+type Action =
+  | 'training'
+  | 'match'
+  | 'athletes'
+  | 'stats'
+  | null;
+
+const activeAction = ref<Action>(null);
+
 </script>
 
 <template>
@@ -98,7 +112,7 @@ const coach = ref<Coach>({
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <p class="text-sm text-gray-600">Nom</p>
-            <p class="text-xl font-semibold text-gray-800">{{ coach.name }}</p>
+            <p class="text-xl font-semibold text-gray-800">{{ coach.name }} {{ coach.lastName }}</p>
           </div>
           <div>
             <p class="text-sm text-gray-600">Sport</p>
@@ -120,7 +134,7 @@ const coach = ref<Coach>({
     <div class="mb-8">
       <h2 class="text-2xl font-bold text-gray-800 mb-4">Actions rapides</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <button class="bg-white hover:bg-blue-50 rounded-lg shadow-md p-6 text-left transition-colors">
+        <button @click="activeAction = 'training'" class="bg-white hover:bg-blue-50 rounded-lg shadow-md p-6 text-left transition-colors">
           <div class="flex items-center gap-3">
             <div class="bg-blue-100 rounded-full p-3">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +145,7 @@ const coach = ref<Coach>({
           </div>
         </button>
 
-        <button class="bg-white hover:bg-green-50 rounded-lg shadow-md p-6 text-left transition-colors">
+        <button @click="activeAction = 'match'" class="bg-white hover:bg-green-50 rounded-lg shadow-md p-6 text-left transition-colors">
           <div class="flex items-center gap-3">
             <div class="bg-green-100 rounded-full p-3">
               <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,7 +156,7 @@ const coach = ref<Coach>({
           </div>
         </button>
 
-        <button class="bg-white hover:bg-purple-50 rounded-lg shadow-md p-6 text-left transition-colors">
+        <button @click="activeAction = 'athletes'" class="bg-white hover:bg-purple-50 rounded-lg shadow-md p-6 text-left transition-colors">
           <div class="flex items-center gap-3">
             <div class="bg-purple-100 rounded-full p-3">
               <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,7 +167,7 @@ const coach = ref<Coach>({
           </div>
         </button>
 
-        <button class="bg-white hover:bg-orange-50 rounded-lg shadow-md p-6 text-left transition-colors">
+        <button @click="activeAction = 'stats'" class="bg-white hover:bg-orange-50 rounded-lg shadow-md p-6 text-left transition-colors">
           <div class="flex items-center gap-3">
             <div class="bg-orange-100 rounded-full p-3">
               <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,12 +183,33 @@ const coach = ref<Coach>({
     <!-- Statistiques des Athlètes -->
 
     <!-- Calendrier TODO : link -->
+
+    <!-- Interface dynamique -->
+    <div v-if="activeAction" class="mt-12 bg-white rounded-lg shadow-md p-8">
+
+      <div v-if="activeAction === 'training'" class="space-y-6">
+        <CreationTraining />
+      </div>
+
+      <div v-else-if="activeAction === 'match'">
+        <CreationCompetition />
+      </div>
+
+      <div v-else-if="activeAction === 'athletes'">
+        <GestionAthlete />
+      </div>
+
+      <div v-else-if="activeAction === 'stats'">
+        <CoachStat />
+      </div>
+
     </div>
+  </div>
   </div>
 </template>
 
 <style scoped>
-.athlete-dashboard {
+.coach-dashboard {
   min-height: 100vh;
 }
 </style>
