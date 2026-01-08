@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { AthleteComposable } from '../../utils/composabes/athlete';
+import { AthleteComposable } from '../../utils/composables/athlete';
 import type { Athlete, League } from '../../utils/types';
-import { LeagueComposable } from '../../utils/composabes/league';
+import { LeagueComposable } from '../../utils/composables/league';
 
 
 const athleteApi = new AthleteComposable();
@@ -14,7 +14,6 @@ const athletes = ref<Athlete[]>([
     lastName: '',
     email: '',
     phoneNumber: '',
-    adress: '',
     birthDate: '',
     gender: 'X',
     type: 'ATHLETE',
@@ -41,7 +40,6 @@ const addAthlete = () => {
     lastName: '',
     email: '',
     phoneNumber: '',
-    adress: '',
     birthDate: '',
     gender: 'X',
     type: 'ATHLETE',
@@ -156,18 +154,6 @@ const submitAthletes = async () => {
               class="w-full border rounded-md p-2"
             />
           </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1">
-            Adresse postale
-          </label>
-          <input
-            type="text"
-            v-model="athlete.adress"
-            class="w-full border rounded-md p-2"
-            placeholder="Ex : 12 rue des Fleurs, 75000 Paris"
-          />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

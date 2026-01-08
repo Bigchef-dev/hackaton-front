@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CreationTraining from './CreationTraining.vue';
 import CreationCompetition from './CreationCompetition.vue';
-import GestionAthlete from './GestionGroupe.vue';
+import GestionGroupes from './GestionGroupe.vue';
 import CoachStat from './CoachStat.vue';
 import InfosPersoCoach from './InfosPersoCoach.vue';
 
@@ -179,7 +179,8 @@ const activeAction = ref<Action>(null);
       </div>
 
       <div v-else-if="activeAction === 'athletes'">
-        <GestionAthlete />
+        <GestionGroupes :club-id="1"/>
+        <!-- TODO : changer l'id par default !!!!!!!!!!!!!!!!! -->
       </div>
 
       <div v-else-if="activeAction === 'stats'">

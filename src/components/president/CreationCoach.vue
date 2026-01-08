@@ -1,47 +1,35 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { CoachComposable } from '../../utils/composables/coach';
+import type { Coach } from '../../utils/types';
 
-interface Coach {
-  id: number;
-  name: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  birthdate: string;
-  gender: string;
-  sport: string;
-  club: string;
-}
+const coachApi = new CoachComposable();
 
 const coaches = ref<Coach[]>([
   {
-    id: Date.now(),
+    id: 0,
     name: '',
     lastName: '',
     email: '',
-    phone: '',
-    address: '',
-    birthdate: '',
-    gender: '',
-    sport: '',
-    club: '',
-  }
+    phoneNumber: '',
+    birthDate: '',
+    gender: 'X',
+    type: 'COACH',
+    clubId: 0,
+  },
 ]);
 
-/* Actions */
 const addCoach = () => {
   coaches.value.push({
-    id: Date.now() + Math.random(),
+    id: coaches.value.length,
     name: '',
     lastName: '',
     email: '',
-    phone: '',
-    address: '',
-    birthdate: '',
-    gender: '',
-    sport: '',
-    club: '',
+    phoneNumber: '',
+    birthDate: '',
+    gender: 'X',
+    type: 'COACH',
+    clubId: 0,
   });
 };
 
@@ -51,18 +39,35 @@ const removeCoach = (index: number) => {
   }
 };
 
-const submitCoaches = () => {
-  if (coaches.value.length === 0) {
-    alert('Vous n\'avez créé aucun coach');
+const submitCoaches = async () => {
+  if (!coaches.value.length) {
+    alert("Vous n'avez créé aucun coach");
     return;
   }
 
-  const payload = {
-    coaches: coaches.value,
-  };
+  try {
+    for (const coach of coaches.value) {
+      await coachApi.createCoach(coach);
+    }
 
-  console.log('Coach(s) créés :', payload);
-  // TODO: appel API
+    alert('Coach(s) créé(s) avec succès');
+
+    // Reset formulaire
+    coaches.value = [coaches.value[0]];
+    Object.assign(coaches.value[0], {
+      name: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      birthDate: '',
+      gender: 'X',
+      clubId: 0,
+    });
+
+  } catch (error) {
+    console.error(error);
+    alert('Erreur lors de la création des coachs');
+  }
 };
 </script>
 
@@ -129,7 +134,7 @@ const submitCoaches = () => {
             </label>
             <input
               type="tel"
-              v-model="coach.phone"
+              v-model="coach.phoneNumber"
               class="w-full border rounded-md p-2"
               placeholder="Ex : 06 12 34 56 78"
             />
@@ -141,22 +146,10 @@ const submitCoaches = () => {
             </label>
             <input
               type="date"
-              v-model="coach.birthdate"
+              v-model="coach.birthDate"
               class="w-full border rounded-md p-2"
             />
           </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1">
-            Adresse postale
-          </label>
-          <input
-            type="text"
-            v-model="coach.address"
-            class="w-full border rounded-md p-2"
-            placeholder="Ex : 12 rue des Fleurs, 75000 Paris"
-          />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -171,30 +164,16 @@ const submitCoaches = () => {
               <option value="">Sélectionner</option>
               <option value="M">Masculin</option>
               <option value="F">Féminin</option>
-              <option value="Autre">Autre</option>
+              <option value="X">Autre</option>
             </select>
           </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Sport
-            </label>
-            <input
-              type="text"
-              v-model="coach.sport"
-              class="w-full border rounded-md p-2"
-              placeholder="Ex : Plongée Sous-Marine"
-            />
-          </div>
-        </div>
-
         <div>
           <label class="block text-sm font-medium mb-1">
-            Club
+            ClubId
           </label>
           <input
             type="text"
-            v-model="coach.club"
+            v-model="coach.clubId"
             class="w-full border rounded-md p-2"
             placeholder="Ex : FC Pingouin"
           />
@@ -208,6 +187,7 @@ const submitCoaches = () => {
         >
           Supprimer ce coach
         </button>
+      </div>
       </div>
 
       <button

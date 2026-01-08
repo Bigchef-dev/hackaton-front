@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { ClubComposable } from '../../utils/composabes/club';
+import { ClubComposable } from '../../utils/composables/club';
 import type { Group } from '../../utils/types';
 
 const props = defineProps<{
