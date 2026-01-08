@@ -248,7 +248,7 @@ const scrollToWho = () => {
         </div>
 
         <div class="mt-8 pt-8 border-t border-slate-800 text-center text-sm text-slate-600">
-          <p>2025 • By Pingouin Corp.</p>
+          <p>2026 • By Pingouin Corp.</p>
         </div>
       </div>
     </footer>
