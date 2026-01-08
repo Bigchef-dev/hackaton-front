@@ -13,54 +13,28 @@
                     </p>
                 </div>
 
-                <div class="flex flex-wrap gap-3">
-                    <button @click="addClub"
-                        class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-3 rounded-xl font-semibold shadow-lg transition hover:scale-105">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-bank" viewBox="0 0 16 16">
-                            <path
-                                d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89zM3.777 3h8.447L8 1zM2 6v7h1V6zm2 0v7h2.5V6zm3.5 0v7h1V6zm2 0v7H12V6zM13 6v7h1V6zm2-1V4H1v1zm-.39 9H1.39l-.25 1h13.72z" />
-                        </svg>
-                        <span class="hidden md:inline">Create New Club</span>
 
-                    </button>
+            </div>
 
-                    <button @click="openUserFormModal = true;"
-                        class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-3 rounded-xl font-semibold shadow-lg transition hover:scale-105">
+
+            <!-- MAIN LAYOUT -->
+            <div class="flex flex-col md:flex-row gap-6 transition-all">
+
+                <!-- USERS COLUMN -->
+                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
+
+                    <h2 class="text-xl font-bold text-white mb-4">
+                        Users
+                    </h2>
+
+                    <ButtonAdd text="Add New User" @click="openUserFormModal = true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                             class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                             <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                             <path fill-rule="evenodd"
                                 d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
                         </svg>
-                        <span class="hidden md:inline">Create New President</span>
-
-                    </button>
-                </div>
-            </div>
-
-            <!-- TOGGLES -->
-            <div class="flex gap-3 mb-6">
-                <button @click="showUsers = !showUsers"
-                    class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">
-                    {{ showUsers ? 'Hide Users' : 'Show Users' }}
-                </button>
-
-                <button @click="showClubs = !showClubs"
-                    class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">
-                    {{ showClubs ? 'Hide Clubs' : 'Show Clubs' }}
-                </button>
-            </div>
-
-            <!-- MAIN LAYOUT -->
-            <div class="flex flex-col md:flex-row gap-6 transition-all">
-
-                <!-- USERS COLUMN -->
-                <div v-if="showUsers" class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
-
-                    <h2 class="text-xl font-bold text-white mb-4">
-                        Users
-                    </h2>
+                    </ButtonAdd>
 
                     <div class="space-y-4">
                         <div v-for="card in cards" :key="card.id" class="p-4 bg-gray-800 rounded-xl shadow">
@@ -73,10 +47,7 @@
                                     </span>
                                 </div>
 
-                                <button class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
-                                    @click="validateDeleteUser(card.id)">
-                                    Delete
-                                </button>
+                                <GenericButton text="Delete" @click="validateDeleteUser(card.id)" />
                             </div>
                         </div>
                     </div>
@@ -87,9 +58,21 @@
            md:max-h-[calc(100vh-260px)] md:overflow-y-auto custom-scroll">
 
 
+
+
                     <h2 class="text-xl font-bold text-white mb-4">
                         Clubs
                     </h2>
+
+                    <ButtonAdd text="Add New Club" @click="addClub">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-building-fill-add" viewBox="0 0 16 16">
+                            <path
+                                d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0" />
+                            <path
+                                d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7.256A4.5 4.5 0 0 0 12.5 8a4.5 4.5 0 0 0-3.59 1.787A.5.5 0 0 0 9 9.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .39-.187A4.5 4.5 0 0 0 8.027 12H6.5a.5.5 0 0 0-.5.5V16H3a1 1 0 0 1-1-1zm2 1.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5m3 0v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5m3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5M7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5M4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+                        </svg>
+                    </ButtonAdd>
 
                     <div class="space-y-4">
                         <div v-for="club in clubs" :key="club.id"
@@ -99,17 +82,85 @@
                                 {{ club.name }}
                             </span>
 
-                            <button @click="deleteClub(club.id)"
-                                class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition">
-                                Delete
-                            </button>
+                            <GenericButton text="Delete" @click="deleteClub(club.id)" />
                         </div>
                     </div>
                 </div>
 
-                <div v-if="openUserFormModal">
-                    <UserFormModal :clubs="clubs || []" @close="openUserFormModal = false" @submit="addUser" />
+
+                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
+
+                    <h2 class="text-xl font-bold text-white mb-4">
+                        Sports
+                    </h2>
+
+                    <ButtonAdd text="Add New Sport" @click="addSport">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-dribbble" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M8 0C3.584 0 0 3.584 0 8s3.584 8 8 8c4.408 0 8-3.584 8-8s-3.592-8-8-8m5.284 3.688a6.8 6.8 0 0 1 1.545 4.251c-.226-.043-2.482-.503-4.755-.217-.052-.112-.096-.234-.148-.355-.139-.33-.295-.668-.451-.99 2.516-1.023 3.662-2.498 3.81-2.69zM8 1.18c1.735 0 3.323.65 4.53 1.718-.122.174-1.155 1.553-3.584 2.464-1.12-2.056-2.36-3.74-2.551-4A7 7 0 0 1 8 1.18m-2.907.642A43 43 0 0 1 7.627 5.77c-3.193.85-6.013.833-6.317.833a6.87 6.87 0 0 1 3.783-4.78zM1.163 8.01V7.8c.295.01 3.61.053 7.02-.971.199.381.381.772.555 1.162l-.27.078c-3.522 1.137-5.396 4.243-5.553 4.504a6.82 6.82 0 0 1-1.752-4.564zM8 14.837a6.8 6.8 0 0 1-4.19-1.44c.12-.252 1.509-2.924 5.361-4.269.018-.009.026-.009.044-.017a28.3 28.3 0 0 1 1.457 5.18A6.7 6.7 0 0 1 8 14.837m3.81-1.171c-.07-.417-.435-2.412-1.328-4.868 2.143-.338 4.017.217 4.251.295a6.77 6.77 0 0 1-2.924 4.573z" />
+                        </svg>
+                    </ButtonAdd>
+                    <div class="space-y-4">
+                        <div v-for="sport in sports" :key="sport.id" class="p-4 bg-gray-800 rounded-xl shadow">
+
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-white">
+                                <div class="font-medium">
+                                    {{ sport.name }}
+
+                                </div>
+                                <GenericButton text="Delete" @click="deleteSport(sport.id)" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+
+                <div v-if="openUserFormModal">
+                    <UserFormModal :clubs="clubs || []" @close="openUserFormModal = false" @submit="addPresident" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Login Modal -->
+        <div v-if="showAdminModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+                <h2 class="text-2xl font-bold text-white mb-4">Admin Login</h2>
+                
+                <div v-if="adminError" class="bg-red-500/20 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-4">
+                    {{ adminError }}
+                </div>
+                
+                <form @submit.prevent="handleAdminLogin" class="space-y-4">
+                    <div>
+                        <label for="adminPassword" class="block text-gray-300 mb-2 font-semibold">Mot de passe Admin</label>
+                        <input
+                            id="adminPassword"
+                            v-model="adminPassword"
+                            type="password"
+                            placeholder="••••••••"
+                            class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-yellow-500 focus:outline-none"
+                            required
+                        />
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <button
+                            type="submit"
+                            :disabled="isAdminLoading"
+                            class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition disabled:opacity-50"
+                        >
+                            {{ isAdminLoading ? 'Connexion...' : 'Confirmer' }}
+                        </button>
+                        <button
+                            type="button"
+                            @click="closeAdminModal"
+                            class="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+                        >
+                            Annuler
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -117,10 +168,24 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { Club, UserInfo } from '../utils/types';
-import { UserComposable } from '../utils/composabes/user';
-import { ClubComposable } from '../utils/composabes/club';
+import type { Athlete, Club, CreateAthletePayload, CreatePresidentPayload, President, Sport, UserInfo } from '../utils/types';
 import UserFormModal from './UserFormModal.vue';
+import ButtonAdd from './ButtonAdd.vue';
+import GenericButton from './GenericButton.vue';
+import { useRouter } from 'vue-router';
+import { useAuth } from '../utils/composables/auth';
+import { ClubComposable } from '../utils/composables/club';
+import { UserComposable } from '../utils/composables/user';
+import { SportComposable } from '../utils/composables/sport';
+
+const router = useRouter();
+const { currentUser, logout, adminLogin } = useAuth();
+
+// Admin login modal state
+const showAdminModal = ref(false);
+const adminPassword = ref('');
+const adminError = ref('');
+const isAdminLoading = ref(false);
 
 /* VISIBILITY */
 const showUsers = ref(true);
@@ -129,15 +194,47 @@ const openUserFormModal = ref(false);
 
 const UserController = new UserComposable();
 const ClubController = new ClubComposable();
+const SportController = new SportComposable();
 
 const cards = ref<UserInfo[]>();
 const clubs = ref<Club[]>();
+const sports = ref<Sport[]>();
 
 
 onMounted(async () => {
     cards.value = await UserController.getAllUsers();
     clubs.value = await ClubController.getAllClubs();
+    sports.value = await SportController.getAllSports();
 });
+
+const handleLogout = () => {
+    logout();
+    router.push('/login');
+};
+
+const handleAdminLogin = async () => {
+    adminError.value = '';
+    isAdminLoading.value = true;
+    
+    try {
+        await adminLogin(adminPassword.value);
+        closeAdminModal();
+    } catch (error) {
+        adminError.value = error instanceof Error ? error.message : 'Échec de l\'authentification admin.';
+    } finally {
+        isAdminLoading.value = false;
+    }
+};
+
+const closeAdminModal = () => {
+    showAdminModal.value = false;
+    adminPassword.value = '';
+    adminError.value = '';
+};
+// Icon components (simplified SVG)
+const Users = {
+    template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`
+};
 
 /* CLUBS */
 
@@ -147,27 +244,51 @@ onMounted(async () => {
 function validateDeleteUser(id: number) {
     if (confirm('Are you sure you want to delete this user?')) {
         console.log('User deleted:', id);
+        UserController.deleteUser(id)
+            .then(() => {
+                cards.value = cards.value?.filter(user => user.id !== id);
+                alert('User deleted successfully!');
+            })
+            .catch((error) => {
+                alert(`Error deleting user: ${error.message}`);
+            });
     }
 }
 
-function addUser(userData: Partial<UserInfo>) {
-    console.log(userData);
-    
+function addPresident(userData: Partial<CreatePresidentPayload>): Promise<President> {
     if (userData.name) {
-        // Convert birthDate from string to Date if provided
-        if (userData.birthDate && typeof userData.birthDate === 'string') {
-            userData.birthDate = new Date(userData.birthDate).toDateString();
-        }
-
-        UserController.createUser(userData as UserInfo)
+        UserController.createPresident(userData as Partial<CreatePresidentPayload>)
             .then((newUser) => {
-                cards.value?.push(newUser);
+                cards.value?.push(newUser
+                );
                 alert(`User "${newUser.name} ${newUser.lastName}" created successfully!`);
+                return newUser;
             })
             .catch((error) => {
                 alert(`Error creating user: ${error.message}`);
+                throw error;
             });
     }
+    throw new Error('Invalid user data');
+}
+
+function addAthlete(userData: Partial<CreateAthletePayload>): Promise<Athlete> {
+    if (userData.name) {
+        UserController.createAthlete(userData as Partial<CreateAthletePayload>)
+            .then((newUser) => {
+                cards.value?.push(newUser
+                );
+                alert(`User "${newUser.name} ${newUser.lastName}" created successfully!`);
+                return newUser;
+            })
+            .catch((error) => {
+                alert(`Error creating user: ${error.message}`);
+                throw error;
+            });
+    }
+    throw new Error('Invalid user data');
+
+    // Implementation for adding an athlete
 }
 
 
@@ -185,6 +306,19 @@ function addClub() {
     }
 }
 
+function addSport() {
+    const sportName = window.prompt('Enter the name of the new sport:');
+    if (sportName) {
+        SportController.createSport({ name: sportName })
+            .then((newSport) => {
+                alert(`Sport "${newSport.name}" created successfully!`);
+            })
+            .catch((error) => {
+                alert(`Error creating sport: ${error.message}`);
+            });
+    }
+}
+
 function deleteClub(id: number) {
     const confirmed = confirm('Are you sure you want to delete this club?');
     if (!confirmed) return;
@@ -196,6 +330,21 @@ function deleteClub(id: number) {
         .catch((error) => {
             alert(`Error deleting club: ${error.message}`);
         });
+}
+
+function deleteSport(id: number) {
+    const confirmed = confirm('Are you sure you want to delete this sport?');
+    if (!confirmed) return;
+    if (id) {
+        SportController.deleteSport(id)
+            .then(() => {
+                sports.value = sports.value?.filter(sport => sport.id !== id);
+                alert('Sport deleted successfully!');
+            })
+            .catch((error) => {
+                alert(`Error deleting sport: ${error.message}`);
+            });
+    }
 }
 </script>
 

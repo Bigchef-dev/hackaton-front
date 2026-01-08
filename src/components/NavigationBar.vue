@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useRouter} from 'vue-router'
-import { useSidebar } from '../utils/composabes/useNavBar'
+import { useSidebar } from '../utils/composables/useNavBar'
 const { isSidebarOpen, isMobileMenuOpen, mobileMenuHeight } = useSidebar()
 
 const activeRoute = ref('dashboard')
@@ -21,11 +21,11 @@ enum UserRole {
 //TODO
 const currentUser = ref({
   name: 'Admin Martin',
-  role: UserRole.admin,
+  role: UserRole.invite,
   avatar: "M"
 })
 
-const nomApp = 'Ultimate App' //TODO
+const nomApp = 'Ultimate Sports'
 
 const getInitials = (name: string) => {
   return name
@@ -44,11 +44,11 @@ const SettingsIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" vie
 
 const menuItems = [
   { id: 'dashboard', label: 'Tableau de bord', icon: HomeIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
-  { id: 'athlete', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
+  { id: 'AthleteDashboard', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
   { id: 'coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
   { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
-  { id: 'connection', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
+  { id: 'Login', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
   { id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
 ]
 
@@ -63,10 +63,9 @@ const toggleSidebar = () => {
 const updateMobileMenuHeight = () => {
   nextTick(() => {
     if (mobileMenuRef.value && isMobileMenuOpen.value) {
-      // Hauteur du header (64px) + hauteur du menu
-      mobileMenuHeight.value = 64 + mobileMenuRef.value.scrollHeight
+      mobileMenuHeight.value = 50 + mobileMenuRef.value.scrollHeight
     } else {
-      mobileMenuHeight.value = 64 // Seulement le header
+      mobileMenuHeight.value = 50
     }
   })
 }
@@ -85,7 +84,6 @@ const navigateTo = (id:string) => {
   console.log(`Navigation vers: ${id}`)
 }
 
-// Mettre à jour la hauteur au montage et lors des changements
 onMounted(() => {
   updateMobileMenuHeight()
 })
@@ -101,7 +99,7 @@ watch(isMobileMenuOpen, () => {
     <aside
       :class="[
         'hidden lg:flex flex-col fixed left-0 top-0 bottom-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white transition-all duration-300 ease-in-out shadow-2xl',
-        isSidebarOpen ? 'w-64' : 'w-20'
+        isSidebarOpen ? 'w-70' : 'w-20'
       ]"
       style="z-index: 40;"
     >

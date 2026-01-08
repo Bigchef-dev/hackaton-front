@@ -57,32 +57,21 @@
                             placeholder="john.doe@example.com" />
                     </div>
 
-                    <!-- User Type -->
-                    <div>
-                        <label class="block text-gray-300 font-medium mb-2 text-sm">User Type</label>
-                        <select v-model="formData.type" required
-                            class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
-                            <option value="" disabled>Select a type</option>
-                            <option value="ATHLETE">Athlete</option>
-                            <option value="COACH">Coach</option>
-                            <option value="PRESIDENT">President</option>
-                            <option value="ADMIN">Admin</option>
-                        </select>
-                    </div>
+        
 
 
-                    <!-- Address (spans 2 columns) -->
+                    <!-- Address (spans 2 columns)
                     <div class="md:col-span-1">
                         <label class="block text-gray-300 font-medium mb-2 text-sm">Address</label>
                         <input v-model="formData.adress" type="text" required
                             class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
                             placeholder="123 Main Street, City, Country" />
-                    </div>
+                    </div> -->
 
                     <!-- Gender Selection -->
                     <div>
                         <label class="block text-gray-300 font-medium mb-2 text-sm">Gender</label>
-                        <select v-model="formData.type" required
+                        <select v-model="formData.gender" required
                             class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
                             <option value="X">Other</option>
                             <option value="F">Male</option>
@@ -92,9 +81,9 @@
 
 
                     <!-- club selection -->
-                    <div v-if="formData.type == 'PRESIDENT' || formData.type == 'COACH'">
+                    <div >
                         <label class="block text-gray-300 font-medium mb-2 text-sm">Club</label>
-                        <select v-model="props.clubs" required
+                        <select v-model="formData.clubId" required
                             class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
                             <option value="" disabled>Select a club</option>
                             <option v-for="club in clubs" :key="club.id" :value="club.id">
@@ -126,38 +115,30 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import type { Club } from '../utils/types';
+import type { Club, CreatePresidentPayload, President } from '../utils/types';
 
-interface UserInfo {
-    name: string;
-    lastName: string;
-    birthDate: string;
-    phoneNumber: string;
-    adress: string;
-    email: string;
-    gender: "M" | "F" | "X";
-    type: "ATHLETE" | "COACH" | "PRESIDENT" | "ADMIN";
-}
+
 
 
 const props = defineProps<{
     clubs: Array<Club>;
 }>();
 
-const formData = reactive<Partial<UserInfo>>({
+const formData = reactive<Partial<CreatePresidentPayload>>({
     name: '',
     lastName: '',
     birthDate: '',
     phoneNumber: '',
-    adress: '',
     email: '',
     gender: 'X',
-    type: 'PRESIDENT',
+    password: 'adminpass',
+    clubId: 0,
+
 });
 
 const emit = defineEmits<{
     (e: 'close'): void;
-    (e: 'submit', formData: Partial<UserInfo>): void;
+    (e: 'submit', formData: Partial<President>): void;
 }>();
 
 
@@ -178,10 +159,8 @@ const resetForm = () => {
     formData.lastName = '';
     formData.birthDate = '';
     formData.phoneNumber = '';
-    formData.adress = '';
     formData.email = '';
     formData.gender = 'X';
-    formData.type = 'PRESIDENT';
     submitted.value = false;
 };
 </script>
