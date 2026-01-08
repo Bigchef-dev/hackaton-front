@@ -63,10 +63,9 @@ const toggleSidebar = () => {
 const updateMobileMenuHeight = () => {
   nextTick(() => {
     if (mobileMenuRef.value && isMobileMenuOpen.value) {
-      // Hauteur du header (64px) + hauteur du menu
-      mobileMenuHeight.value = 64 + mobileMenuRef.value.scrollHeight
+      mobileMenuHeight.value = 50 + mobileMenuRef.value.scrollHeight
     } else {
-      mobileMenuHeight.value = 64 // Seulement le header
+      mobileMenuHeight.value = 50
     }
   })
 }
@@ -85,7 +84,6 @@ const navigateTo = (id:string) => {
   console.log(`Navigation vers: ${id}`)
 }
 
-// Mettre à jour la hauteur au montage et lors des changements
 onMounted(() => {
   updateMobileMenuHeight()
 })
@@ -101,7 +99,7 @@ watch(isMobileMenuOpen, () => {
     <aside
       :class="[
         'hidden lg:flex flex-col fixed left-0 top-0 bottom-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white transition-all duration-300 ease-in-out shadow-2xl',
-        isSidebarOpen ? 'w-64' : 'w-20'
+        isSidebarOpen ? 'w-70' : 'w-20'
       ]"
       style="z-index: 40;"
     >

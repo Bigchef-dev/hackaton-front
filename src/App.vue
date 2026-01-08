@@ -5,7 +5,7 @@ import { computed } from 'vue'
 
 const { isSidebarOpen, mobileMenuHeight } = useSidebar()
 
-const desktopMargin = computed(() => isSidebarOpen.value ? 'lg:ml-64' : 'lg:ml-20')
+const desktopMargin = computed(() => isSidebarOpen.value ? 'lg:ml-70' : 'lg:ml-20')
 
 const mobilePaddingTop = computed(() => `${mobileMenuHeight.value}px`)
 </script>
