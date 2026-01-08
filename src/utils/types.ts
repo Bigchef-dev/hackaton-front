@@ -143,3 +143,11 @@ export interface TypeMeasure {
     unit: string;
     activityId: number;
 }
+
+export enum UserRole {
+    invite = 'INVITE',
+    athlete = 'ATHLETE',
+    coach = 'COACH',
+    president = 'PRESIDENT',
+    admin = 'ADMIN'
+}

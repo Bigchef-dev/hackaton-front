@@ -15,8 +15,11 @@ const mobilePaddingTop = computed(() => `${mobileMenuHeight.value}px`)
     <NavigationBar />
     <main class="min-h-screen bg-slate-50">
       <div 
-        :class="['transition-all duration-300 lg:pt-0', desktopMargin]"
-        :style="{ paddingTop: mobilePaddingTop }"
+        :class="['lg:pt-0', desktopMargin]"
+        :style="{ 
+          paddingTop: mobilePaddingTop,
+          transition: 'padding-top 500ms ease-in-out, margin-left 300ms ease-in-out'
+        }"
         class="lg:!pt-0">
         <router-view />
       </div>
