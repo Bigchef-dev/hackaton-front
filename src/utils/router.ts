@@ -6,6 +6,7 @@ import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
 import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
 import LoginForm from '../components/LoginForm.vue';
+import Home from '../components/Home.vue';
 
 
 
@@ -13,8 +14,8 @@ const routes: Array<RouteRecordRaw> = [
 
   {
     path: '/',
-    name: 'dashboard',
-    component: HelloWorld,
+    name: 'home',
+    component: Home,
   },
   {
     path: '/admin/dashboard',
@@ -31,6 +32,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AthleteDashboard',
     component: AthleteDashboard,
   },
+
 ]
 
 const router = createRouter({
