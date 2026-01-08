@@ -65,9 +65,11 @@ const toggleSidebar = () => {
 const updateMobileMenuHeight = () => {
   nextTick(() => {
     if (mobileMenuRef.value && isMobileMenuOpen.value) {
-      mobileMenuHeight.value = 50 + mobileMenuRef.value.scrollHeight
+      // Ouverture : mise à jour immédiate
+      mobileMenuHeight.value = 64 + mobileMenuRef.value.scrollHeight
     } else {
-      mobileMenuHeight.value = 50
+      // Fermeture : mise à jour immédiate, la transition CSS gère l'animation
+      mobileMenuHeight.value = 64
     }
   })
 }
@@ -79,7 +81,7 @@ const toggleMobileMenu = () => {
 
 const navigateTo = (id:string) => {
   activeRoute.value = id
-  isMobileMenuOpen.value = false
+  isMobileMenuOpen.value = true
   updateMobileMenuHeight()
   router.push({ name: id })
   
@@ -100,10 +102,10 @@ watch(isMobileMenuOpen, () => {
     <!-- Desktop Sidebar -->
     <aside
       :class="[
-        'hidden lg:flex flex-col fixed left-0 top-0 bottom-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white transition-all duration-300 ease-in-out shadow-2xl',
+        'hidden lg:flex flex-col fixed left-0 top-0 bottom-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-2xl overflow-x-hidden',
         isSidebarOpen ? 'w-70' : 'w-20'
       ]"
-      style="z-index: 40;"
+      style="z-index: 40; transition: width 300ms ease-in-out;"
     >
       <!-- Header -->
       <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
@@ -132,8 +134,7 @@ watch(isMobileMenuOpen, () => {
         </button>
       </div>
 
-      <!-- Navigation Items -->
-      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto overflow-x-hidden">
         <button
           v-for="item in filteredMenuItems"
           :key="item.id"
@@ -158,7 +159,6 @@ watch(isMobileMenuOpen, () => {
         </button>
       </nav>
 
-      <!-- User Profile -->
       <div :class="['p-4 border-t border-slate-700 flex-shrink-0', isSidebarOpen ? '' : 'flex justify-center']">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0">
@@ -173,8 +173,11 @@ watch(isMobileMenuOpen, () => {
     </aside>
 
     <!-- Mobile Top Navigation -->
-    <header class="lg:hidden fixed top-0 left-0 right-0 bg-slate-900 text-white shadow-lg z-50">
-      <div class="flex items-center justify-between p-4">
+    <header class="lg:hidden fixed top-0 left-0 right-0 text-white shadow-lg z-50">
+      <!-- Background avec couleur unie pour éviter l'espace blanc -->
+      <div class="absolute inset-0 bg-slate-800 -z-10"></div>
+      
+      <div class="relative flex items-center justify-between p-4 bg-slate-900">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold">
             {{ getInitials(nomApp) }}
@@ -198,48 +201,45 @@ watch(isMobileMenuOpen, () => {
       </div>
 
       <!-- Mobile Menu Dropdown -->
-      <Transition
-        enter-active-class="transition-all duration-300 ease-in-out"
-        enter-from-class="max-h-0 opacity-0"
-        enter-to-class="max-h-screen opacity-100"
-        leave-active-class="transition-all duration-300 ease-in-out"
-        leave-from-class="max-h-screen opacity-100"
-        leave-to-class="max-h-0 opacity-0"
+      <nav 
+        ref="mobileMenuRef"
+        :class="[
+          'relative border-t border-slate-700 bg-slate-800 overflow-hidden transition-all duration-500 ease-in-out',
+          isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        ]"
+        :style="{ 
+          maxHeight: isMobileMenuOpen ? mobileMenuRef?.scrollHeight + 'px' : '0px',
+          transition: 'max-height 500ms ease-in-out, opacity 500ms ease-in-out'
+        }"
       >
-        <nav 
-          v-show="isMobileMenuOpen" 
-          ref="mobileMenuRef"
-          class="border-t border-slate-700 bg-slate-800 overflow-hidden max-h-[calc(100vh-4rem)] overflow-y-auto"
+        <button
+          v-for="item in filteredMenuItems"
+          :key="item.id"
+          @click="navigateTo(item.id)"
+          :class="[
+            'w-full flex items-center space-x-4 px-6 py-4 transition-all duration-200',
+            activeRoute === item.id
+              ? 'bg-gradient-to-r from-blue-600 to-purple-600 border-l-4 border-white'
+              : 'hover:bg-slate-700 active:bg-slate-600'
+          ]"
         >
-          <button
-            v-for="item in filteredMenuItems"
-            :key="item.id"
-            @click="navigateTo(item.id)"
-            :class="[
-              'w-full flex items-center space-x-4 px-6 py-4 transition-all duration-200',
-              activeRoute === item.id
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 border-l-4 border-white'
-                : 'hover:bg-slate-700 active:bg-slate-600'
-            ]"
-          >
-            <div v-html="item.icon" class="w-5 h-5 flex-shrink-0 flex items-center" />
-            <span class="font-medium">{{ item.label }}</span>
-          </button>
-          
-          <!-- Mobile User Profile -->
-          <div class="border-t border-slate-700 p-4 bg-slate-900">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center font-semibold">
-                {{ currentUser.avatar }}
-              </div>
-              <div>
-                <p class="font-medium text-sm">{{ currentUser.name }}</p>
-                <p class="text-xs text-slate-400 capitalize">{{ currentUser.role }}</p>
-              </div>
+          <div v-html="item.icon" class="w-5 h-5 flex-shrink-0 flex items-center" />
+          <span class="font-medium">{{ item.label }}</span>
+        </button>
+        
+        <!-- Mobile User Profile -->
+        <div class="border-t border-slate-700 p-4 bg-slate-900">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center font-semibold">
+              {{ currentUser.avatar }}
+            </div>
+            <div>
+              <p class="font-medium text-sm">{{ currentUser.name }}</p>
+              <p class="text-xs text-slate-400 capitalize">{{ currentUser.role }}</p>
             </div>
           </div>
-        </nav>
-      </Transition>
+        </div>
+      </nav>
     </header>
   </div>
 </template>
