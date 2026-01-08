@@ -27,7 +27,7 @@ export interface UserInfo {
     adress: string;
     email: string; // Validation logic for email format should be implemented in the application layer
     gender: "M" | "F" | "X";
-    
+    type: "ATHLETE" | "COACH" | "PRESIDENT" | "ADMIN" | "USER";
 }
 
 export interface Athlete extends UserInfo {
