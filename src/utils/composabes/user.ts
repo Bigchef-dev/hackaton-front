@@ -3,8 +3,8 @@ import type { Group, Session, UserInfo } from "../types";
 
 import { CheckerComposable as Checker } from "./checker";
 
-export class UserComposable  {
-    
+export class UserComposable {
+
     checker: Checker;
 
     constructor() {
@@ -12,7 +12,7 @@ export class UserComposable  {
     }
 
     // =================================== GET ===================================
-    async getAllUsers() : Promise<UserInfo[]> {
+    async getAllUsers(): Promise<UserInfo[]> {
         const response = await API.get("users");
         return response;
     }
@@ -38,11 +38,11 @@ export class UserComposable  {
     }
 
     // =================================== PUT ===================================
-    async updateUserInfo( userId: number, data: Partial<UserInfo>): Promise<UserInfo> {
-        if(!this.checker.isUserInfoValid(data)) {
+    async updateUserInfo(userId: number, data: Partial<UserInfo>): Promise<UserInfo> {
+        if (!this.checker.isUserInfoValid(data)) {
             throw new Error("Invalid user info data");
         }
-        if(!this.checker.isUserInfoComplete(data)) {
+        if (!this.checker.isUserInfoComplete(data)) {
             throw new Error("Incomplete user info data");
         }
         const response = await API.put(`users/${userId}`, data);
@@ -51,14 +51,31 @@ export class UserComposable  {
 
     // =================================== POST ===================================
     async createUser(data: Partial<UserInfo>): Promise<UserInfo> {
-        if(!this.checker.isUserInfoValid(data)) {
-            throw new Error("Invalid user info data");
+        // if (!this.checker.isUserInfoValid(data)) {
+        //     throw new Error("Invalid user info data");
+        // }
+        // if (!this.checker.isUserInfoComplete(data)) {
+        //     throw new Error("Incomplete user info data");
+        // }
+        switch (data.type) {
+            case 'ATHLETE':
+                const response = await API.post("users/athlete", data);
+                return response;
+            case 'COACH':
+                const resp = await API.post("users/coach", data);
+                return resp;
+            case 'PRESIDENT':
+                const res = await API.post("users/president", data);
+                return res;
+            case 'ADMIN':
+                const r = await API.post("users/admin", data);
+                return r;
+            default:
+                throw new Error("Invalid user type");
+
         }
-        if(!this.checker.isUserInfoComplete(data)) {
-            throw new Error("Incomplete user info data");
-        }
-        const response = await API.post("users", data);
-        return response;
+
+
     }
 
     // =================================== DELETE ===================================

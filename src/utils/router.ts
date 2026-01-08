@@ -1,4 +1,9 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import HelloWorld from '../components/HelloWorld.vue';
+import AdminDashboard from '../components/AdminDashboard.vue';
+import ClubForm from '../components/ClubForm.vue';
+
+
 
 const routes: Array<RouteRecordRaw> = [
 
@@ -7,26 +12,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'dashboard',
     component: HelloWorld,
   },
-    {
-    path: '/coach',
-    name: 'coach',
-    component: Coach,
-  },
   {
-  path: '/athlete',
-  name: 'athlete',
-  component: Athlete,
-  },
-  {
-  path: '/test-connection',
-  name: 'connection',
-  component: TestConnection,
-  },
-  {
-  path: '/settings',
-  name: 'settings',
-  component: Settings,
-  },
+    path: '/admin/newclub',
+    name: 'NewClub',
+    component: ClubForm,
+  }
+  
 ];
 
 const router = createRouter({
