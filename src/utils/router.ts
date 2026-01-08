@@ -8,7 +8,6 @@ import President from '../components/president/PresidentDashboard.vue';
 import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
 import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
-import LoginForm from '../components/LoginForm.vue';
 
 const routes: Array<RouteRecordRaw> = [
 
@@ -28,11 +27,6 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginView,
   },
   {
-    path: '/admin/newclub',
-    name: 'NewClub',
-    component: ClubForm,
-  },
-  {
     path: '/profile',
     name: 'Profile',
     component: Profile,
@@ -50,6 +44,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'President',
     component: President,
   },
+  {
     path: '/athlete',
     name: 'AthleteDashboard',
     component: AthleteDashboard,
