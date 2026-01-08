@@ -2,6 +2,7 @@
 import ProfilLayout from './ProfileLayout.vue'
 import Card from './Card.vue'
 import ProfileContent from './ProfileContent.vue'
+import router from '../../utils/router'
 
 const props = defineProps({
   user: {
@@ -31,6 +32,10 @@ const emit = defineEmits(['profile-updated'])
 const handleProfileUpdated = (updatedUser: any) => {
   emit('profile-updated', updatedUser)
 }
+
+const goBack = () => {
+  router.back();
+};
 </script>
 
 <template>
@@ -50,6 +55,13 @@ const handleProfileUpdated = (updatedUser: any) => {
         >
             ← Retour à l’accueil
         </router-link>
+        <br/>
+        <button
+          @click="goBack"
+          class="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-4"
+        >
+          ← Retour
+        </button>
       </template>
     </Card>
   </ProfilLayout>
