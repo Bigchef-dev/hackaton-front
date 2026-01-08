@@ -4,6 +4,7 @@ import AdminDashboard from '../components/AdminDashboard.vue';
 import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
 import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
+import LoginForm from '../components/LoginForm.vue';
 
 
 

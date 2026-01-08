@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {computed } from 'vue';
+import { computed } from 'vue';
 import type { CalendarEventType } from '../../utils/types';
-import { useCalendar } from '../../utils/composabes/calandar/useCalendar';
-import { useModal } from '../../utils/composabes/calandar/useModal';
+import { useCalendar } from '../../utils/composables/calandar/useCalendar';
+import { useModal } from '../../utils/composables/calandar/useModal';
 import CalendarHeader from './CalandarHeader.vue';
 import CalendarWeekView from './CalandarWeekView.vue';
 import CalendarMonthView from './CalandarMonthView.vue';
@@ -40,7 +40,7 @@ const { isOpen: isModalOpen, modalData: selectedEvent, open: openModal, close: c
 const visibleEvents = computed(() => {
   const start = viewMode.value === 'week' ? weekStart.value : monthStart.value;
   const end = viewMode.value === 'week' ? weekEnd.value : monthEnd.value;
-  
+
   return props.events.filter(event => {
     const eventStart = new Date(event.start);
     const eventEnd = new Date(event.end);
@@ -67,43 +67,20 @@ const handleEventClick = (event: CalendarEventType): void => {
 <template>
   <div class="calendar-container">
     <div class="calendar-header">
-      <CalendarHeader
-        :current-date="currentDate"
-        :view-mode="viewMode"
-        :week-start="weekStart"
-        :week-end="weekEnd"
-        :month-start="monthStart"
-        @view-change="handleViewChange"
-        @navigate="handleNavigate"
-      />
+      <CalendarHeader :current-date="currentDate" :view-mode="viewMode" :week-start="weekStart" :week-end="weekEnd"
+        :month-start="monthStart" @view-change="handleViewChange" @navigate="handleNavigate" />
     </div>
 
     <!-- Contenu scrollable (grilles semaine/mois) -->
     <div class="calendar-content">
-      <CalendarWeekView
-        v-if="viewMode === 'week'"
-        :events="visibleEvents"
-        :week-days="weekDays"
-        :is-today="isToday"
-        @event-click="handleEventClick"
-      />
-    
-      <CalendarMonthView
-        v-else
-        :events="visibleEvents"
-        :month-grid="monthGrid"
-        :current-month="monthStart"
-        :is-same-month="isSameMonth"
-        :is-today="isToday"
-        @event-click="handleEventClick"
-      />
+      <CalendarWeekView v-if="viewMode === 'week'" :events="visibleEvents" :week-days="weekDays" :is-today="isToday"
+        @event-click="handleEventClick" />
+
+      <CalendarMonthView v-else :events="visibleEvents" :month-grid="monthGrid" :current-month="monthStart"
+        :is-same-month="isSameMonth" :is-today="isToday" @event-click="handleEventClick" />
     </div>
 
-    <EventDetailsModal
-      :is-open="isModalOpen"
-      :event="selectedEvent"
-      @close="closeModal"
-    />
+    <EventDetailsModal :is-open="isModalOpen" :event="selectedEvent" @close="closeModal" />
   </div>
 </template>
 
@@ -134,7 +111,7 @@ const handleEventClick = (event: CalendarEventType): void => {
   .calendar-container {
     padding: 1rem;
   }
-  
+
   .calendar-header {
     margin-bottom: 1.5rem;
   }

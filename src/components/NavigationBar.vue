@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useRouter} from 'vue-router'
-import { useSidebar } from '../utils/composabes/useNavBar'
+import { useSidebar } from '../utils/composables/useNavBar'
 const { isSidebarOpen, isMobileMenuOpen, mobileMenuHeight } = useSidebar()
 
 const activeRoute = ref('dashboard')
@@ -21,7 +21,7 @@ enum UserRole {
 //TODO
 const currentUser = ref({
   name: 'Admin Martin',
-  role: UserRole.athlete,
+  role: UserRole.invite,
   avatar: "M"
 })
 
@@ -48,7 +48,7 @@ const menuItems = [
   { id: 'coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
   { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
-  { id: 'connection', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
+  { id: 'Login', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
   { id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
 ]
 
