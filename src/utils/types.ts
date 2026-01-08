@@ -24,10 +24,10 @@ export interface UserInfo {
     lastName: string;
     birthDate: string;
     phoneNumber: string;
-    adress: string;
     email: string; // Validation logic for email format should be implemented in the application layer
     gender: "M" | "F" | "X";
     type: "ATHLETE" | "COACH" | "PRESIDENT" | "ADMIN";
+    password?: string;
 }
 
 export interface Athlete extends UserInfo {
@@ -35,12 +35,22 @@ export interface Athlete extends UserInfo {
 }
 
 export interface Coach extends UserInfo {
-    id_club: number;
+    clubId: number;
 }
 
-export interface President extends UserInfo {
-    id_club: number;
+export interface President {
+    clubId: number;
+    id: number;
+    name: string;
+    lastName: string;
+    birthDate: string
+    phoneNumber: string;
+    email: string;
+    gender: "M" | "F" | "X";
+    type: "PRESIDENT";
+    clubName: string;
 }
+
 
 export interface League {
     id: number;
@@ -51,11 +61,34 @@ export interface League {
 
 export interface Sport {
     id: number;
-    nom: string;
+    name: string;
 }
 
 export interface Club {
     id: number;
     name: string;
     id_sport: number;
+}
+
+
+interface CreateUserPayload {
+    name: string;
+    lastName: string;
+    birthDate: string;
+    phoneNumber: string;
+    email: string;
+    gender: "M" | "F" | "X";
+    password: "adminpass";
+}
+
+export interface CreateAthletePayload extends CreateUserPayload {
+    id_league: number;
+}
+
+export interface CreateCoachPayload extends CreateUserPayload {
+    clubId: number;
+}
+
+export interface CreatePresidentPayload extends CreateUserPayload {
+    clubId: number;
 }

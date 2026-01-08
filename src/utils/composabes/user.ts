@@ -1,5 +1,5 @@
 import { apiInstance as API } from "../api";
-import type { Group, Session, UserInfo } from "../types";
+import type { Athlete, CreateAthletePayload, CreatePresidentPayload, Group, President, Session, UserInfo } from "../types";
 
 import { CheckerComposable as Checker } from "./checker";
 
@@ -50,36 +50,18 @@ export class UserComposable {
     }
 
     // =================================== POST ===================================
-    async createUser(data: Partial<UserInfo>): Promise<UserInfo> {
-        // if (!this.checker.isUserInfoValid(data)) {
-        //     throw new Error("Invalid user info data");
-        // }
-        // if (!this.checker.isUserInfoComplete(data)) {
-        //     throw new Error("Incomplete user info data");
-        // }
-        switch (data.type) {
-            case 'ATHLETE':
-                const response = await API.post("users/athlete", data);
-                return response;
-            case 'COACH':
-                const resp = await API.post("users/coach", data);
-                return resp;
-            case 'PRESIDENT':
-                const res = await API.post("users/president", data);
-                return res;
-            case 'ADMIN':
-                const r = await API.post("users/admin", data);
-                return r;
-            default:
-                throw new Error("Invalid user type");
+    async createPresident(data: Partial<CreatePresidentPayload>): Promise<President> {
+        const res = await API.post("users/president", data);
+        return res;
+    }
 
-        }
-
-
+    async createAthlete(data: Partial<CreateAthletePayload>): Promise<Athlete> {
+        const res = await API.post("users/athlete", data);
+        return res;
     }
 
     // =================================== DELETE ===================================
-    async deleteUser(userId: string): Promise<{ message: string }> {
+    async deleteUser(userId: number): Promise<{ message: string }> {
         const response = await API.delete(`users/${userId}`);
         return response;
     }
