@@ -27,8 +27,6 @@ const emit = defineEmits(['profile-updated'])
             <br/>
             <p>{{ user.phone }}</p>
             <br/>
-            <p>{{ user.address }}</p>
-            <br/>
             <p>{{ user.birthdate }}</p>
             <br/>
             <p>{{ user.gender }}</p>

@@ -5,6 +5,8 @@ import CreationAthlete from './CreationAthlete.vue';
 import CreationCoach from './CreationCoach.vue';
 import InfosPerso from './InfosPerso.vue';
 import StatPres from './StatPres.vue';
+import DeleteCoach from './DeleteCoach.vue';
+import DeleteAthlete from './DeleteAthlete.vue';
 
 const router = useRouter();
 
@@ -137,10 +139,12 @@ const activeAction = ref<Action>(null);
 
       <div v-if="activeAction === 'coach'" class="space-y-6">
         <CreationCoach />
+        <DeleteCoach />
       </div>
 
       <div v-else-if="activeAction === 'athletes'">
         <CreationAthlete />
+        <DeleteAthlete />
       </div>
 
       <div v-else-if="activeAction === 'stats'">
