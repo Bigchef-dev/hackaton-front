@@ -20,9 +20,9 @@ enum UserRole {
 // Simuler un utilisateur connecté (en attendant authantification ok)
 //TODO
 const currentUser = ref({
-  name: 'Coach Martin',
-  role: UserRole.president,
-  avatar: 'CM'
+  name: 'Admin Martin',
+  role: UserRole.admin,
+  avatar: "M"
 })
 
 const nomApp = 'Ultimate App' //TODO
@@ -47,7 +47,7 @@ const menuItems = [
   { id: 'athlete', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
   { id: 'coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
   { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
-  { id: 'administration', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
+  { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
   { id: 'connection', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
   { id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
 ]
