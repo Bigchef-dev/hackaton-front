@@ -1,22 +1,25 @@
 <script setup lang="ts">
+import NavigationBar from './components/NavigationBar.vue'
+import { useSidebar } from './utils/composabes/useNavBar'
+import { computed } from 'vue'
 
+const { isSidebarOpen, mobileMenuHeight } = useSidebar()
+
+const desktopMargin = computed(() => isSidebarOpen.value ? 'lg:ml-70' : 'lg:ml-20')
+
+const mobilePaddingTop = computed(() => `${mobileMenuHeight.value}px`)
 </script>
 
 <template>
-  <router-view />
+  <div>
+    <NavigationBar />
+    <main class="min-h-screen bg-slate-50">
+      <div 
+        :class="['transition-all duration-300 lg:pt-0', desktopMargin]"
+        :style="{ paddingTop: mobilePaddingTop }"
+        class="lg:!pt-0">
+        <router-view />
+      </div>
+    </main>
+  </div>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>

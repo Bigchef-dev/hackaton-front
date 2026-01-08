@@ -12,7 +12,7 @@ export class ClubComposable  {
 
     // =================================== GET ===================================
     async getAllClubs(): Promise<Club[]> {
-        const response = await API.get("clubs");
+        const response = await API.get("club");
         return response;
     }
 
@@ -47,11 +47,11 @@ export class ClubComposable  {
     }
 
     // =================================== POST ===================================
-    async createClub(data: Club): Promise<Club> {
+    async createClub(data: {name: string}): Promise<Club> {
         if(!this.checker.isValidClub(data)) {
             throw new Error("Invalid club data");
         }
-        const response = await API.post("clubs", data);
+        const response = await API.put("club", data);
         return response;
     }
 
@@ -63,7 +63,7 @@ export class ClubComposable  {
 
     // =================================== DELETE ===================================
     async deleteClub(clubId: number): Promise<void> {
-        const response = await API.delete(`clubs/${clubId}`);
+        const response = await API.delete(`club/${clubId}`);
         return response;
     }
 
