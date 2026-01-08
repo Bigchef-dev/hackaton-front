@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-import HelloWorld from '../components/HelloWorld.vue';
+import HelloWorld from '../components/Home.vue';
 import ClubForm from '../components/ClubForm.vue';
 import AdminDashboard from '../components/AdminDashboard.vue';
 

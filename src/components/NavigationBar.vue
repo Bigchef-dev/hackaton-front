@@ -25,7 +25,7 @@ const currentUser = ref({
   avatar: "M"
 })
 
-const nomApp = 'Ultimate App' //TODO
+const nomApp = 'Ultimate Sports'
 
 const getInitials = (name: string) => {
   return name
