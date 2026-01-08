@@ -194,7 +194,7 @@ const submitSession = () => {
             </h5>
 
             <div
-            v-for="(measure, mIndex) in getMeasuresForActivity(activity.id)"
+            v-for="(measure) in getMeasuresForActivity(activity.id)"
             :key="measure.id"
             class="border rounded-lg p-3 space-y-2 bg-gray-50"
             >
