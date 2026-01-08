@@ -1,50 +1,51 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { AthleteComposable } from '../../utils/composabes/athlete';
+import type { Athlete, League } from '../../utils/types';
+import { LeagueComposable } from '../../utils/composabes/league';
 
-interface Athlete {
-  id: number;
-  name: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  birthdate: string;
-  gender: string;
-  sport: string;
-  club: string;
-  level: string;
-}
+
+const athleteApi = new AthleteComposable();
 
 const athletes = ref<Athlete[]>([
   {
-    id: Date.now(),
+    id: 0,
     name: '',
     lastName: '',
     email: '',
-    phone: '',
-    address: '',
-    birthdate: '',
-    gender: '',
-    sport: '',
-    club: '',
-    level: '',
-  }
+    phoneNumber: '',
+    adress: '',
+    birthDate: '',
+    gender: 'X',
+    type: 'ATHLETE',
+    id_league: 0,
+  },
 ]);
 
-/* Actions */
+const leagueApi = new LeagueComposable();
+const leagues = ref<League[]>([]);
+
+onMounted(async () => {
+  try {
+    leagues.value = await leagueApi.getAllLeagues();
+  } catch (error) {
+    console.error(error);
+    alert('Erreur lors du chargement des ligues');
+  }
+});
+
 const addAthlete = () => {
   athletes.value.push({
-    id: Date.now() + Math.random(),
+    id: athletes.value.length,
     name: '',
     lastName: '',
     email: '',
-    phone: '',
-    address: '',
-    birthdate: '',
-    gender: '',
-    sport: '',
-    club: '',
-    level: '',
+    phoneNumber: '',
+    adress: '',
+    birthDate: '',
+    gender: 'X',
+    type: 'ATHLETE',
+    id_league: 0,
   });
 };
 
@@ -54,20 +55,26 @@ const removeAthlete = (index: number) => {
   }
 };
 
-const submitAthletes = () => {
-  if (athletes.value.length === 0) {
-    alert('Vous n\'avez créé aucun athlète');
+const submitAthletes = async () => {
+  if (!athletes.value.length) {
+    alert("Vous n'avez créé aucun athlète");
     return;
   }
 
-  const payload = {
-    athletes: athletes.value,
-  };
+  try {
+    for (const athlete of athletes.value) {
+      await athleteApi.createAthlete(athlete);
+    }
 
-  console.log('Athlète(s) créés :', payload);
-  // TODO: appel API
+    alert('Athlète(s) créé(s) avec succès');
+
+    // reset formulaire
+    athletes.value = [athletes.value[0]];
+  } catch (error) {
+    console.error(error);
+    alert('Erreur lors de la création');
+  }
 };
-
 </script>
 
 <template>
@@ -84,7 +91,7 @@ const submitAthletes = () => {
 
       <div
         v-for="(athlete, index) in athletes"
-        :key="athlete.id"
+        :key="`athlete-${index}`"
         class="border rounded-lg p-4 space-y-3"
       >
 
@@ -133,7 +140,7 @@ const submitAthletes = () => {
             </label>
             <input
               type="tel"
-              v-model="athlete.phone"
+              v-model="athlete.phoneNumber"
               class="w-full border rounded-md p-2"
               placeholder="Ex : 06 12 34 56 78"
             />
@@ -145,7 +152,7 @@ const submitAthletes = () => {
             </label>
             <input
               type="date"
-              v-model="athlete.birthdate"
+              v-model="athlete.birthDate"
               class="w-full border rounded-md p-2"
             />
           </div>
@@ -157,7 +164,7 @@ const submitAthletes = () => {
           </label>
           <input
             type="text"
-            v-model="athlete.address"
+            v-model="athlete.adress"
             class="w-full border rounded-md p-2"
             placeholder="Ex : 12 rue des Fleurs, 75000 Paris"
           />
@@ -175,49 +182,28 @@ const submitAthletes = () => {
               <option value="">Sélectionner</option>
               <option value="M">Masculin</option>
               <option value="F">Féminin</option>
-              <option value="Autre">Autre</option>
+              <option value="X">Autre</option>
             </select>
           </div>
 
           <div>
             <label class="block text-sm font-medium mb-1">
-              Sport
+              League
             </label>
-            <input
-              type="text"
-              v-model="athlete.sport"
-              class="w-full border rounded-md p-2"
-              placeholder="Ex : Plongée Sous-Marine"
-            />
-          </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Club
-            </label>
-            <input
-              type="text"
-              v-model="athlete.club"
-              class="w-full border rounded-md p-2"
-              placeholder="Ex : FC Pingouin"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Niveau
-            </label>
             <select
-              v-model="athlete.level"
+              v-model="athlete.id_league"
               class="w-full border rounded-md p-2"
             >
-              <option value="">Sélectionner</option>
-              <option value="Débutant">Débutant</option>
-              <option value="Intermédiaire">Intermédiaire</option>
-              <option value="Avancé">Avancé</option>
-              <option value="Expert">Expert</option>
+              <option :value="0">Sélectionner une ligue</option>
+
+              <option
+                v-for="league in leagues"
+                :key="league.id"
+                :value="league.id"
+              >
+                {{ league.nom }}
+              </option>
             </select>
           </div>
         </div>
