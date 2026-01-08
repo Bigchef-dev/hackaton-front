@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CreationAthlete from './CreationAthlete.vue';
 import CreationCoach from './CreationCoach.vue';
+import InfosPerso from './InfosPerso.vue';
+import StatPres from './StatPres.vue';
 
 const router = useRouter();
 
@@ -74,28 +76,7 @@ const activeAction = ref<Action>(null);
           </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <p class="text-sm text-gray-600">Nom</p>
-            <p class="text-lg font-semibold text-gray-800">
-              {{ president.name }} {{ president.lastName }}
-            </p>
-          </div>
-
-          <div>
-            <p class="text-sm text-gray-600">Club</p>
-            <p class="text-lg font-semibold text-gray-800">
-              {{ president.club }}
-            </p>
-          </div>
-
-          <div>
-            <p class="text-sm text-gray-600">Contact</p>
-            <p class="text-lg font-semibold text-gray-800">
-              {{ president.email }}
-            </p>
-          </div>
-        </div>
+        <InfosPerso :president="president" />
       </div>
     </div>
 
@@ -163,7 +144,7 @@ const activeAction = ref<Action>(null);
       </div>
 
       <div v-else-if="activeAction === 'stats'">
-        <CoachStat />
+        <StatPres />
       </div>
     </div>
   </div>

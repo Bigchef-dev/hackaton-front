@@ -48,19 +48,11 @@ const goBack = () => {
       />
 
       <template #footer>
-        <!-- Back link -->
-        <router-link
-            to="/"
-            class="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-4"
-        >
-            ← Retour à l’accueil
-        </router-link>
-        <br/>
         <button
           @click="goBack"
           class="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-4"
         >
-          ← Retour
+          ← Retour au tableau de bord
         </button>
       </template>
     </Card>
