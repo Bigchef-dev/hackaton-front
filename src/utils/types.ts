@@ -128,3 +128,11 @@ export interface AuthState {
     token: string | null;
     isAuthenticated: boolean;
 }
+
+export enum UserRole {
+    invite = 'INVITE',
+    athlete = 'ATHLETE',
+    coach = 'COACH',
+    president = 'PRESIDENT',
+    admin = 'ADMIN'
+}
