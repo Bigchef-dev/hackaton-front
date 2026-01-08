@@ -1,168 +1,221 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-8">
+    <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-6 md:p-8">
         <div class="max-w-7xl mx-auto">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-12">
+
+            <!-- HEADER -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
                 <div>
-                    <h1 class="text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
-                    <p class="text-gray-400">Welcome! Here you can manage users and settings.</p>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+                        Admin Dashboard
+                    </h1>
+                    <p class="text-gray-400">
+                        Welcome! Here you can manage users and clubs.
+                    </p>
                 </div>
-                <button @click=""
-                    class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-blue-500/50 transition-all duration-300 hover:scale-105">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add Card
+
+                <div class="flex flex-wrap gap-3">
+                    <button @click="addClub"
+                        class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-3 rounded-xl font-semibold shadow-lg transition hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            class="bi bi-bank" viewBox="0 0 16 16">
+                            <path
+                                d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89zM3.777 3h8.447L8 1zM2 6v7h1V6zm2 0v7h2.5V6zm3.5 0v7h1V6zm2 0v7H12V6zM13 6v7h1V6zm2-1V4H1v1zm-.39 9H1.39l-.25 1h13.72z" />
+                        </svg>
+                        <span class="hidden md:inline">Create New Club</span>
+
+                    </button>
+
+                    <button @click="openUserFormModal = true;"
+                        class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-5 py-3 rounded-xl font-semibold shadow-lg transition hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                            <path fill-rule="evenodd"
+                                d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                        <span class="hidden md:inline">Create New President</span>
+
+                    </button>
+                </div>
+            </div>
+
+            <!-- TOGGLES -->
+            <div class="flex gap-3 mb-6">
+                <button @click="showUsers = !showUsers"
+                    class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">
+                    {{ showUsers ? 'Hide Users' : 'Show Users' }}
+                </button>
+
+                <button @click="showClubs = !showClubs"
+                    class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">
+                    {{ showClubs ? 'Hide Clubs' : 'Show Clubs' }}
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div v-for="card in cards" :key="card.id" class="p-4 bg-gray-800 rounded-2xl shadow-lg shadow-black/30">
+            <!-- MAIN LAYOUT -->
+            <div class="flex flex-col md:flex-row gap-6 transition-all">
 
-                    <div class="text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div class="text-lg font-medium">
-                            {{ card.name }} {{ card.lastName }}
+                <!-- USERS COLUMN -->
+                <div v-if="showUsers" class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
+
+                    <h2 class="text-xl font-bold text-white mb-4">
+                        Users
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div v-for="card in cards" :key="card.id" class="p-4 bg-gray-800 rounded-xl shadow">
+
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-white">
+                                <div class="font-medium">
+                                    {{ card.name }} {{ card.lastName }}
+                                    <span class="ml-2 text-xs text-gray-400">
+                                        ({{ card.type }})
+                                    </span>
+                                </div>
+
+                                <button class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
+                                    @click="validateDeleteUser(card.id)">
+                                    Delete
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                            <!-- <button
-                                class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white transition" @click="openModalUserInfo(card)">
-                                See Details
-                            </button> -->
+                <!-- CLUBS COLUMN -->
+                <div v-if="showClubs" class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4
+           md:max-h-[calc(100vh-260px)] md:overflow-y-auto custom-scroll">
 
-                            <button
-                                class="w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white transition"
-                                @click="validateDeleteUser(card.id)">
+
+                    <h2 class="text-xl font-bold text-white mb-4">
+                        Clubs
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div v-for="club in clubs" :key="club.id"
+                            class="p-4 bg-gray-800 rounded-xl shadow text-white flex justify-between items-center">
+
+                            <span class="font-medium">
+                                {{ club.name }}
+                            </span>
+
+                            <button @click="deleteClub(club.id)"
+                                class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition">
                                 Delete
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-
-            <!-- <div v-if="seeUserDetails">
-                <UserInfoModal :user="selectedCard" @close="seeUserDetails = false" />
-            </div> -->
-
-
-            <!-- Cards Grid
-            <div class="grid grid-cols-1 sm:grid-cols-3 ">
-                <div v-for="card in cards" :key="card.id">
-                    <UserCard :user="card" />
+                <div v-if="openUserFormModal">
+                    <UserFormModal :clubs="clubs || []" @close="openUserFormModal = false" @submit="addUser" />
                 </div>
-            </div> -->
-
-            <!-- Recent Activity -->
-
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import UserCard from './reusable/UserCard.vue';
-import type { UserInfo } from '../utils/types';
-import { validateLocaleAndSetLanguage } from 'typescript';
-import UserInfoModal from './UserInfoModal.vue';
+import { onMounted, ref } from 'vue';
+import type { Club, UserInfo } from '../utils/types';
+import { UserComposable } from '../utils/composabes/user';
+import { ClubComposable } from '../utils/composabes/club';
+import UserFormModal from './UserFormModal.vue';
 
-const seeUserDetails = ref(false);
-const selectedCard = ref<UserInfo>({
-    id: 0,
-    name: '',
-    lastName: '',
-    birthDate: new Date(),
-    phoneNumber: '',
-    adress: '',
-    email: '',
-    gender: 'X',
-    type: 'ATHLETE'
+/* VISIBILITY */
+const showUsers = ref(true);
+const showClubs = ref(true);
+const openUserFormModal = ref(false);
+
+const UserController = new UserComposable();
+const ClubController = new ClubComposable();
+
+const cards = ref<UserInfo[]>();
+const clubs = ref<Club[]>();
+
+
+onMounted(async () => {
+    cards.value = await UserController.getAllUsers();
+    clubs.value = await ClubController.getAllClubs();
 });
-// Icon components (simplified SVG)
-const Users = {
-    template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`
-};
 
-const DollarSign = {
-    template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
-};
-
-const TrendingUp = {
-    template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>`
-};
-
-const Settings = {
-    template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`
-};
-
-const Bell = {
-    template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>`
-};
+/* CLUBS */
 
 
 
-const cards = ref<UserInfo[]>([
-    {
-        id: 1,
-        name: 'John',
-        lastName: 'Doe',
-        birthDate: new Date('1990-01-01'),
-        phoneNumber: '123-456-7890',
-        adress: '123 Main St, Anytown, USA',
-        email: 'john.doe@example.com',
-        gender: "M",
-        type: "ATHLETE"
-    },
-    {
-        id: 2,
-        name: 'Jane',
-        lastName: 'Smith',
-        birthDate: new Date('1985-05-15'),
-        phoneNumber: '987-654-3210',
-        adress: '456 Elm St, Othertown, USA',
-        email: 'jane.smith@example.com',
-        gender: "F",
-        type: "COACH"
-    },
-    {
-        id: 3,
-        name: 'Alice',
-        lastName: 'Johnson',
-        birthDate: new Date('1992-09-23'),
-        phoneNumber: '555-123-4567',
-        adress: '789 Oak St, Sometown, USA',
-        email: 'alice.johnson@example.com',
-        gender: "F",
-        type: "PRESIDENT"
-    },
-    {
-        id: 4,
-        name: 'Bob',
-        lastName: 'Brown',
-        birthDate: new Date('1988-12-11'),
-        phoneNumber: '444-555-6666',
-        adress: '321 Pine St, Anycity, USA',
-        email: 'bob.brown@example.com',
-        gender: "M",
-        type: "ADMIN"
-    }
-
-]);
-
+/* ACTIONS */
 function validateDeleteUser(id: number) {
-    const confirmed = confirm("Are you sure you want to delete this user?");
-    if (confirmed) {
-        console.log("UserDeleted:", id);
-
+    if (confirm('Are you sure you want to delete this user?')) {
+        console.log('User deleted:', id);
     }
 }
 
-function openModalUserInfo(card: UserInfo) {
-    selectedCard.value = card;
-    seeUserDetails.value = true;
+function addUser(userData: Partial<UserInfo>) {
+    console.log(userData);
+    
+    if (userData.name) {
+        // Convert birthDate from string to Date if provided
+        if (userData.birthDate && typeof userData.birthDate === 'string') {
+            userData.birthDate = new Date(userData.birthDate).toDateString();
+        }
+
+        UserController.createUser(userData as UserInfo)
+            .then((newUser) => {
+                cards.value?.push(newUser);
+                alert(`User "${newUser.name} ${newUser.lastName}" created successfully!`);
+            })
+            .catch((error) => {
+                alert(`Error creating user: ${error.message}`);
+            });
+    }
 }
 
 
+function addClub() {
+    const clubName = window.prompt('Enter the name of the new club:');
+    if (clubName) {
+        ClubController.createClub({ name: clubName })
+            .then((newClub) => {
+                clubs.value?.push(newClub);
+                alert(`Club "${newClub.name}" created successfully!`);
+            })
+            .catch((error) => {
+                alert(`Error creating club: ${error.message}`);
+            });
+    }
+}
 
-
+function deleteClub(id: number) {
+    const confirmed = confirm('Are you sure you want to delete this club?');
+    if (!confirmed) return;
+    ClubController.deleteClub(id)
+        .then(() => {
+            clubs.value = clubs.value?.filter(club => club.id !== id);
+            alert('Club deleted successfully!');
+        })
+        .catch((error) => {
+            alert(`Error deleting club: ${error.message}`);
+        });
+}
 </script>
+
+
+<style scoped>
+.custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 transparent;
+}
+
+.custom-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #6366f1, #8b5cf6);
+    border-radius: 999px;
+}
+</style>

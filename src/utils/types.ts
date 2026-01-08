@@ -13,7 +13,7 @@ export interface Activity {
 }
 
 export interface Group {
-id: number;
+    id: number;
     name: string;
     id_club: number;
 }
@@ -22,12 +22,12 @@ export interface UserInfo {
     id: number;
     name: string;
     lastName: string;
-    birthDate: Date;
+    birthDate: string;
     phoneNumber: string;
     adress: string;
     email: string; // Validation logic for email format should be implemented in the application layer
     gender: "M" | "F" | "X";
-    type: "ATHLETE" | "COACH" | "PRESIDENT" | "ADMIN" | "USER";
+    type: "ATHLETE" | "COACH" | "PRESIDENT" | "ADMIN";
 }
 
 export interface Athlete extends UserInfo {

@@ -63,7 +63,7 @@
                                         </svg>
                                     </div>
                                     <span class="text-center flex-1">
-                                        {{ user?.birthDate.toDateString() }}
+                                        {{ user?.birthDate}}
                                     </span>
                                 </div>
 
