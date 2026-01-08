@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import NavigationBar from './NavigationBar.vue';
-
-defineProps<{ msg: string }>()
 
 const count = ref(0)
 </script>
 
 <template>
-  <NavigationBar />
-
-  <h1>{{ msg }}</h1>
 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
