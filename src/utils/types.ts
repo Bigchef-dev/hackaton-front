@@ -92,3 +92,13 @@ export interface CreateCoachPayload extends CreateUserPayload {
 export interface CreatePresidentPayload extends CreateUserPayload {
     clubId: number;
 }
+export interface CalendarEventType {
+    id: number;
+    title: string;
+    description?: string;
+    start: string; // ISO date string
+    end: string; // ISO date string
+    type: 'training' | 'match' | 'recovery' | 'cours' | 'td' | 'tp' | 'examen' | 'projet' | 'conference' | 'reunion';
+    location?: string;
+    instructor?: string;
+}
