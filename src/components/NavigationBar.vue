@@ -2,28 +2,19 @@
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useRouter} from 'vue-router'
 import { useSidebar } from '../utils/composables/useNavBar'
+import { UserRole } from '../utils/types'
+import { useAuthStore } from '../utils/stores/login'
 const { isSidebarOpen, isMobileMenuOpen, mobileMenuHeight } = useSidebar()
 
 const activeRoute = ref('dashboard')
 const mobileMenuRef = ref<HTMLElement | null>(null)
 
 const router = useRouter()
+const store = useAuthStore()
+const currentUser = computed(() => store.currentUser)
 
-enum UserRole {
-  invite = 'INVITE',
-  admin = 'ADMIN',
-  coach = 'COACH',
-  athlete = 'ATHLETE',
-  president = 'PRESIDENT'
-}
 
-// Simuler un utilisateur connecté (en attendant authantification ok)
-//TODO
-const currentUser = ref({
-  name: 'Admin Martin',
-  role: UserRole.invite,
-  avatar: "M"
-})
+
 
 const nomApp = 'Ultimate Sports'
 

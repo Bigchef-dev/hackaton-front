@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import router from '../utils/router';
-import { useAuthStore } from '../utils/store/authStore';
+import { useAuthStore } from '../utils/stores/login';
 const store = useAuthStore();
 
 const handleLogout = () => {
