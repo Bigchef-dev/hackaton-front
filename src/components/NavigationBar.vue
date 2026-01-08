@@ -21,7 +21,7 @@ enum UserRole {
 //TODO
 const currentUser = ref({
   name: 'Admin Martin',
-  role: UserRole.admin,
+  role: UserRole.athlete,
   avatar: "M"
 })
 
@@ -44,7 +44,7 @@ const SettingsIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" vie
 
 const menuItems = [
   { id: 'dashboard', label: 'Tableau de bord', icon: HomeIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
-  { id: 'athlete', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
+  { id: 'AthleteDashboard', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
   { id: 'coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
   { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },

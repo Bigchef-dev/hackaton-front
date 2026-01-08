@@ -17,18 +17,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin/dashboard',
     name: 'AdminDashboard',
     component: AdminDashboard,
-  },  {
+  }, 
+  {
     path: '/login',
     name: 'Login',
     component: LoginView,
   },
-
-      {
+  {
     path: '/athlete',
     name: 'AthleteDashboard',
     component: AthleteDashboard,
   },
-  
+
 ];
 
 const router = createRouter({
