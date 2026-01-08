@@ -7,6 +7,7 @@ import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
 import LoginForm from '../components/LoginForm.vue';
 import Home from '../components/Home.vue';
+import LoginStuff from '../components/LoginStuff.vue';
 
 
 
@@ -25,7 +26,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginView,
+    component: LoginStuff,
   },
   {
     path: '/athlete',
