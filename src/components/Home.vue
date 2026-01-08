@@ -15,7 +15,7 @@ const features = [
   {
     icon: '📅',
     title: 'Planification des séances',
-    description: 'Créez et planifiez vos entraînements et compétitions avec récurrence, assignez les coachs et les athlètes.',
+    description: 'Créez et planifiez vos entraînements et compétitions avec ou sans récurrence, assignez les coachs et les athlètes.',
     color: 'from-indigo-500 to-blue-200'
   },
   {
@@ -36,7 +36,7 @@ const profiles = [
   {
     emoji: '🎯',
     title: 'Coach',
-    description: 'Planifiez vos séances et les activiés proposées puis assignés les athlètes qui y participeront.',
+    description: 'Planifiez vos séances et les activiés proposées puis assignez les athlètes qui y participeront.',
     gradient: 'from-purple-600 to-pink-600'
   },
   {
@@ -48,13 +48,13 @@ const profiles = [
     {
     emoji: '🧑‍💼',
     title: 'Président',
-    description: 'ajoutez les athlètes et les coachs présents dans votre club',
+    description: 'Ajoutez les athlètes et les coachs présents dans votre club',
     gradient: 'from-purple-600 to-pink-600'
   },
   {
     emoji: '💻',
     title: 'Administrateur',
-    description: 'Créer les clubs, les sports et les présidents pris en charge par l\'application.',
+    description: 'Créez les clubs, les sports et les présidents pris en charge par l\'application.',
     gradient: 'from-purple-600 to-pink-600'
   }
 ]
