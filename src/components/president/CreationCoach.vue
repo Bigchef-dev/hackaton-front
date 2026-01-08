@@ -21,7 +21,7 @@ const coaches = ref<Coach[]>([
 
 const addCoach = () => {
   coaches.value.push({
-    id: coaches.value.length,
+    id: Date.now() + Math.random(),
     name: '',
     lastName: '',
     email: '',
@@ -63,7 +63,6 @@ const submitCoaches = async () => {
       gender: 'X',
       clubId: 0,
     });
-
   } catch (error) {
     console.error(error);
     alert('Erreur lors de la création des coachs');
@@ -73,112 +72,33 @@ const submitCoaches = async () => {
 
 <template>
   <div class="p-6 bg-white rounded-lg shadow-md">
-    <h3 class="text-xl font-bold mb-6">
-      Créer un coach
-    </h3>
+    <h3 class="text-xl font-bold mb-6">Créer un coach</h3>
 
-    <!-- Coaches -->
-    <div class="space-y-4">
-      <h4 class="font-semibold">
-        Coachs
-      </h4>
-
+    <!-- Desktop grid -->
+    <div class="hidden md:grid grid-cols-1 gap-4">
       <div
         v-for="(coach, index) in coaches"
         :key="coach.id"
         class="border rounded-lg p-4 space-y-3"
       >
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Prénom
-            </label>
-            <input
-              type="text"
-              v-model="coach.name"
-              class="w-full border rounded-md p-2"
-              placeholder="Ex : Jean"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Nom
-            </label>
-            <input
-              type="text"
-              v-model="coach.lastName"
-              class="w-full border rounded-md p-2"
-              placeholder="Ex : Dupont"
-            />
-          </div>
+        <div class="grid grid-cols-2 gap-4">
+          <input v-model="coach.name" placeholder="Prénom" class="border rounded-md p-2" />
+          <input v-model="coach.lastName" placeholder="Nom" class="border rounded-md p-2" />
         </div>
-
-        <div>
-          <label class="block text-sm font-medium mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            v-model="coach.email"
-            class="w-full border rounded-md p-2"
-            placeholder="Ex : jean.dupont@example.com"
-          />
+        <input v-model="coach.email" placeholder="Email" class="border rounded-md p-2 w-full" />
+        <div class="grid grid-cols-2 gap-4">
+          <input v-model="coach.phoneNumber" placeholder="Téléphone" class="border rounded-md p-2" />
+          <input v-model="coach.birthDate" type="date" class="border rounded-md p-2" />
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Téléphone
-            </label>
-            <input
-              type="tel"
-              v-model="coach.phoneNumber"
-              class="w-full border rounded-md p-2"
-              placeholder="Ex : 06 12 34 56 78"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Date de naissance
-            </label>
-            <input
-              type="date"
-              v-model="coach.birthDate"
-              class="w-full border rounded-md p-2"
-            />
-          </div>
+        <div class="grid grid-cols-2 gap-4">
+          <select v-model="coach.gender" class="border rounded-md p-2">
+            <option value="">Sélectionner</option>
+            <option value="M">Masculin</option>
+            <option value="F">Féminin</option>
+            <option value="X">Autre</option>
+          </select>
+          <input v-model="coach.clubId" placeholder="ClubId" class="border rounded-md p-2" />
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">
-              Sexe
-            </label>
-            <select
-              v-model="coach.gender"
-              class="w-full border rounded-md p-2"
-            >
-              <option value="">Sélectionner</option>
-              <option value="M">Masculin</option>
-              <option value="F">Féminin</option>
-              <option value="X">Autre</option>
-            </select>
-          </div>
-        <div>
-          <label class="block text-sm font-medium mb-1">
-            ClubId
-          </label>
-          <input
-            type="text"
-            v-model="coach.clubId"
-            class="w-full border rounded-md p-2"
-            placeholder="Ex : FC Pingouin"
-          />
-        </div>
-
         <button
           v-if="coaches.length > 1"
           @click="removeCoach(index)"
@@ -188,16 +108,47 @@ const submitCoaches = async () => {
           Supprimer ce coach
         </button>
       </div>
-      </div>
-
-      <button
-        @click="addCoach"
-        type="button"
-        class="text-blue-600 font-medium hover:underline text-sm"
-      >
-        + Ajouter un coach
-      </button>
     </div>
+
+    <!-- Mobile cards -->
+    <div class="md:hidden space-y-4">
+      <div
+        v-for="(coach, index) in coaches"
+        :key="coach.id"
+        class="border rounded-lg p-4 shadow-sm bg-gray-50 space-y-2"
+      >
+        <div><span class="font-semibold">Prénom:</span> <input v-model="coach.name" class="border rounded-md p-1 w-full" /></div>
+        <div><span class="font-semibold">Nom:</span> <input v-model="coach.lastName" class="border rounded-md p-1 w-full" /></div>
+        <div><span class="font-semibold">Email:</span> <input v-model="coach.email" class="border rounded-md p-1 w-full" /></div>
+        <div><span class="font-semibold">Téléphone:</span> <input v-model="coach.phoneNumber" class="border rounded-md p-1 w-full" /></div>
+        <div><span class="font-semibold">Date de naissance:</span> <input v-model="coach.birthDate" type="date" class="border rounded-md p-1 w-full" /></div>
+        <div><span class="font-semibold">Sexe:</span> 
+          <select v-model="coach.gender" class="border rounded-md p-1 w-full">
+            <option value="">Sélectionner</option>
+            <option value="M">Masculin</option>
+            <option value="F">Féminin</option>
+            <option value="X">Autre</option>
+          </select>
+        </div>
+        <div><span class="font-semibold">ClubId:</span> <input v-model="coach.clubId" class="border rounded-md p-1 w-full" /></div>
+        <button
+          v-if="coaches.length > 1"
+          @click="removeCoach(index)"
+          type="button"
+          class="text-red-600 text-sm hover:underline mt-2"
+        >
+          Supprimer ce coach
+        </button>
+      </div>
+    </div>
+
+    <button
+      @click="addCoach"
+      type="button"
+      class="text-blue-600 font-medium hover:underline mt-4"
+    >
+      + Ajouter un coach
+    </button>
 
     <!-- Submit -->
     <div class="pt-4">
@@ -210,3 +161,9 @@ const submitCoaches = async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+input, select {
+  width: 100%;
+}
+</style>

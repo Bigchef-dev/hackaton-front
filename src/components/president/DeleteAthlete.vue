@@ -26,7 +26,6 @@ const deleteAthlete = async (athleteId: number) => {
   try {
     await athleteApi.deleteAthlete(athleteId);
     alert('Athlète supprimé avec succès');
-    // Retirer l'athlète supprimé de la liste locale
     athletes.value = athletes.value.filter(a => a.id !== athleteId);
   } catch (error) {
     console.error(error);
@@ -48,7 +47,8 @@ onMounted(() => {
     </div>
 
     <div v-else>
-      <table class="w-full border-collapse border border-gray-200">
+      <!-- Table desktop -->
+      <table class="hidden md:table w-full border-collapse border border-gray-200">
         <thead>
           <tr class="bg-gray-100">
             <th class="border p-2 text-left">Prénom</th>
@@ -65,27 +65,44 @@ onMounted(() => {
             <td class="border p-2">{{ athlete.email }}</td>
             <td class="border p-2">{{ athlete.phoneNumber }}</td>
             <td class="border p-2">
-              <button
-                @click="deleteAthlete(athlete.id)"
-                class="text-red-600 hover:underline"
-              >
+              <button @click="deleteAthlete(athlete.id)" class="text-red-600 hover:underline">
                 Supprimer
               </button>
             </td>
           </tr>
-          <tr v-if="athletes.length === 0">
-            <td colspan="5" class="text-center p-4 text-gray-500">
-              Aucun athlète disponible
-            </td>
-          </tr>
         </tbody>
       </table>
+
+      <!-- Mobile cards -->
+      <div class="md:hidden space-y-4">
+        <div
+          v-for="athlete in athletes"
+          :key="athlete.id"
+          class="border rounded-lg p-4 shadow-sm bg-gray-50"
+        >
+          <div><span class="font-semibold">Prénom:</span> {{ athlete.name }}</div>
+          <div><span class="font-semibold">Nom:</span> {{ athlete.lastName }}</div>
+          <div><span class="font-semibold">Email:</span> {{ athlete.email }}</div>
+          <div><span class="font-semibold">Téléphone:</span> {{ athlete.phoneNumber }}</div>
+          <button
+            @click="deleteAthlete(athlete.id)"
+            class="text-red-600 hover:underline mt-2"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+
+      <div v-if="athletes.length === 0" class="text-center p-4 text-gray-500">
+        Aucun athlète disponible
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-table th, table td {
+table th,
+table td {
   vertical-align: middle;
 }
 </style>

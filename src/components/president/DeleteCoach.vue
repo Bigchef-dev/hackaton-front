@@ -26,7 +26,6 @@ const deleteCoach = async (coachId: number) => {
   try {
     await coachApi.deleteCoach(coachId);
     alert('Coach supprimé avec succès');
-    // Retirer le coach supprimé de la liste locale
     coaches.value = coaches.value.filter(c => c.id !== coachId);
   } catch (error) {
     console.error(error);
@@ -48,7 +47,8 @@ onMounted(() => {
     </div>
 
     <div v-else>
-      <table class="w-full border-collapse border border-gray-200">
+      <!-- Desktop table -->
+      <table class="hidden md:table w-full border-collapse border border-gray-200">
         <thead>
           <tr class="bg-gray-100">
             <th class="border p-2 text-left">Prénom</th>
@@ -80,12 +80,36 @@ onMounted(() => {
           </tr>
         </tbody>
       </table>
+
+      <!-- Mobile cards -->
+      <div class="md:hidden space-y-4">
+        <div
+          v-for="coach in coaches"
+          :key="coach.id"
+          class="border rounded-lg p-4 shadow-sm bg-gray-50 space-y-2"
+        >
+          <div><span class="font-semibold">Prénom:</span> {{ coach.name }}</div>
+          <div><span class="font-semibold">Nom:</span> {{ coach.lastName }}</div>
+          <div><span class="font-semibold">Email:</span> {{ coach.email }}</div>
+          <div><span class="font-semibold">Téléphone:</span> {{ coach.phoneNumber }}</div>
+          <button
+            @click="deleteCoach(coach.id)"
+            class="text-red-600 hover:underline mt-2"
+          >
+            Supprimer
+          </button>
+        </div>
+        <div v-if="coaches.length === 0" class="text-center text-gray-500 p-4">
+          Aucun coach disponible
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-table th, table td {
+table th,
+table td {
   vertical-align: middle;
 }
 </style>
