@@ -55,7 +55,7 @@ const handleLogin = async () => {
     await login(credentials.value);
 
     // Redirection après connexion réussie
-    const redirectPath = (route.query.redirect as string) || '/admin';
+    const redirectPath = (route.query.redirect as string) || '/';
     router.push(redirectPath);
   } catch (error) {
     errorMessage.value = error instanceof Error

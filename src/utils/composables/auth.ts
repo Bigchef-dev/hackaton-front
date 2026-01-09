@@ -22,6 +22,13 @@ export class AuthComposable {
             authToken.value = storedToken;
             try {
                 currentUser.value = JSON.parse(storedUser);
+                const store = useAuthStore();
+                if(!currentUser.value) throw new Error('No current user');
+                store.setCurrentUser({ id: currentUser.value.id, name: currentUser.value.name,
+                    role: currentUser.value.type == 'ADMIN' ? UserRole.admin : (currentUser.value.type == 'COACH' ? UserRole.coach : (currentUser.value.type == 'PRESIDENT' ? UserRole.president : UserRole.athlete)),
+                    avatar: "A"
+                });
+
             } catch (error) {
                 console.error('Error parsing stored user:', error);
                 this.logout();
