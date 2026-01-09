@@ -100,7 +100,7 @@ const getAvailableAthletes = (groupId: number): Athlete[] => {
 onMounted(async () => {
   loading.value = true;
   try {
-    groups.value = await clubApi.getClubGroups(String(props.clubId));
+    groups.value = await clubApi.getClubGroups(props.clubId);
     usingFakeData.value = false;
   } catch (e) {
     console.error(e);
