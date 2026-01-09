@@ -11,6 +11,7 @@ import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
 import LoginForm from '../components/LoginForm.vue';
 import LoginStuff from '../components/LoginStuff.vue';
+import Logout from '../components/Logout.vue';
 
 const routes: Array<RouteRecordRaw> = [
 
@@ -57,6 +58,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AthleteDashboard',
     component: AthleteDashboard,
   },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout,
+  }
 
 ];
 

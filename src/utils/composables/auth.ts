@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import { apiInstance as API } from '../api';
-import type { LoginCredentials, AdminLoginCredentials, LoginResponse, UserInfo } from '../types';
+import { type LoginCredentials, type AdminLoginCredentials, type LoginResponse, type UserInfo, UserRole } from '../types';
+import { useAuthStore } from '../stores/login';
 
 // État réactif global de l'authentification
 const currentUser = ref<UserInfo | null>(null);
@@ -16,7 +17,7 @@ export class AuthComposable {
     private initAuth(): void {
         const storedToken = localStorage.getItem('authToken');
         const storedUser = localStorage.getItem('currentUser');
-        
+
         if (storedToken && storedUser) {
             authToken.value = storedToken;
             try {
@@ -31,10 +32,10 @@ export class AuthComposable {
     // =================================== POST ===================================
     async login(credentials: LoginCredentials): Promise<UserInfo> {
         const response: LoginResponse = await API.post('auth/login', credentials);
-        
+
         authToken.value = response.access_token;
         localStorage.setItem('authToken', response.access_token);
-        
+
         try {
             const user: UserInfo = await API.get('users/me');
             currentUser.value = user;
@@ -50,10 +51,12 @@ export class AuthComposable {
     async adminLogin(password: string): Promise<LoginResponse> {
         console.log('Admin login credentials being sent:', password);
         const response: LoginResponse = await API.post('auth/admin-login', { password });
-        
+
         authToken.value = response.access_token;
         localStorage.setItem('authToken', response.access_token);
-        
+        const store = useAuthStore();
+        store.setCurrentUser({ name: 'Admin', role: UserRole.admin, avatar: '' });
+
         return response;
     }
 
@@ -63,6 +66,8 @@ export class AuthComposable {
         currentUser.value = null;
         localStorage.removeItem('authToken');
         localStorage.removeItem('currentUser');
+        const store = useAuthStore();
+        store.clearUser();
     }
 
     // =================================== GETTERS ===================================
