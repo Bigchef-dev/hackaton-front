@@ -14,6 +14,11 @@ const emit = defineEmits<{
 }>();
 
 
+onMounted(() => {
+  console.log('Props groupes:', props.groups);
+  console.log('Props athlètes:', props.athletes);
+});
+
 const loading = ref(false);
 const usingFakeData = ref(false);
 
@@ -110,12 +115,12 @@ const createGroup = async () => {
 
     <p v-if="loading">Chargement...</p>
 
-    <p v-else-if="groups.length === 0" class="text-gray-500">
+    <p v-else-if="props.groups.length === 0" class="text-gray-500">
       Aucun groupe pour ce club
     </p>
 
     <div v-else class="space-y-3">
-      <div v-for="group in groups" :key="group.id" class="border rounded-lg overflow-hidden">
+      <div v-for="group in props.groups" :key="group.id" class="border rounded-lg overflow-hidden">
         <!-- HEADER -->
         <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
           :class="{ 'bg-blue-50': isGroupOpen(group.id) }" @click="toggleGroup(group.id)">

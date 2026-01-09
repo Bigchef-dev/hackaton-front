@@ -34,9 +34,12 @@ onMounted(async () => {
   console.log(groupList.value);
 
 
+  
+
 
 
 });
+
 
 function addGroup(name: string) {
   clubController.createGroup({ name, clubId: userCoach!.value!.club.id }).then(() => {
@@ -46,16 +49,11 @@ function addGroup(name: string) {
   });
 }
 
-
-
 const goToProfile = () => {
   router.push({
     name: 'Profile',
   });
 };
-
-
-
 
 type Action =
   | 'training'
@@ -108,7 +106,6 @@ onMounted(() => {
     },
   ];
 });
-
 </script>
 
 <template>
