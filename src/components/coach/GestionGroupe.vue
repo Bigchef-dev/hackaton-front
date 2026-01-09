@@ -104,6 +104,7 @@ const getGroupAthletes = (groupId: number): Athlete[] =>
 const getAvailableAthletes = (groupId: number): Athlete[] => {
   const currentIds = getGroupAthletes(groupId).map(a => a.id);
   let available = allAthletes.value.filter(a => !currentIds.includes(a.id));
+  // TODO : remplacer par appel API pour récupérer les athlètes du club du coach
   
   // Appliquer le filtre par sport
   if (selectedSport.value !== 'all') {
@@ -115,6 +116,7 @@ const getAvailableAthletes = (groupId: number): Athlete[] => {
 
 // Computed pour extraire la liste des sports uniques
 const updateAvailableSports = () => {
+  // TODO : remplacer par appel API pour récupérer les sports du club du coach
   const sports = new Set<string>();
   allAthletes.value.forEach(athlete => {
     if (getAthleteSport(athlete.id)) {
