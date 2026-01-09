@@ -17,6 +17,20 @@ const emit = defineEmits<{
 onMounted(() => {
   console.log('Props groupes:', props.groups);
   console.log('Props athlètes:', props.athletes);
+
+  // Initialize groupAthletes map
+  const groupAthletesMap: Record<number, Athlete[]> = {};
+
+  props.athletes.forEach(athlete => {
+    athlete.groups!.forEach(groupId => {
+      if (!groupAthletesMap[groupId.id]) {
+        groupAthletesMap[groupId.id] = [];
+      }
+      groupAthletesMap[groupId.id].push(athlete);
+    });
+  });
+
+  groupAthletes.value = groupAthletesMap;
 });
 
 const loading = ref(false);
@@ -131,13 +145,13 @@ const createGroup = async () => {
             </span>
           </div>
 
-          <button @click.stop="" class="text-red-600 hover:underline text-sm">
+          <button v-if="group.name != 'Default Group'" @click.stop="" class="text-red-600 hover:underline text-sm">
             Supprimer
           </button>
         </div>
 
         <!-- CONTENT -->
-        <div v-if="isGroupOpen(group.id)" class="bg-gray-50 p-4 border-t">
+        <div v-if="isGroupOpen(group.id) " class="bg-gray-50 p-4 border-t">
           <div class="flex justify-between items-center mb-3">
             <h4 class="font-semibold text-gray-700">Athlètes</h4>
             <button @click="addAthleteToGroup(group.id)" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">
