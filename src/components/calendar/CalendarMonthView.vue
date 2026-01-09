@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import type { Session } from '../../utils/types';
+import { groupEventsByDay } from '../../utils/composables/calandar/useRecurrence';
 import CalendarDayCell from './CalendarDayCell.vue';
 import EventTooltip from './EventTooltip.vue';
 
@@ -34,60 +35,27 @@ const hideTooltip = () => {
   tooltipEvent.value = null;
 };
 
-// Générer les occurrences d'événements récurrents
-const generateRecurrentEvents = (event: Session, targetDate: Date): Session[] => {
-  const startDate = new Date(event.date_session);
-  const targetDateOnly = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-  const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-  
-  // Si la date cible est avant la date de début, pas d'occurrence
-  if (targetDateOnly < startDateOnly) {
-    return [];
-  }
-  
-  // Calculer le nombre de jours entre la date de début et la date cible
-  const daysDiff = Math.floor((targetDateOnly.getTime() - startDateOnly.getTime()) / (1000 * 60 * 60 * 24));
-  
-  // Si pas de récurrence, afficher uniquement le jour de début
-  if (!event.recurrence || event.recurrence <= 0) {
-    if (daysDiff === 0) {
-      return [event];
-    }
-    return [];
-  }
-  
-  // Vérifier si la date cible correspond à une occurrence (multiple de la récurrence)
-  if (daysDiff % event.recurrence === 0) {
-    const occurrenceDate = new Date(targetDate);
-    occurrenceDate.setHours(startDate.getHours(), startDate.getMinutes(), 0, 0);
-    
-    return [{
-      ...event,
-      date_session: occurrenceDate,
-      id: event.id + (daysDiff / event.recurrence) * 1000000
-    }];
-  }
-  
-  return [];
-};
-
 // Organiser les événements par jour avec récurrence
 const eventsByDay = computed(() => {
-  const map = new Map<string, Session[]>();
+  // Trouver le début et la fin de la grille affichée
+  const gridStart = props.monthGrid[0];
+  const gridEnd = props.monthGrid[props.monthGrid.length - 1];
   
+  // Normaliser les dates
+  const normalizedStart = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate());
+  const normalizedEnd = new Date(gridEnd.getFullYear(), gridEnd.getMonth(), gridEnd.getDate());
+  
+  const eventsMap = groupEventsByDay(props.events, normalizedStart, normalizedEnd);
+  
+  // Vérifier que chaque date de la grille a bien sa clé
+  const result = new Map<string, Session[]>();
   props.monthGrid.forEach(date => {
-    const dayKey = date.toDateString();
-    const dayOccurrences: Session[] = [];
-    
-    props.events.forEach(event => {
-      const occurrences = generateRecurrentEvents(event, date);
-      dayOccurrences.push(...occurrences);
-    });
-    
-    map.set(dayKey, dayOccurrences);
+    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const dayKey = normalizedDate.toDateString();
+    result.set(dayKey, eventsMap.get(dayKey) || []);
   });
   
-  return map;
+  return result;
 });
 
 // Jours de la semaine
@@ -97,7 +65,6 @@ const weekDaysMedium = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
 <template>
   <div class="bg-slate-900 rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col h-full min-h-0">
-    <!-- En-tête jours de la semaine - Mobile (1 lettre) -->
     <div class="grid grid-cols-7 border-b border-slate-700/50 bg-slate-800/50 lg:hidden">
       <div
         v-for="(day, _) in weekDaysShort"
@@ -108,7 +75,6 @@ const weekDaysMedium = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
       </div>
     </div>
 
-    <!-- En-tête jours de la semaine - Desktop (3 lettres) -->
     <div class="hidden lg:grid grid-cols-7 border-b border-slate-700/50 bg-slate-800/50">
       <div
         v-for="day in weekDaysMedium"
@@ -119,11 +85,10 @@ const weekDaysMedium = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
       </div>
     </div>
 
-    <!-- Grille du mois -->
     <div class="grid grid-cols-7 flex-1 overflow-auto min-h-0">
       <CalendarDayCell
-        v-for="(date, index) in monthGrid"
-        :key="index"
+        v-for="(date, _) in monthGrid"
+        :key="`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`"
         :date="date"
         :events="eventsByDay.get(date.toDateString()) || []"
         :is-current-month="isSameMonth(date, currentMonth)"
@@ -134,7 +99,6 @@ const weekDaysMedium = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
       />
     </div>
 
-    <!-- Tooltip -->
     <EventTooltip
       :event="tooltipEvent"
       :x="tooltipX"

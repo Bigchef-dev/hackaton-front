@@ -15,7 +15,6 @@ export interface Session {
 export interface Activity {
     id: number;
     theme: string;
-    //id_type_stat: number;
 }
 
 export interface Group {

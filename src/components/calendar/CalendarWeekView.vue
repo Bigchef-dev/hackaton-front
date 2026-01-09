@@ -1,6 +1,8 @@
+<!--- CalendarWeekView --->
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import type { Session } from '../../utils/types';
+import { groupEventsByDay } from '../../utils/composables/calandar/useRecurrence';
 import CalendarEvent from './CalendarEvent.vue';
 import EventTooltip from './EventTooltip.vue';
 
@@ -54,60 +56,12 @@ const handleMouseLeave = () => {
 // Heures d'affichage (6h - 22h)
 const hours = Array.from({ length: 17 }, (_, i) => i + 6);
 
-// Générer les occurrences d'événements récurrents
-const generateRecurrentEvents = (event: Session, targetDate: Date): Session[] => {
-  const startDate = new Date(event.date_session);
-  const targetDateOnly = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-  const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-  
-  // Si la date cible est avant la date de début, pas d'occurrence
-  if (targetDateOnly < startDateOnly) {
-    return [];
-  }
-  
-  // Calculer le nombre de jours entre la date de début et la date cible
-  const daysDiff = Math.floor((targetDateOnly.getTime() - startDateOnly.getTime()) / (1000 * 60 * 60 * 24));
-  
-  // Si pas de récurrence, afficher uniquement le jour de début
-  if (!event.recurrence || event.recurrence <= 0) {
-    if (daysDiff === 0) {
-      return [event];
-    }
-    return [];
-  }
-  
-  // Vérifier si la date cible correspond à une occurrence (multiple de la récurrence)
-  if (daysDiff % event.recurrence === 0) {
-    const occurrenceDate = new Date(targetDate);
-    occurrenceDate.setHours(startDate.getHours(), startDate.getMinutes(), 0, 0);
-    
-    return [{
-      ...event,
-      date_session: occurrenceDate,
-      id: event.id + (daysDiff / event.recurrence) * 1000000
-    }];
-  }
-  
-  return [];
-};
-
 // Organiser les événements par jour avec récurrence
 const eventsByDay = computed(() => {
-  const map = new Map<string, Session[]>();
+  const weekStart = props.weekDays[0];
+  const weekEnd = props.weekDays[props.weekDays.length - 1];
   
-  props.weekDays.forEach((day: Date) => {
-    const dayKey = day.toDateString();
-    const dayOccurrences: Session[] = [];
-    
-    props.events.forEach((event: Session) => {
-      const occurrences = generateRecurrentEvents(event, day);
-      dayOccurrences.push(...occurrences);
-    });
-    
-    map.set(dayKey, dayOccurrences);
-  });
-  
-  return map;
+  return groupEventsByDay(props.events, weekStart, weekEnd);
 });
 
 // Formatage des jours
@@ -174,7 +128,7 @@ const formatDate = (date: Date): number => {
                 <!-- Événements dans cette plage horaire -->
                 <div class="space-y-1.5">
                   <div
-                    v-for="event in eventsByDay.get(day.toDateString())?.filter(e => {
+                    v-for="event in eventsByDay.get(day.toDateString())?.filter((e:Session) => {
                       const eventHour = new Date(e.date_session).getHours();
                       return eventHour === hour;
                     })"

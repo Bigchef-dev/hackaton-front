@@ -71,10 +71,8 @@ const sizeValue = computed(() => props.size || 'md');
       sizeValue === 'xs' ? 'p-1.5' : sizeValue === 'sm' ? 'p-2' : 'p-3'
     ]"
   >
-    <!-- Effet de brillance au hover -->
     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-full transition-all duration-500 -translate-x-full"></div>
     
-    <!-- Version extra small (mobile) -->
     <div v-if="sizeValue === 'xs'" class="flex items-center gap-1.5 relative z-10">
       <span class="text-xs">{{ config.icon }}</span>
       
@@ -85,12 +83,10 @@ const sizeValue = computed(() => props.size || 'md');
         <p class="text-[9px] text-white/70">{{ timeShort }}</p>
       </div>
 
-      <!-- Indicateur d'activités -->
       <div v-if="event.activities && event.activities.length > 0" 
            class="w-1 h-1 rounded-full bg-white/60"></div>
     </div>
 
-    <!-- Version small -->
     <div v-else-if="sizeValue === 'sm'" class="relative z-10">
       <div class="flex items-start gap-2 mb-1">
         <span class="text-sm">{{ config.icon }}</span>
@@ -114,7 +110,6 @@ const sizeValue = computed(() => props.size || 'md');
       </div>
     </div>
 
-    <!-- Version medium -->
     <div v-else class="relative z-10">
       <div class="flex items-start gap-2 mb-2">
         <span class="text-lg">{{ config.icon }}</span>

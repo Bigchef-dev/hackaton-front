@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import type { Session, ViewMode, NavigationDirection } from '../../utils/types';
 import { useCalendar } from '../../utils/composables/calandar/useCalendar';
+import { hasOccurrenceInPeriod } from '../../utils/composables/calandar/useRecurrence';
 import CalendarHeader from './CalendarHeader.vue';
 import CalendarDayView from './CalendarDayView.vue';
 import CalendarWeekView from './CalendarWeekView.vue';
@@ -12,7 +13,6 @@ const props = defineProps<{
   events: Session[];
 }>();
 
-// Composables
 const {
   currentDate,
   viewMode,
@@ -47,13 +47,6 @@ const closeModal = () => {
   }, 300);
 };
 
-const getEndDate = (session: Session): Date => {
-  const startDate = session.date_session;
-  const durationInMs = session.duree * 60 * 60 * 1000; 
-  
-  return new Date(startDate.getTime() + durationInMs);
-};
-
 // Filtrage des événements selon la période visible
 const visibleEvents = computed(() => {
   let start: Date;
@@ -72,10 +65,9 @@ const visibleEvents = computed(() => {
     end = monthEnd.value;
   }
 
+  // Filtrer les événements qui ont au moins une occurrence dans la période
   return props.events.filter(event => {
-    const eventStart = event.date_session;
-    const eventEnd = getEndDate(event);
-    return eventStart <= end && eventEnd >= start;
+    return hasOccurrenceInPeriod(event, start, end);
   });
 });
 
@@ -97,8 +89,7 @@ const handleEventClick = (event: Session): void => {
 
 <template>
   <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-2 sm:p-4 lg:p-6">
-    <div class="calendar-container max-w-[1600px] h-[800px] overflow-auto">
-      <!-- Header sticky -->
+    <div class="calendar-container max-w-[1600px] h-[900px] overflow-auto">
       <div class="calendar-header sticky top-2 z-30 mb-4 sm:mb-6">
         <CalendarHeader 
           :current-date="currentDate" 
@@ -111,7 +102,6 @@ const handleEventClick = (event: Session): void => {
         />
       </div>
 
-      <!-- Contenu avec transitions -->
       <div class="calendar-content">
         <Transition
           mode="out-in"
@@ -151,7 +141,6 @@ const handleEventClick = (event: Session): void => {
         </Transition>
       </div>
 
-      <!-- Modal -->
       <EventDetailsModal 
         :is-open="isModalOpen" 
         :event="selectedEvent" 

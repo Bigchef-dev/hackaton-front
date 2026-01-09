@@ -19,7 +19,6 @@ const emit = defineEmits<{
 const cellRef = ref<HTMLElement | null>(null);
 let hoverTimeout: number | null = null;
 
-// Mobile: afficher 2 événements, Desktop: 3
 const visibleEventsMobile = props.events.slice(0, 2);
 const visibleEventsDesktop = props.events.slice(0, 3);
 const hasMoreMobile = props.events.length > 2;
@@ -77,7 +76,6 @@ const handleTouchEnd = () => {
       isToday && 'bg-blue-900/30 ring-2 ring-blue-500/50'
     ]"
   >
-    <!-- En-tête avec le numéro du jour et indicateurs -->
     <div class="flex justify-between items-start mb-1.5 sm:mb-2">
       <span
         :class="[
@@ -92,14 +90,11 @@ const handleTouchEnd = () => {
         {{ date.getDate() }}
       </span>
 
-      <!-- Indicateurs colorés pour les types d'événements -->
       <div v-if="events.length > 0" class="flex items-center gap-1">
         <div v-if="hasENTRAINEMENT" class="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></div>
         <div v-if="hasCOMPETITION" class="w-1.5 h-1.5 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></div>
       </div>
     </div>
-
-    <!-- Liste des événements - Mobile (max 2) -->
     <div class="space-y-1.5 lg:hidden">
       <div
         v-for="event in visibleEventsMobile"
@@ -126,7 +121,6 @@ const handleTouchEnd = () => {
       </button>
     </div>
 
-    <!-- Liste des événements - Desktop (max 3) -->
     <div class="space-y-1.5 hidden lg:block">
       <div
         v-for="event in visibleEventsDesktop"

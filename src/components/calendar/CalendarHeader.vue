@@ -59,9 +59,7 @@ const isMonthView = computed(() => props.viewMode === 'month');
 
 <template>
   <div class="bg-slate-900 rounded-xl p-3 sm:p-5 shadow-2xl border border-slate-700/50">
-    <!-- Mobile: Layout vertical compact -->
     <div class="flex flex-col gap-5 lg:hidden">
-      <!-- Ligne 1: Titre + Navigation -->
       <div class="flex items-center justify-between">
         <h2 class="text-lg sm:text-xl font-bold text-white">
           <span class="sm:hidden">{{ shortTitle }}</span>
@@ -91,7 +89,6 @@ const isMonthView = computed(() => props.viewMode === 'month');
           </button>
         </div>
 
-      <!-- Ligne 2: Bouton Aujourd'hui + Sélecteur de vue -->
       <div class="flex items-center justify-between gap-2">
         <button
           @click="emit('navigate', 'today')"
@@ -100,7 +97,6 @@ const isMonthView = computed(() => props.viewMode === 'month');
           Aujourd'hui
         </button>
         
-        <!-- Sélecteur de vue compact - Mobile: seulement Jour -->
         <div class="flex items-center gap-1 bg-slate-800 rounded-lg p-1 sm:hidden">
           <button
             @click="emit('view-change', 'day')"
@@ -110,7 +106,6 @@ const isMonthView = computed(() => props.viewMode === 'month');
           </button>
         </div>
 
-        <!-- Sélecteur de vue - Tablette: Jour + Semaine + Mois -->
         <div class="hidden sm:flex items-center gap-1 bg-slate-800 rounded-lg p-1 lg:hidden">
           <button
             @click="emit('view-change', 'day')"
@@ -151,7 +146,6 @@ const isMonthView = computed(() => props.viewMode === 'month');
       </div>
     </div>
 
-    <!-- Desktop: Layout horizontal -->
   <div class="hidden lg:grid grid-cols-3 items-center w-full">
     <div class="flex justify-start">
       <h2 class="text-2xl font-bold text-white whitespace-nowrap">
