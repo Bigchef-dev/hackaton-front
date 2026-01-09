@@ -63,6 +63,14 @@ export class CheckerComposable  {
         return this.isUserInfoValid(athlete) && this.isUserInfoComplete(athlete) && this.isLeagueIdValid(athlete.id);
     }
 
+    isCoachValid(coach: Partial<UserInfo>): boolean {
+        return this.isUserInfoValid(coach) && this.isUserInfoComplete(coach) && this.isClubIdValid(coach.id);
+    }
+
+    isClubIdValid(clubId: number | undefined): boolean {
+        return typeof clubId === 'number' && clubId > 0;
+    }
+
     isValidClub(club: {name: string}): boolean {
         if (typeof club.name !== 'string' || club.name.trim() === '') {
             return false;
