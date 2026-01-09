@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { President } from '../../utils/types';
+
 
 const props = defineProps({
   president: {
-    type: Object,
+    type: Object as () => President,
     required: true
   },
 });
@@ -21,7 +23,7 @@ const props = defineProps({
         <div>
         <p class="text-sm text-gray-600">Club</p>
         <p class="text-lg font-semibold text-gray-800">
-            {{ president.club }}
+            {{ president.club.name }}
         </p>
         </div>
 

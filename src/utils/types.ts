@@ -76,10 +76,12 @@ export interface Club {
     id: number;
     name: string;
     sports: Sport[];
+    coaches?: Coach[];
+    athletes?: Athlete[];
 }
 
 
-interface CreateUserPayload {
+export interface CreateUserPayload {
     name: string;
     lastName: string;
     birthDate: string;
@@ -87,6 +89,12 @@ interface CreateUserPayload {
     email: string;
     gender: "M" | "F" | "X";
     password: "adminpass";
+    type: "ATHLETE" | "COACH" | "PRESIDENT";
+}
+
+export interface CreateUserValue extends CreateUserPayload {
+    clubId?: number;
+    sportIds?: number[];
 }
 
 export interface CreateAthletePayload extends CreateUserPayload {
@@ -102,6 +110,8 @@ export interface CreateCoachPayload extends CreateUserPayload {
 export interface CreatePresidentPayload extends CreateUserPayload {
     clubId: number;
 }
+
+
 export interface CalendarEventType {
     id: number;
     title: string;

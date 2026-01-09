@@ -1,5 +1,5 @@
 import { apiInstance as API } from "../api";
-import type { Athlete, Group, Session, UserInfo, Club } from "../types";
+import type { Athlete, Group, Session, UserInfo, Club, Coach } from "../types";
 import { CheckerComposable as Checker } from "./checker";
 
 
@@ -16,23 +16,23 @@ export class ClubComposable  {
         return response;
     }
 
-    async getClubById(clubId: string): Promise<Club> {
-        const response = await API.get(`clubs/${clubId}`);
+    async getClubById(clubId: number): Promise<Club> {
+        const response = await API.get(`club/${clubId}`);
         return response;
     }
 
-    async getClubGroups(clubId: string): Promise<Group[]> {
-        const response = await API.get(`clubs/${clubId}/groups`);
+    async getClubGroups(clubId: number): Promise<Group[]> {
+        const response = await API.get(`club/${clubId}/groups`);
         return response;
     }
 
-    async getClubSessions(clubId: string): Promise<Session[]> {
-        const response = await API.get(`clubs/${clubId}/sessions`);
+    async getClubSessions(clubId: number): Promise<Session[]> {
+        const response = await API.get(`club/${clubId}/sessions`);
         return response;
     }
 
-    async getClubMembers(clubId: string): Promise<UserInfo[]> {
-        const response = await API.get(`clubs/${clubId}/users`);
+    async getClubMembers(clubId: number): Promise<UserInfo[]> {
+        const response = await API.get(`club/${clubId}/users`);
         return response;
     }
 
@@ -41,10 +41,7 @@ export class ClubComposable  {
         return response;
     }
 
-    async getClubCoaches(clubId: number): Promise<UserInfo[]> {
-        const response = await API.get(`clubs/${clubId}/coaches`);
-        return response;
-    }
+
 
     // =================================== POST ===================================
     async createClub(data: {name: string}): Promise<Club> {
