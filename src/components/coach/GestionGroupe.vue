@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { ClubComposable } from '../../utils/composables/club';
 import type { Group, Athlete } from '../../utils/types';
 
@@ -22,6 +22,10 @@ const showAddAthletePanel = ref<Record<number, boolean>>({});
 /* Création de groupe */
 const newGroupName = ref('');
 const creatingGroup = ref(false);
+
+/* Filtrage par sport */
+const selectedSport = ref<string>('all');
+const availableSports = ref<string[]>([]);
 
 /* ---------------- FAKE DATA ---------------- */
 
@@ -74,6 +78,13 @@ const allAthletes = ref<Athlete[]>(
 
 /* ---------------- HELPERS ---------------- */
 
+const getAthleteSport = (athleteId: number) => {
+  if (athleteId % 2 === 0) {
+    return "Nage pingouin";
+  }
+  return "Glisse manchot (handisport uniquement)";
+};
+
 const isGroupOpen = (groupId: number) =>
   openedGroupIds.value.includes(groupId);
 
@@ -92,8 +103,38 @@ const getGroupAthletes = (groupId: number): Athlete[] =>
 
 const getAvailableAthletes = (groupId: number): Athlete[] => {
   const currentIds = getGroupAthletes(groupId).map(a => a.id);
-  return allAthletes.value.filter(a => !currentIds.includes(a.id));
+  let available = allAthletes.value.filter(a => !currentIds.includes(a.id));
+  
+  // Appliquer le filtre par sport
+  if (selectedSport.value !== 'all') {
+    available = available.filter(a => getAthleteSport(a.id) === selectedSport.value);
+  }
+  
+  return available;
 };
+
+// Computed pour extraire la liste des sports uniques
+const updateAvailableSports = () => {
+  const sports = new Set<string>();
+  allAthletes.value.forEach(athlete => {
+    if (getAthleteSport(athlete.id)) {
+      sports.add(getAthleteSport(athlete.id));
+    }
+  });
+  availableSports.value = Array.from(sports).sort();
+};
+
+// Computed pour filtrer les groupes affichés selon le sport sélectionné
+const filteredGroups = computed(() => {
+  if (selectedSport.value === 'all') {
+    return groups.value;
+  }
+  
+  return groups.value.filter(group => {
+    const athletes = getGroupAthletes(group.id);
+    return athletes.some(athlete => getAthleteSport(athlete.id) === selectedSport.value);
+  });
+});
 
 /* ---------------- LIFECYCLE ---------------- */
 
@@ -108,6 +149,7 @@ onMounted(async () => {
     usingFakeData.value = true;
   } finally {
     loading.value = false;
+    updateAvailableSports();
   }
 });
 
@@ -134,9 +176,8 @@ const addAthleteToGroup = (groupId: number) => {
 
 const addAthlete = (groupId: number, athlete: Athlete) => {
   groupAthletes.value[groupId].push(athlete);
+  showAddAthletePanel.value[groupId] = false;
 };
-
-/* ---------------- CREATE GROUP ---------------- */
 
 const createGroup = async () => {
   if (!newGroupName.value.trim()) return;
@@ -185,13 +226,13 @@ const createGroup = async () => {
 
     <p v-if="loading">Chargement...</p>
 
-    <p v-else-if="groups.length === 0" class="text-gray-500">
-      Aucun groupe pour ce club
+    <p v-else-if="filteredGroups.length === 0" class="text-gray-500">
+      Aucun groupe trouvé pour ce filtre
     </p>
 
     <div v-else class="space-y-3">
       <div
-        v-for="group in groups"
+        v-for="group in filteredGroups"
         :key="group.id"
         class="border rounded-lg overflow-hidden"
       >
@@ -248,6 +289,9 @@ const createGroup = async () => {
                 <div class="text-sm text-gray-500">
                   {{ athlete.email }}
                 </div>
+                <div class="text-sm text-blue-600 font-medium mt-1">
+                  {{ getAthleteSport(athlete.id) }}
+                </div>
               </div>
               <button
                 @click="removeAthleteFromGroup(group.id, athlete.id)"
@@ -263,6 +307,26 @@ const createGroup = async () => {
             v-if="showAddAthletePanel[group.id]"
             class="mt-4 bg-white border rounded-lg p-4"
           >
+
+          <!-- FILTRAGE PAR SPORT -->
+          <div class="mb-4 p-4 bg-white border rounded-lg">
+            <label class="block font-semibold mb-2 text-gray-700">
+              Filtrer par sport
+            </label>
+            <select
+              v-model="selectedSport"
+              class="w-full border rounded px-3 py-2 bg-white"
+            >
+              <option value="all">Tous les sports</option>
+              <option
+                v-for="sport in availableSports"
+                :key="sport"
+                :value="sport"
+              >
+                {{ sport }}
+              </option>
+            </select>
+          </div>
             <div class="flex justify-between mb-2">
               <h5 class="font-semibold">Ajouter un athlète</h5>
               <button
@@ -277,7 +341,12 @@ const createGroup = async () => {
               v-if="getAvailableAthletes(group.id).length === 0"
               class="text-gray-500"
             >
-              Tous les athlètes sont déjà dans ce groupe
+              <span v-if="selectedSport === 'all'">
+                Tous les athlètes sont déjà dans ce groupe
+              </span>
+              <span v-else>
+                Aucun athlète disponible pour le sport sélectionné
+              </span>
             </div>
 
             <ul v-else class="space-y-2">
@@ -286,9 +355,14 @@ const createGroup = async () => {
                 :key="athlete.id"
                 class="flex justify-between items-center border rounded p-2"
               >
-                <span>
-                  {{ athlete.name }} {{ athlete.lastName }}
-                </span>
+                <div>
+                  <span class="font-medium">
+                    {{ athlete.name }} {{ athlete.lastName }}
+                  </span>
+                  <span class="text-sm text-blue-600 ml-2">
+                    ({{ getAthleteSport(athlete.id) }})
+                  </span>
+                </div>
                 <button
                   @click="addAthlete(group.id, athlete)"
                   class="text-green-600 text-xl font-bold"
