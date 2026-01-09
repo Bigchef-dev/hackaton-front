@@ -214,19 +214,22 @@ const createGroup = async () => {
 </script>
 
 <template>
-  <div>
-    <h3 class="text-xl font-bold mb-4">Gestion des groupes</h3>
+  <!-- Effets de fond -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+  </div>
 
-    <div
-      v-if="usingFakeData"
-      class="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded"
-    >
+  <div>
+    <h3 class="text-xl font-bold mb-4 gradient-text">Gestion des groupes</h3>
+
+    <div v-if="usingFakeData" class="mb-4 p-3 bg-yellow-900/30 border border-yellow-600 text-yellow-300 rounded">
       ⚠️ Données de démonstration affichées
     </div>
 
-    <p v-if="loading">Chargement...</p>
+    <p v-if="loading" class="text-purple-300">Chargement...</p>
 
-    <p v-else-if="filteredGroups.length === 0" class="text-gray-500">
+    <p v-else-if="filteredGroups.length === 0" class="text-purple-300">
       Aucun groupe trouvé pour ce filtre
     </p>
 
@@ -234,45 +237,44 @@ const createGroup = async () => {
       <div
         v-for="group in filteredGroups"
         :key="group.id"
-        class="border rounded-lg overflow-hidden"
+        class="border rounded-lg overflow-hidden border-purple-900/30 bg-surface"
       >
+
         <!-- HEADER -->
         <div
-          class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
-          :class="{ 'bg-blue-50': isGroupOpen(group.id) }"
+          class="p-4 flex justify-between items-center cursor-pointer hover:bg-purple-900/20 transition-colors"
+          :class="{ 'bg-purple-900/20': isGroupOpen(group.id) }"
           @click="toggleGroup(group.id)"
         >
           <div class="flex items-center gap-2">
-            <span class="font-medium">{{ group.name }}</span>
-            <span class="text-sm text-gray-500">
+            <span class="font-medium gradient-text">{{ group.name }}</span>
+            <span class="text-sm text-purple-300">
               ({{ getGroupAthletes(group.id).length }} athlètes)
             </span>
           </div>
 
           <button
             @click.stop="deleteGroup(group.id)"
-            class="text-red-600 hover:underline text-sm"
+            class="text-red-400 hover:text-red-300 text-sm transition-colors"
           >
             Supprimer
           </button>
         </div>
 
         <!-- CONTENT -->
-        <div v-if="isGroupOpen(group.id)" class="bg-gray-50 p-4 border-t">
+        <div v-if="isGroupOpen(group.id)" class="p-4 border-t border-purple-900/30">
           <div class="flex justify-between items-center mb-3">
-            <h4 class="font-semibold text-gray-700">Athlètes</h4>
+            <h4 class="font-semibold text-purple-300">Athlètes</h4>
             <button
               @click="addAthleteToGroup(group.id)"
-              class="bg-blue-600 text-white px-3 py-1 rounded text-sm"
+              class="bg-accent-blue text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors"
             >
               + Ajouter
             </button>
           </div>
 
           <div
-            v-if="getGroupAthletes(group.id).length === 0"
-            class="text-gray-500"
-          >
+            v-if="getGroupAthletes(group.id).length === 0" class="text-purple-300">
             Aucun athlète dans ce groupe
           </div>
 
@@ -280,22 +282,22 @@ const createGroup = async () => {
             <li
               v-for="athlete in getGroupAthletes(group.id)"
               :key="athlete.id"
-              class="bg-white border rounded p-3 flex justify-between items-center"
+              class="bg-purple-900/20 border border-purple-900/30 rounded p-3 flex justify-between items-center transition-colors hover:bg-purple-900/30"
             >
               <div>
-                <div class="font-medium">
+                <div class="font-medium text-white">
                   {{ athlete.name }} {{ athlete.lastName }}
                 </div>
-                <div class="text-sm text-gray-500">
+                <div class="text-sm text-purple-200">
                   {{ athlete.email }}
                 </div>
-                <div class="text-sm text-blue-600 font-medium mt-1">
+                <div class="text-sm text-blue-300 font-medium mt-1">
                   {{ getAthleteSport(athlete.id) }}
                 </div>
               </div>
               <button
                 @click="removeAthleteFromGroup(group.id, athlete.id)"
-                class="text-red-600 hover:underline text-sm"
+                class="text-red-400 hover:text-red-300 text-sm transition-colors"
               >
                 Retirer
               </button>
@@ -304,18 +306,16 @@ const createGroup = async () => {
 
           <!-- ADD ATHLETE PANEL -->
           <div
-            v-if="showAddAthletePanel[group.id]"
-            class="mt-4 bg-white border rounded-lg p-4"
-          >
+            v-if="showAddAthletePanel[group.id]" class="mt-4 bg-surface-light border rounded-lg p-4 border-gray-600 fade-in">
 
           <!-- FILTRAGE PAR SPORT -->
-          <div class="mb-4 p-4 bg-white border rounded-lg">
-            <label class="block font-semibold mb-2 text-gray-700">
+          <div class="mb-4 p-2 bg-surface-light border rounded border-gray-600">
+            <label class="block font-semibold mb-2 text-purple-200">
               Filtrer par sport
             </label>
             <select
               v-model="selectedSport"
-              class="w-full border rounded px-3 py-2 bg-white"
+              class="w-full border rounded px-3 py-2 bg-surface text-white border-gray-600"
             >
               <option value="all">Tous les sports</option>
               <option
@@ -328,9 +328,9 @@ const createGroup = async () => {
             </select>
           </div>
             <div class="flex justify-between mb-2">
-              <h5 class="font-semibold">Ajouter un athlète</h5>
+              <h5 class="font-semibold text-white">Ajouter un athlète</h5>
               <button
-                class="text-sm text-gray-500"
+                class="text-sm text-gray-400 hover:text-gray-300 transition-colors"
                 @click="showAddAthletePanel[group.id] = false"
               >
                 Fermer
@@ -338,9 +338,7 @@ const createGroup = async () => {
             </div>
 
             <div
-              v-if="getAvailableAthletes(group.id).length === 0"
-              class="text-gray-500"
-            >
+              v-if="getAvailableAthletes(group.id).length === 0" class="text-gray-400">
               <span v-if="selectedSport === 'all'">
                 Tous les athlètes sont déjà dans ce groupe
               </span>
@@ -353,19 +351,19 @@ const createGroup = async () => {
               <li
                 v-for="athlete in getAvailableAthletes(group.id)"
                 :key="athlete.id"
-                class="flex justify-between items-center border rounded p-2"
+                class="flex justify-between items-center border rounded p-2 border-gray-600 hover:bg-gray-800 transition-colors"
               >
                 <div>
-                  <span class="font-medium">
+                  <span class="font-medium text-white">
                     {{ athlete.name }} {{ athlete.lastName }}
                   </span>
-                  <span class="text-sm text-blue-600 ml-2">
+                  <span class="text-sm text-blue-400 ml-2">
                     ({{ getAthleteSport(athlete.id) }})
                   </span>
                 </div>
                 <button
                   @click="addAthlete(group.id, athlete)"
-                  class="text-green-600 text-xl font-bold"
+                  class="text-green-600 text-xl font-bold hover:text-green-500 transition-colors"
                 >
                   +
                 </button>
@@ -376,21 +374,21 @@ const createGroup = async () => {
       </div>
 
       <!-- CREATE GROUP -->
-      <div class="mt-6 p-4 border rounded-lg bg-gray-50">
-        <h4 class="font-semibold mb-2">Créer un nouveau groupe</h4>
+      <div class="mt-6 p-4 border rounded-lg bg-surface-light border-gray-600">
+        <h4 class="font-semibold mb-2 text-white">Créer un nouveau groupe</h4>
 
         <div class="flex gap-2">
           <input
             v-model="newGroupName"
             type="text"
             placeholder="Nom du groupe"
-            class="flex-1 border rounded px-3 py-2"
+            class="flex-1 border rounded px-3 py-2 bg-surface text-white border-gray-600 focus:ring-2 focus:ring-accent-purple focus:outline-none"
           />
 
           <button
             @click="createGroup"
             :disabled="creatingGroup || !newGroupName"
-            class="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+            class="bg-accent-purple text-white px-4 py-2 rounded disabled:opacity-50 hover:bg-purple-600 transition-colors"
           >
             Créer
           </button>
@@ -399,3 +397,44 @@ const createGroup = async () => {
     </div>
   </div>
 </template>
+
+<style>
+:root {
+  --bg-surface-light: #2D1B69;
+  --accent-purple: #8B5CF6;
+  --accent-pink: #EC4899;
+  --accent-blue: #3B82F6;
+  --text-primary: #E5E7EB;
+  --text-secondary: #9CA3AF;
+  --danger: #EF4444;
+  --success: #10B981;
+  --border-color: rgba(139, 92, 246, 0.2);
+}
+
+.dark-theme {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+input:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+}
+</style>

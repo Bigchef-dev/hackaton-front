@@ -88,90 +88,159 @@ const submitSession = async () => {
 </script>
 
 <template>
-  <div class="p-6 bg-white rounded-lg shadow-md">
-    <h3 class="text-xl font-bold mb-4">Créer un entraînement</h3>
+  <div class="p-8 bg-slate-800/40 backdrop-blur-md border border-white/5 rounded-2xl">
+    <h3 class="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      Créer un entraînement
+    </h3>
 
     <!-- Infos session -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-      <div>
-        <label class="block text-sm font-medium mb-1">Date de la session</label>
-        <input type="date" v-model="session.date_session" class="w-full border rounded-md p-2" />
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="group">
+        <label class="block text-sm font-medium mb-2 text-slate-300 group-hover:text-slate-200 transition-colors">
+          Date de la session
+        </label>
+        <input 
+          type="date" 
+          v-model="session.date_session" 
+          class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all" 
+        />
       </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Durée (minutes)</label>
-        <input type="number" min="1" v-model.number="session.duree" class="w-full border rounded-md p-2" />
+      
+      <div class="group">
+        <label class="block text-sm font-medium mb-2 text-slate-300 group-hover:text-slate-200 transition-colors">
+          Durée (minutes)
+        </label>
+        <input 
+          type="number" 
+          min="1" 
+          v-model.number="session.duree" 
+          class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all" 
+        />
       </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Récurrence (jours)</label>
-        <input type="number" min="0" v-model.number="session.reccurcivite" class="w-full border rounded-md p-2" />
+      
+      <div class="group">
+        <label class="block text-sm font-medium mb-2 text-slate-300 group-hover:text-slate-200 transition-colors">
+          Récurrence (jours)
+        </label>
+        <input 
+          type="number" 
+          min="0" 
+          v-model.number="session.reccurcivite" 
+          class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all" 
+        />
       </div>
     </div>
 
     <!-- Activities -->
-    <div class="space-y-4">
-      <h4 class="font-semibold">Activités</h4>
+    <div class="space-y-6">
+      <h4 class="text-xl font-semibold text-slate-200">Activités</h4>
 
       <div
         v-for="(activity, index) in activities"
         :key="activity.id"
-        class="border rounded-lg p-4 space-y-3"
+        class="border border-slate-700 rounded-2xl p-6 space-y-4 bg-slate-900/30 hover:border-slate-600 transition-all"
       >
-        <div>
-          <label class="block text-sm font-medium mb-1">Thème</label>
-          <input type="text" v-model="activity.theme" class="w-full border rounded-md p-2" placeholder="Ex : endurance, technique..." />
+        <div class="group">
+          <label class="block text-sm font-medium mb-2 text-slate-300 group-hover:text-slate-200 transition-colors">
+            Thème
+          </label>
+          <input 
+            type="text" 
+            v-model="activity.theme" 
+            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all" 
+            placeholder="Ex : endurance, technique..." 
+          />
         </div>
 
         <!-- Mesures -->
-        <div class="space-y-3 mt-4 pl-4 border-l-2 border-gray-200">
-          <h5 class="font-semibold text-sm">Mesures pour cette activité</h5>
+        <div class="space-y-4 mt-6 pl-6 border-l-2 border-purple-500/30">
+          <h5 class="font-semibold text-sm text-slate-300">Mesures pour cette activité</h5>
 
           <div
             v-for="typeMeasure in getTypeMeasuresForActivity(activity.id)"
             :key="typeMeasure.id"
-            class="border rounded-lg p-3 space-y-2 bg-gray-50"
+            class="border border-slate-700 rounded-xl p-4 space-y-3 bg-slate-900/50"
           >
-            <div>
-              <label class="block text-sm font-medium mb-1">Nom</label>
-              <input type="text" v-model="typeMeasure.name" class="w-full border rounded-md p-2" placeholder="Ex : vitesse, distance..." />
+            <div class="group">
+              <label class="block text-sm font-medium mb-2 text-slate-300 group-hover:text-slate-200 transition-colors">
+                Nom
+              </label>
+              <input 
+                type="text" 
+                v-model="typeMeasure.name" 
+                class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all" 
+                placeholder="Ex : vitesse, distance..." 
+              />
             </div>
 
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-sm font-medium mb-1">Unité</label>
-                <input type="text" v-model="typeMeasure.unit" class="w-full border rounded-md p-2" placeholder="Ex : km, sec..." />
+            <div class="grid grid-cols-2 gap-4">
+              <div class="group">
+                <label class="block text-sm font-medium mb-2 text-slate-300 group-hover:text-slate-200 transition-colors">
+                  Unité
+                </label>
+                <input 
+                  type="text" 
+                  v-model="typeMeasure.unit" 
+                  class="w-full bg-slate-900/50 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all" 
+                  placeholder="Ex : km, sec..." 
+                />
               </div>
             </div>
 
-            <button @click="removeTypeMeasure(typeMeasures.indexOf(typeMeasure))" type="button" class="text-red-600 text-sm hover:underline">
+            <button 
+              @click="removeTypeMeasure(typeMeasures.indexOf(typeMeasure))" 
+              type="button" 
+              class="text-red-400 text-sm hover:text-red-300 hover:underline transition-colors"
+            >
               Supprimer cette mesure
             </button>
           </div>
 
-          <button @click="addTypeMeasure(activity.id)" type="button" class="text-blue-600 font-medium hover:underline text-sm">
+          <button 
+            @click="addTypeMeasure(activity.id)" 
+            type="button" 
+            class="text-purple-400 font-medium hover:text-purple-300 hover:underline text-sm transition-colors"
+          >
             + Ajouter une mesure
           </button>
         </div>
 
-        <button v-if="activities.length > 1" @click="removeActivity(index)" type="button" class="text-red-600 text-sm hover:underline mt-2">
+        <button 
+          v-if="activities.length > 1" 
+          @click="removeActivity(index)" 
+          type="button" 
+          class="text-red-400 text-sm hover:text-red-300 hover:underline mt-4 transition-colors"
+        >
           Supprimer cette activité
         </button>
       </div>
 
-      <button @click="addActivity" type="button" class="text-blue-600 font-medium hover:underline">
-        + Ajouter une activité
-      </button>
+      <div class="flex gap-4">
+        <button 
+          @click="addActivity" 
+          type="button" 
+          class="text-blue-400 font-medium hover:text-blue-300 hover:underline transition-colors"
+        >
+          + Ajouter une activité
+        </button>
 
-      <br/>
-
-      <button type="button" class="text-blue-600 font-medium hover:underline">
-        + Ajouter une activité préexistante
-      </button>
+        <button 
+          type="button" 
+          class="text-blue-400 font-medium hover:text-blue-300 hover:underline transition-colors"
+        >
+          + Ajouter une activité préexistante
+        </button>
+      </div>
     </div>
 
     <!-- Submit -->
-    <div class="pt-4">
-      <button @click="submitSession" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
-        Créer la session
+    <div class="pt-8">
+      <button 
+        @click="submitSession" 
+        class="group relative px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-500 hover:to-purple-500 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-blue-500/50"
+      >
+        <span class="relative z-10">Créer la session</span>
+        <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
       </button>
     </div>
   </div>
