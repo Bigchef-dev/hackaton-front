@@ -16,13 +16,13 @@ export class CoachComposable {
         return response;
     }
 
-    async getCoachById(coachId: string): Promise<Coach> {
-        const response = await API.get(`coaches/${coachId}`);
+    async getCoachById(coachId: number): Promise<Coach> {
+        const response = await API.get(`users/${coachId}`);
         return response;
     }
 
-    async getCoachClub(coachId: string): Promise<Club> {
-        const response = await API.get(`coaches/${coachId}/club`);
+    async getCoachClub(coachId: number): Promise<Club> {
+        const response = await API.get(`users/${coachId}/club`);
         return response;
     }
 

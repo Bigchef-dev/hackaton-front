@@ -82,7 +82,7 @@ const submitSession = async () => {
     typeMeasures.value = [];
   } catch (error) {
     console.error(error);
-    alert('Erreur lors de la création de la session');
+    alert('Erreur lors de la création de la session ' + error);
   }
 };
 </script>

@@ -37,7 +37,7 @@ const menuItems = [
   { id: 'home', label: 'Accueil', icon: HomeIcon, roles: [UserRole.invite] },
   { id: 'homeconnect', label: 'Accueil', icon: HomeIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president] },
   { id: 'AthleteDashboard', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
-  { id: 'coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
+  { id: 'Coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
   { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
   { id: 'Login', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.invite] },
@@ -56,10 +56,8 @@ const toggleSidebar = () => {
 const updateMobileMenuHeight = () => {
   nextTick(() => {
     if (mobileMenuRef.value && isMobileMenuOpen.value) {
-      // Ouverture : mise à jour immédiate
       mobileMenuHeight.value = 64 + mobileMenuRef.value.scrollHeight
     } else {
-      // Fermeture : mise à jour immédiate, la transition CSS gère l'animation
       mobileMenuHeight.value = 64
     }
   })
@@ -90,7 +88,6 @@ watch(isMobileMenuOpen, () => {
 
 <template>
   <div>
-    <!-- Desktop Sidebar -->
     <aside
       :class="[
         'hidden lg:flex flex-col fixed left-0 top-0 bottom-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-2xl overflow-x-hidden',
@@ -98,7 +95,6 @@ watch(isMobileMenuOpen, () => {
       ]"
       style="z-index: 40; transition: width 300ms ease-in-out;"
     >
-      <!-- Header -->
       <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
         <div 
           :class="[
@@ -163,11 +159,8 @@ watch(isMobileMenuOpen, () => {
       </div>
     </aside>
 
-    <!-- Mobile Top Navigation -->
     <header class="lg:hidden fixed top-0 left-0 right-0 text-white shadow-lg z-50">
-      <!-- Background avec couleur unie pour éviter l'espace blanc -->
       <div class="absolute inset-0 bg-slate-800 -z-10"></div>
-      
       <div class="relative flex items-center justify-between p-4 bg-slate-900">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold">
@@ -190,8 +183,6 @@ watch(isMobileMenuOpen, () => {
           </svg>
         </button>
       </div>
-
-      <!-- Mobile Menu Dropdown -->
       <nav 
         ref="mobileMenuRef"
         :class="[
@@ -218,7 +209,6 @@ watch(isMobileMenuOpen, () => {
           <span class="font-medium">{{ item.label }}</span>
         </button>
         
-        <!-- Mobile User Profile -->
         <div class="border-t border-slate-700 p-4 bg-slate-900">
           <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center font-semibold">
