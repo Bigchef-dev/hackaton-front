@@ -1,15 +1,21 @@
+export type ViewMode = 'day' | 'week' | 'month';
+export type NavigationDirection = 'today' | 'prev' | 'next';
+
 export interface Session {
     id: number;
     date_session: Date;
-    reccurcivite: number;
+    recurrence: number;
     duree: number;
+    coach?: string;
+    type: 'ENTRAINEMENT' | 'COMPETITION';
+    activities?: Activity[];
     id_sport: number;
 }
 
 export interface Activity {
     id: number;
     theme: string;
-    id_type_stat: number;
+    //id_type_stat: number;
 }
 
 export interface Group {
@@ -91,17 +97,6 @@ export interface CreateCoachPayload extends CreateUserPayload {
 
 export interface CreatePresidentPayload extends CreateUserPayload {
     clubId: number;
-}
-export interface CalendarEventType {
-    id: number;
-    title: string;
-    description?: string;
-    start: string; // ISO date string
-    end: string; // ISO date string
-    type: 'training' | 'match' | 'recovery' | 'cours' | 'td' | 'tp' | 'examen' | 'projet' | 'conference' | 'reunion';
-    location?: string;
-    instructor?: string;
-// Authentication types*
 }
 export interface LoginCredentials {
     email: string;

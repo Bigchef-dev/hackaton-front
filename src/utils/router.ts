@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import Home from '../components/Home.vue';
 import HomeConnect from '../components/HomeConnect.vue';
-
-import AdminDashboard from '../components/AdminDashboard.vue';
+import AdminDashboard from '../components/athlete/AthleteDashboard.vue';
 import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
 import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
@@ -24,6 +23,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'homeconnect',
     component: HomeConnect,
   },
+    {
+    path: '/athlete/dashboard',
+    name: 'AthleteDashboard',
+    component: AthleteDashboard,
+  },
   {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
@@ -33,11 +37,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/login',
     name: 'Login',
     component: LoginStuff,
-  },
-  {
-    path: '/athlete',
-    name: 'AthleteDashboard',
-    component: AthleteDashboard,
   },
   {
     path: '/logout',
@@ -54,6 +53,7 @@ const router = createRouter({
 
 // Guard de navigation : protège les routes nécessitant une authentification
 router.beforeEach((to, from, next) => {
+    console.log(router.getRoutes());
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const isAuthenticated = checkIsAuthenticated();
 

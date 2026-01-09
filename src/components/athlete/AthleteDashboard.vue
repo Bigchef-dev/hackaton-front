@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import type { CalendarEventType } from '../../utils/types';
-import CalandarContainer from '../calandar/CalandarContainer.vue';
+import type { Session } from '../../utils/types';
+import CalandarContainer from '../calandar/CalendarContainer.vue';
+
 
 interface Athlete {
   name: string;
@@ -10,7 +11,7 @@ interface Athlete {
   level: string;
 }
 
-const events = ref<CalendarEventType[]>([]);
+const events = ref<Session[]>([]);
 const athlete = ref<Athlete>({
   name: 'John Doe',
   sport: 'Football',
@@ -20,42 +21,55 @@ const athlete = ref<Athlete>({
 
 onMounted(() => {
   events.value = [
-    {
-      id: 1,
-      title: 'Entraînement Technique',
-      description: 'Session de travail technique',
-      start: new Date(2026, 0, 10, 10, 0).toISOString(),
-      end: new Date(2026, 0, 10, 12, 0).toISOString(),
-      type: 'training',
-      location: 'Stade Central',
-    },
-    {
-      id: 2,
-      title: 'Match Officiel',
-      description: 'Match contre rival',
-      start: new Date(2026, 0, 12, 15, 0).toISOString(),
-      end: new Date(2026, 0, 12, 17, 0).toISOString(),
-      type: 'match',
-      location: 'Stade Municipal',
-    },
-    {
-      id: 3,
-      title: 'Récupération',
-      description: 'Séance de récupération',
-      start: new Date(2026, 0, 13, 9, 0).toISOString(),
-      end: new Date(2026, 0, 13, 10, 30).toISOString(),
-      type: 'recovery',
-      location: 'Centre de Récupération',
-    },
-    {
-      id: 4,
-      title: 'Préparation Physique',
-      description: 'Renforcement musculaire',
-      start: new Date(2026, 0, 15, 14, 0).toISOString(),
-      end: new Date(2026, 0, 15, 15, 30).toISOString(),
-      type: 'training',
-      location: 'Gymnase',
-    },
+  {
+    id: 1,
+    date_session: new Date('2026-01-12T09:00:00'),
+    recurrence: 7, // Hebdomadaire
+    duree: 1.5,
+    coach: 'Jean Entraineur',
+    type: 'ENTRAINEMENT',
+    id_sport: 1,
+    activities: [{ id: 101, theme: 'Échauffement cardio' }, { id: 102, theme: 'Exercices de passes' }]
+  },
+  {
+    id: 2,
+    date_session: new Date('2026-01-14T18:30:00'),
+    recurrence: 0,
+    duree: 2,
+    coach: 'Marc Arbitre',
+    type: 'COMPETITION',
+    id_sport: 1,
+    activities: [{ id: 103, theme: 'Competition amical contre l\'équipe B' }]
+  },
+  {
+    id: 3,
+    date_session: new Date('2026-01-15T10:00:00'),
+    recurrence: 7,
+    duree: 1,
+    coach: 'Lucie Coach',
+    type: 'ENTRAINEMENT',
+    id_sport: 2,
+    activities: [{ id: 104, theme: 'Renforcement musculaire' }]
+  },
+  {
+    id: 4,
+    date_session: new Date('2026-01-18T10:00:00'),
+    recurrence: 0,
+    duree: 3,
+    coach: 'Jean Entraineur',
+    type: 'ENTRAINEMENT',
+    id_sport: 1,
+    activities: [{ id: 105, theme: 'Tactique et stratégie' }, { id: 106, theme: 'Analyse vidéo' }]
+  },
+  {
+    id: 5,
+    date_session: new Date('2026-01-18T15:00:00'),
+    recurrence: 0,
+    duree: 2,
+    type: 'COMPETITION',
+    id_sport: 1,
+    activities: [{ id: 107, theme: 'Finale régionale' }]
+  }
   ];
 });
 </script>
@@ -103,7 +117,7 @@ onMounted(() => {
         </div>
         <div class="flex items-center gap-3">
           <div class="w-4 h-4 bg-red-500 rounded"></div>
-          <span class="text-gray-700">Match</span>
+          <span class="text-gray-700">COMPETITION</span>
         </div>
         <div class="flex items-center gap-3">
           <div class="w-4 h-4 bg-green-500 rounded"></div>
