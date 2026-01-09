@@ -36,12 +36,12 @@ export class ClubComposable  {
         return response;
     }
 
-    async getClubAthletes(clubId: string): Promise<Athlete[]> {
+    async getClubAthletes(clubId: number): Promise<Athlete[]> {
         const response = await API.get(`clubs/${clubId}/athletes`);
         return response;
     }
 
-    async getClubCoaches(clubId: string): Promise<UserInfo[]> {
+    async getClubCoaches(clubId: number): Promise<UserInfo[]> {
         const response = await API.get(`clubs/${clubId}/coaches`);
         return response;
     }

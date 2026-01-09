@@ -22,6 +22,13 @@ export class AuthComposable {
             authToken.value = storedToken;
             try {
                 currentUser.value = JSON.parse(storedUser);
+                const store = useAuthStore();
+                if(!currentUser.value) throw new Error('No current user');
+                store.setCurrentUser({ id: currentUser.value.id, name: currentUser.value.name,
+                    role: currentUser.value.type == 'ADMIN' ? UserRole.admin : (currentUser.value.type == 'COACH' ? UserRole.coach : (currentUser.value.type == 'PRESIDENT' ? UserRole.president : UserRole.athlete)),
+                    avatar: "A"
+                });
+
             } catch (error) {
                 console.error('Error parsing stored user:', error);
                 this.logout();
@@ -40,6 +47,9 @@ export class AuthComposable {
             const user: UserInfo = await API.get('users/me');
             currentUser.value = user;
             localStorage.setItem('currentUser', JSON.stringify(user));
+            const store = useAuthStore();
+            const role = user.type == 'ADMIN' ? UserRole.admin : (user.type == 'COACH' ? UserRole.coach : (user.type == 'PRESIDENT' ? UserRole.president : UserRole.athlete));
+            store.setCurrentUser({ id: user.id, name: user.name, role: role, avatar: "A" });
             return user;
         } catch (error) {
             authToken.value = null;
@@ -55,7 +65,7 @@ export class AuthComposable {
         authToken.value = response.access_token;
         localStorage.setItem('authToken', response.access_token);
         const store = useAuthStore();
-        store.setCurrentUser({ name: 'Admin', role: UserRole.admin, avatar: '' });
+        store.setCurrentUser({ id: 3, name: 'Admin', role: UserRole.coach, avatar: '' });
 
         return response;
     }

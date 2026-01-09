@@ -1,15 +1,14 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import Home from '../components/Home.vue';
 import HomeConnect from '../components/HomeConnect.vue';
-import AdminDashboard from '../components/athlete/AthleteDashboard.vue';
+
+import AdminDashboard from '../components/AdminDashboard.vue';
 import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
 import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
 import LoginForm from '../components/LoginForm.vue';
 import LoginStuff from '../components/LoginStuff.vue';
 import Logout from '../components/Logout.vue';
-
-
 
 const routes: Array<RouteRecordRaw> = [
 
@@ -39,12 +38,17 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginStuff,
   },
   {
+    path: '/athlete',
+    name: 'AthleteDashboard',
+    component: AthleteDashboard,
+  },
+  {
     path: '/logout',
     name: 'Logout',
     component: Logout,
   }
 
-]
+];
 
 const router = createRouter({
     history: createWebHistory(),

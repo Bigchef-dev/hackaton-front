@@ -39,12 +39,20 @@ export interface Athlete extends UserInfo {
     id_league: number;
 }
 
-export interface Coach extends UserInfo {
-    clubId: number;
+export interface Coach {
+    id: number;
+    name: string;
+    lastName: string;
+    birthDate: string
+    phoneNumber: string;
+    email: string;
+    gender: "M" | "F" | "X";
+    type: "COACH";
+    club: Club;
+    sport: Sport[];
 }
 
 export interface President {
-    clubId: number;
     id: number;
     name: string;
     lastName: string;
@@ -53,7 +61,7 @@ export interface President {
     email: string;
     gender: "M" | "F" | "X";
     type: "PRESIDENT";
-    clubName: string;
+    club: Club;
 }
 
 
@@ -72,7 +80,7 @@ export interface Sport {
 export interface Club {
     id: number;
     name: string;
-    id_sport: number;
+    sports: Sport[];
 }
 
 
@@ -87,10 +95,12 @@ interface CreateUserPayload {
 }
 
 export interface CreateAthletePayload extends CreateUserPayload {
+    sportId: number;
     id_league: number;
 }
 
 export interface CreateCoachPayload extends CreateUserPayload {
+    sportId: number;
     clubId: number;
 }
 
@@ -99,7 +109,7 @@ export interface CreatePresidentPayload extends CreateUserPayload {
 }
 export interface LoginCredentials {
     email: string;
-    password: string;
+    passwordHash: string;
 }
 
 export interface AdminLoginCredentials {
@@ -121,6 +131,21 @@ export interface AuthState {
     user: UserInfo | null;
     token: string | null;
     isAuthenticated: boolean;
+}
+
+export interface Measure {
+    id: number;
+    name: string;
+    value: number;
+    unit: string;
+    activityId: number;
+}
+
+export interface TypeMeasure {
+    id: number;
+    name: string;
+    unit: string;
+    activityId: number;
 }
 
 export enum UserRole {

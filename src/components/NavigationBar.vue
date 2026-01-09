@@ -37,7 +37,7 @@ const menuItems = [
   { id: 'home', label: 'Accueil', icon: HomeIcon, roles: [UserRole.invite] },
   { id: 'homeconnect', label: 'Accueil', icon: HomeIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president] },
   { id: 'AthleteDashboard', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
-  { id: 'coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
+  { id: 'Coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
   { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
   { id: 'Login', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.invite] },

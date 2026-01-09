@@ -5,6 +5,7 @@ export const useAuthStore = defineStore('auth', {
 
     state: () => ({
         currentUser: {
+            id: 0,
             name: '',
             role: UserRole.invite,
             avatar: ''
@@ -15,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
         userRole: (state) => state.currentUser.role,
     },
     actions: {
-        setCurrentUser(user: { name: string; role: UserRole; avatar: string }) {
+        setCurrentUser(user: { id: number; name: string; role: UserRole; avatar: string }) {
             this.$patch({ currentUser: user });
         },
         clearUser() {

@@ -205,6 +205,12 @@ onMounted(async () => {
     cards.value = await UserController.getAllUsers();
     clubs.value = await ClubController.getAllClubs();
     sports.value = await SportController.getAllSports();
+
+    console.log(cards);
+    console.log(clubs);
+    console.log(sports);
+    
+    
 });
 
 const handleLogout = () => {

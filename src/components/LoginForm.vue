@@ -18,7 +18,7 @@
 
         <div class="form-group">
           <label for="password">Mot de passe</label>
-          <input id="password" v-model="credentials.password" type="password" placeholder="••••••••" required
+          <input id="password" v-model="credentials.passwordHash" type="password" placeholder="••••••••" required
             autocomplete="current-password" />
         </div>
 
@@ -41,7 +41,7 @@ const route = useRoute();
 
 const credentials = ref<LoginCredentials>({
   email: '',
-  password: ''
+  passwordHash: ''
 });
 
 const errorMessage = ref<string>('');
@@ -55,7 +55,7 @@ const handleLogin = async () => {
     await login(credentials.value);
 
     // Redirection après connexion réussie
-    const redirectPath = (route.query.redirect as string) || '/admin';
+    const redirectPath = (route.query.redirect as string) || '/';
     router.push(redirectPath);
   } catch (error) {
     errorMessage.value = error instanceof Error
