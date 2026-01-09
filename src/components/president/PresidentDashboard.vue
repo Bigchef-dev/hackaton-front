@@ -91,7 +91,7 @@ const activeAction = ref<Action>(null);
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
             <!-- Gérer les coachs -->
-            <button @click="activeAction = 'coach'" class="bg-white hover:bg-blue-50 rounded-lg shadow-md p-6 text-left transition-colors">
+            <button @click="activeAction = activeAction === 'coach' ? null : 'coach'" class="bg-white hover:bg-blue-50 rounded-lg shadow-md p-6 text-left transition-colors">
               <div class="flex items-center gap-3">
                 <div class="bg-blue-100 rounded-full p-3">
                   <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,7 +105,7 @@ const activeAction = ref<Action>(null);
             </button>
 
             <!-- Gérer les athlètes -->
-            <button @click="activeAction = 'athletes'" class="bg-white hover:bg-green-50 rounded-lg shadow-md p-6 text-left transition-colors">
+            <button @click="activeAction = activeAction === 'athletes' ? null : 'athletes'" class="bg-white hover:bg-green-50 rounded-lg shadow-md p-6 text-left transition-colors">
               <div class="flex items-center gap-3">
                 <div class="bg-green-100 rounded-full p-3">
                   <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +119,7 @@ const activeAction = ref<Action>(null);
             </button>
 
             <!-- Statistiques du club -->
-            <button @click="activeAction = 'stats'" class="bg-white hover:bg-orange-50 rounded-lg shadow-md p-6 text-left transition-colors">
+            <button @click="activeAction = activeAction === 'stats' ? null : 'stats'" class="bg-white hover:bg-orange-50 rounded-lg shadow-md p-6 text-left transition-colors">
               <div class="flex items-center gap-3">
                 <div class="bg-orange-100 rounded-full p-3">
                   <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,6 +135,38 @@ const activeAction = ref<Action>(null);
     </div>
 
     <!-- Interface dynamique -->
+    <div v-if="activeAction === null" class="mt-12 bg-white rounded-lg shadow-md p-8">
+      <div class="mb-4">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">
+            Gestion du club
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
+            <di>
+                <DeleteAthlete />
+                <button
+                    @click="activeAction = 'athletes'"
+                    type="button"
+                    class="text-blue-600 font-medium hover:underline mt-4"
+                >
+                + Ajouter un athlète
+                </button>
+            </di>
+            
+            <div>
+                <DeleteCoach />
+                <button
+                    @click="activeAction = 'coach'"
+                    type="button"
+                    class="text-blue-600 font-medium hover:underline mt-4"
+                >
+                + Ajouter un coach
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
     <div v-if="activeAction" class="mt-12 bg-white rounded-lg shadow-md p-8">
 
       <div v-if="activeAction === 'coach'" class="space-y-6">
