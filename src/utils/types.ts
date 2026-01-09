@@ -15,7 +15,7 @@ export interface Activity {
 export interface Group {
     id: number;
     name: string;
-    id_club: number;
+    clubId: number;
 }
 
 export interface UserInfo {
@@ -32,6 +32,7 @@ export interface UserInfo {
 
 export interface Athlete extends UserInfo {
     id_league: number;
+    groups?: Group[];
 }
 
 export interface Coach {
@@ -78,6 +79,7 @@ export interface Club {
     sports: Sport[];
     coaches?: Coach[];
     athletes?: Athlete[];
+    groups?: Group[];
 }
 
 

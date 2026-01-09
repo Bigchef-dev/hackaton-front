@@ -6,7 +6,7 @@ import CreationCompetition from './CreationCompetition.vue';
 import GestionGroupes from './GestionGroupe.vue';
 import CoachStat from './CoachStat.vue';
 import InfosPersoCoach from './InfosPersoCoach.vue';
-import { type Athlete, type CalendarEventType, type Coach } from '../../utils/types';
+import { type Athlete, type CalendarEventType, type Coach, type Group } from '../../utils/types';
 import CalandarContainer from '../calandar/CalandarContainer.vue';
 import { ClubComposable } from '../../utils/composables/club';
 import { CoachComposable } from '../../utils/composables/coach';
@@ -19,6 +19,7 @@ const userCoach = ref<Coach | null>(null);
 const clubController = new ClubComposable();
 const CoachController = new CoachComposable();
 const athletesList = ref<Athlete[]>([]);
+const groupList = ref<Group[]>([]);
 
 onMounted(async () => {
   document.title = 'Tableau de Bord Coach - SportTrack';
@@ -26,11 +27,24 @@ onMounted(async () => {
     router.push({ name: 'Login' });
   }
   userCoach.value = await CoachController.getCoachById(user.id);
-  athletesList.value = await clubController.getClubAthletes(userCoach.value.club.id); // TODO : dynamic club id
+  athletesList.value = (await clubController.getClubById(userCoach.value.club.id)).athletes || []; // TODO : dynamic club id
+  groupList.value = (await clubController.getClubById(userCoach.value.club.id)).groups || [];
+
+  console.log(athletesList.value);
+  console.log(groupList.value);
+
+
 
 
 });
 
+function addGroup(name: string) {
+  clubController.createGroup({ name, clubId: userCoach!.value!.club.id }).then(() => {
+    clubController.getClubById(userCoach!.value!.club.id).then((club) => {
+      groupList.value = club.groups || [];
+    });
+  });
+}
 
 
 
@@ -194,8 +208,9 @@ onMounted(() => {
         <CreationCompetition />
       </div>
 
-      <div v-else-if="activeAction === 'athletes'">
-        <GestionGroupes :club-id="1" />
+      <div v-else-if="activeAction === 'athletes' && userCoach">
+        <GestionGroupes :athletes="athletesList" :groups="groupList" :clubId="userCoach?.club.id"
+          @add-group="addGroup" />
         <!-- TODO : changer l'id par default !!!!!!!!!!!!!!!!! -->
       </div>
 

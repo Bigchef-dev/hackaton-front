@@ -52,6 +52,12 @@ export class ClubComposable  {
         return response;
     }
 
+    async createGroup(data: {name: string, clubId: number}): Promise<Group> {
+        
+        const response = await API.put("groups", data);
+        return response;
+    }
+
     // =================================== PUT ===================================
     async updateClub( clubId: number, data: Partial<Club>): Promise<Club> {
         const response = await API.put(`clubs/${clubId}`, data);
