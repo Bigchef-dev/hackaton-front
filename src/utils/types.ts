@@ -115,7 +115,7 @@ export interface CalendarEventType {
 }
 export interface LoginCredentials {
     email: string;
-    password: string;
+    passwordHash: string;
 }
 
 export interface AdminLoginCredentials {
