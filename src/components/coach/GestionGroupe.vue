@@ -13,177 +13,71 @@ const loading = ref(false);
 const error = ref<string | null>(null);
 const usingFakeData = ref(false);
 const selectedGroupId = ref<number | null>(null);
+const showAddAthletePanel = ref(false);
 
-// Données de démonstration - Groupes
+/* ---------------- FAKE DATA ---------------- */
+
 const fakeGroups: Group[] = [
-  {
-    id: 1,
-    name: 'Groupe Débutants',
-    id_club: props.clubId
-  },
-  {
-    id: 2,
-    name: 'Groupe Intermédiaires',
-    id_club: props.clubId
-  },
-  {
-    id: 3,
-    name: 'Groupe Avancés',
-    id_club: props.clubId
-  },
-  {
-    id: 4,
-    name: 'Groupe Compétition',
-    id_club: props.clubId
-  },
-  {
-    id: 5,
-    name: 'Groupe Elite',
-    id_club: props.clubId
-  }
+  { id: 1, name: 'Groupe Débutants', id_club: props.clubId },
+  { id: 2, name: 'Groupe Intermédiaires', id_club: props.clubId },
+  { id: 3, name: 'Groupe Avancés', id_club: props.clubId },
+  { id: 4, name: 'Groupe Compétition', id_club: props.clubId },
+  { id: 5, name: 'Groupe Elite', id_club: props.clubId }
 ];
 
-// Données de démonstration - Athlètes par groupe
 const fakeGroupAthletes: Record<number, Athlete[]> = {
   1: [
-    {
-      id: 1,
-      name: 'Lucas',
-      lastName: 'Petit',
-      birthDate: '2010-05-15',
-      phoneNumber: '06 11 22 33 44',
-      email: 'lucas.petit@example.com',
-      gender: 'M',
-      type: 'ATHLETE',
-      id_league: 0
-    },
-    {
-      id: 2,
-      name: 'Emma',
-      lastName: 'Moreau',
-      birthDate: '2011-08-20',
-      phoneNumber: '06 22 33 44 55',
-      email: 'emma.moreau@example.com',
-      gender: 'F',
-      type: 'ATHLETE',
-      id_league: 0
-    },
-    {
-      id: 3,
-      name: 'Hugo',
-      lastName: 'Simon',
-      birthDate: '2010-12-10',
-      phoneNumber: '06 33 44 55 66',
-      email: 'hugo.simon@example.com',
-      gender: 'M',
-      type: 'ATHLETE',
-      id_league: 0
-    }
+    { id: 1, name: 'Lucas', lastName: 'Petit', birthDate: '2011-05-15', phoneNumber: '', email: 'lucas.petit@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 },
+    { id: 2, name: 'Emma', lastName: 'Moreau', birthDate: '2012-08-20', phoneNumber: '', email: 'emma.moreau@example.com', gender: 'F', type: 'ATHLETE', id_league: 0 },
+    { id: 3, name: 'Noah', lastName: 'Bernard', birthDate: '2011-11-03', phoneNumber: '', email: 'noah.bernard@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 },
+    { id: 4, name: 'Lina', lastName: 'Dupont', birthDate: '2013-02-14', phoneNumber: '', email: 'lina.dupont@example.com', gender: 'F', type: 'ATHLETE', id_league: 0 }
   ],
+
   2: [
-    {
-      id: 4,
-      name: 'Léa',
-      lastName: 'Laurent',
-      birthDate: '2008-03-25',
-      phoneNumber: '06 44 55 66 77',
-      email: 'lea.laurent@example.com',
-      gender: 'F',
-      type: 'ATHLETE',
-      id_league: 0
-    },
-    {
-      id: 5,
-      name: 'Thomas',
-      lastName: 'Lefebvre',
-      birthDate: '2009-07-14',
-      phoneNumber: '06 55 66 77 88',
-      email: 'thomas.lefebvre@example.com',
-      gender: 'M',
-      type: 'ATHLETE',
-      id_league: 0
-    }
+    { id: 5, name: 'Hugo', lastName: 'Simon', birthDate: '2009-12-10', phoneNumber: '', email: 'hugo.simon@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 },
+    { id: 6, name: 'Manon', lastName: 'Leroy', birthDate: '2010-06-18', phoneNumber: '', email: 'manon.leroy@example.com', gender: 'F', type: 'ATHLETE', id_league: 0 },
+    { id: 7, name: 'Tom', lastName: 'Rousseau', birthDate: '2008-09-27', phoneNumber: '', email: 'tom.rousseau@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 }
   ],
+
   3: [
-    {
-      id: 6,
-      name: 'Chloé',
-      lastName: 'Roux',
-      birthDate: '2006-11-30',
-      phoneNumber: '06 66 77 88 99',
-      email: 'chloe.roux@example.com',
-      gender: 'F',
-      type: 'ATHLETE',
-      id_league: 0
-    },
-    {
-      id: 7,
-      name: 'Nathan',
-      lastName: 'Girard',
-      birthDate: '2007-02-18',
-      phoneNumber: '06 77 88 99 00',
-      email: 'nathan.girard@example.com',
-      gender: 'M',
-      type: 'ATHLETE',
-      id_league: 0
-    },
-    {
-      id: 8,
-      name: 'Camille',
-      lastName: 'Blanc',
-      birthDate: '2006-09-05',
-      phoneNumber: '06 88 99 00 11',
-      email: 'camille.blanc@example.com',
-      gender: 'F',
-      type: 'ATHLETE',
-      id_league: 0
-    }
+    { id: 8, name: 'Chloé', lastName: 'Roux', birthDate: '2007-11-30', phoneNumber: '', email: 'chloe.roux@example.com', gender: 'F', type: 'ATHLETE', id_league: 0 },
+    { id: 9, name: 'Nathan', lastName: 'Girard', birthDate: '2006-02-18', phoneNumber: '', email: 'nathan.girard@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 },
+    { id: 10, name: 'Camille', lastName: 'Blanc', birthDate: '2006-09-05', phoneNumber: '', email: 'camille.blanc@example.com', gender: 'F', type: 'ATHLETE', id_league: 0 }
   ],
+
   4: [
-    {
-      id: 9,
-      name: 'Alexandre',
-      lastName: 'Guerin',
-      birthDate: '2004-04-22',
-      phoneNumber: '06 99 00 11 22',
-      email: 'alexandre.guerin@example.com',
-      gender: 'M',
-      type: 'ATHLETE',
-      id_league: 0
-    },
-    {
-      id: 10,
-      name: 'Marine',
-      lastName: 'Faure',
-      birthDate: '2005-06-12',
-      phoneNumber: '06 00 11 22 33',
-      email: 'marine.faure@example.com',
-      gender: 'F',
-      type: 'ATHLETE',
-      id_league: 0
-    }
+    { id: 11, name: 'Alexandre', lastName: 'Guerin', birthDate: '2004-04-22', phoneNumber: '', email: 'alexandre.guerin@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 },
+    { id: 12, name: 'Marine', lastName: 'Faure', birthDate: '2005-06-12', phoneNumber: '', email: 'marine.faure@example.com', gender: 'F', type: 'ATHLETE', id_league: 0 },
+    { id: 13, name: 'Julien', lastName: 'Marchand', birthDate: '2003-01-19', phoneNumber: '', email: 'julien.marchand@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 }
   ],
+
   5: [
-    {
-      id: 11,
-      name: 'Maxime',
-      lastName: 'Bonnet',
-      birthDate: '2002-01-08',
-      phoneNumber: '06 11 22 33 44',
-      email: 'maxime.bonnet@example.com',
-      gender: 'M',
-      type: 'ATHLETE',
-      id_league: 0
-    }
+    { id: 14, name: 'Maxime', lastName: 'Bonnet', birthDate: '2002-01-08', phoneNumber: '', email: 'maxime.bonnet@example.com', gender: 'M', type: 'ATHLETE', id_league: 0 },
+    { id: 15, name: 'Sarah', lastName: 'Perrin', birthDate: '2001-07-03', phoneNumber: '', email: 'sarah.perrin@example.com', gender: 'F', type: 'ATHLETE', id_league: 0 }
   ]
 };
 
+
 const groupAthletes = ref<Record<number, Athlete[]>>(fakeGroupAthletes);
 
-// Computed pour obtenir les athlètes du groupe sélectionné
+/* Liste globale des athlètes */
+const allAthletes = ref<Athlete[]>(
+  Object.values(fakeGroupAthletes).flat()
+);
+
 const selectedGroupAthletes = computed(() => {
   if (selectedGroupId.value === null) return [];
   return groupAthletes.value[selectedGroupId.value] || [];
+});
+
+const availableAthletes = computed(() => {
+  if (selectedGroupId.value === null) return [];
+
+  const currentIds = selectedGroupAthletes.value.map(a => a.id);
+
+  return allAthletes.value.filter(
+    athlete => !currentIds.includes(athlete.id)
+  );
 });
 
 onMounted(async () => {
@@ -191,11 +85,9 @@ onMounted(async () => {
   try {
     groups.value = await clubApi.getClubGroups(String(props.clubId));
     usingFakeData.value = false;
-    // TODO: Charger les athlètes pour chaque groupe
   } catch (e) {
     console.error(e);
     groups.value = fakeGroups;
-    groupAthletes.value = fakeGroupAthletes;
     usingFakeData.value = true;
   } finally {
     loading.value = false;
@@ -203,129 +95,105 @@ onMounted(async () => {
 });
 
 const selectGroup = (groupId: number) => {
-  selectedGroupId.value = selectedGroupId.value === groupId ? null : groupId;
+  if (selectedGroupId.value === groupId) {
+    selectedGroupId.value = null;
+    showAddAthletePanel.value = false;
+  } else {
+    selectedGroupId.value = groupId;
+    showAddAthletePanel.value = false;
+  }
 };
 
 const deleteGroup = (groupId: number) => {
   if (!confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?')) return;
-  
+
   groups.value = groups.value.filter(g => g.id !== groupId);
   delete groupAthletes.value[groupId];
-  
+
   if (selectedGroupId.value === groupId) {
     selectedGroupId.value = null;
-  }
-  
-  if (usingFakeData.value) {
-    alert('Groupe supprimé (données de démonstration)');
-  } else {
-    alert('Groupe supprimé avec succès');
   }
 };
 
 const removeAthleteFromGroup = (athleteId: number) => {
   if (!confirm('Êtes-vous sûr de vouloir retirer cet athlète du groupe ?')) return;
-  
+
   if (selectedGroupId.value !== null) {
-    groupAthletes.value[selectedGroupId.value] = groupAthletes.value[selectedGroupId.value].filter(
-      a => a.id !== athleteId
-    );
-    
-    if (usingFakeData.value) {
-      alert('Athlète retiré du groupe (données de démonstration)');
-    } else {
-      alert('Athlète retiré du groupe avec succès');
-    }
+    groupAthletes.value[selectedGroupId.value] =
+      groupAthletes.value[selectedGroupId.value].filter(
+        a => a.id !== athleteId
+      );
   }
 };
 
 const addAthleteToGroup = () => {
+  showAddAthletePanel.value = true;
+};
+
+const addAthlete = (athlete: Athlete) => {
   if (selectedGroupId.value === null) return;
-  
-  // TODO: Ouvrir un modal pour sélectionner un athlète à ajouter
-  alert('Fonctionnalité d\'ajout d\'athlète à implémenter');
+
+  groupAthletes.value[selectedGroupId.value].push(athlete);
 };
 </script>
 
 <template>
   <div>
-    <h3 class="text-xl font-bold mb-4">
-      Gestion des groupes
-    </h3>
+    <h3 class="text-xl font-bold mb-4">Gestion des groupes</h3>
 
-    <!-- Avertissement données de démonstration -->
-    <div v-if="usingFakeData" class="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded">
-      ⚠️ Données de démonstration affichées (erreur de connexion)
+    <div
+      v-if="usingFakeData"
+      class="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded"
+    >
+      ⚠️ Données de démonstration affichées
     </div>
 
-    <!-- Loading -->
-    <p v-if="loading">Chargement des groupes...</p>
+    <p v-if="loading">Chargement...</p>
 
-    <!-- Empty -->
     <p v-else-if="groups.length === 0" class="text-gray-500">
       Aucun groupe pour ce club
     </p>
 
-    <!-- Groups list -->
     <div v-else class="space-y-3">
       <div
         v-for="group in groups"
         :key="group.id"
         class="border rounded-lg overflow-hidden"
       >
-        <!-- En-tête du groupe -->
+        <!-- HEADER -->
         <div
-          class="p-4 flex justify-between items-center hover:bg-gray-50 cursor-pointer"
+          class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50"
           :class="{ 'bg-blue-50': selectedGroupId === group.id }"
           @click="selectGroup(group.id)"
         >
           <div class="flex items-center gap-2">
-            <svg
-              class="w-5 h-5 transition-transform"
-              :class="{ 'rotate-90': selectedGroupId === group.id }"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
             <span class="font-medium">{{ group.name }}</span>
             <span class="text-sm text-gray-500">
               ({{ groupAthletes[group.id]?.length || 0 }} athlètes)
             </span>
           </div>
 
-          <!-- Actions du groupe -->
-          <div class="space-x-2 text-sm">
-            <button
-              @click.stop="deleteGroup(group.id)"
-              class="text-red-600 hover:underline"
-            >
-              Supprimer
-            </button>
-          </div>
+          <button
+            @click.stop="deleteGroup(group.id)"
+            class="text-red-600 hover:underline text-sm"
+          >
+            Supprimer
+          </button>
         </div>
 
-        <!-- Liste des athlètes (affichée si le groupe est sélectionné) -->
-        <div
-          v-if="selectedGroupId === group.id"
-          class="bg-gray-50 p-4 border-t"
-        >
+        <!-- CONTENT -->
+        <div v-if="selectedGroupId === group.id" class="bg-gray-50 p-4 border-t">
           <div class="flex justify-between items-center mb-3">
-            <h4 class="font-semibold text-gray-700">Athlètes du groupe</h4>
+            <h4 class="font-semibold text-gray-700">Athlètes</h4>
             <button
               @click="addAthleteToGroup"
-              class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm flex items-center gap-1"
+              class="bg-blue-600 text-white px-3 py-1 rounded text-sm"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-              </svg>
-              Ajouter un athlète
+              + Ajouter
             </button>
           </div>
 
-          <!-- Liste des athlètes -->
-          <div v-if="selectedGroupAthletes.length === 0" class="text-center text-gray-500 py-4">
+          <div v-if="selectedGroupAthletes.length === 0" class="text-gray-500">
             Aucun athlète dans ce groupe
           </div>
 
@@ -333,7 +201,7 @@ const addAthleteToGroup = () => {
             <li
               v-for="athlete in selectedGroupAthletes"
               :key="athlete.id"
-              class="bg-white border rounded-lg p-3 flex justify-between items-center hover:shadow-sm transition-shadow"
+              class="bg-white border rounded p-3 flex justify-between items-center"
             >
               <div>
                 <div class="font-medium">
@@ -351,6 +219,44 @@ const addAthleteToGroup = () => {
               </button>
             </li>
           </ul>
+
+          <!-- ADD ATHLETE PANEL -->
+          <div
+            v-if="showAddAthletePanel"
+            class="mt-4 bg-white border rounded-lg p-4"
+          >
+            <div class="flex justify-between mb-2">
+              <h5 class="font-semibold">Ajouter un athlète</h5>
+              <button
+                class="text-sm text-gray-500"
+                @click="showAddAthletePanel = false"
+              >
+                Fermer
+              </button>
+            </div>
+
+            <div v-if="availableAthletes.length === 0" class="text-gray-500">
+              Tous les athlètes sont déjà dans ce groupe
+            </div>
+
+            <ul v-else class="space-y-2">
+              <li
+                v-for="athlete in availableAthletes"
+                :key="athlete.id"
+                class="flex justify-between items-center border rounded p-2"
+              >
+                <span>
+                  {{ athlete.name }} {{ athlete.lastName }}
+                </span>
+                <button
+                  @click="addAthlete(athlete)"
+                  class="text-green-600 text-xl font-bold"
+                >
+                  +
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
