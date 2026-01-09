@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue';
 import { CoachComposable } from '../../utils/composables/coach';
 import type { Coach } from '../../utils/types';
+import UserInfoModal from '../UserInfoModal.vue';
 
 const coachApi = new CoachComposable();
 
 const coaches = ref<Coach[]>([]);
 const loading = ref(false);
 const usingFakeData = ref(false);
+const selectedCoach = ref<Coach | null>(null);
 
 // Données de démonstration
 const fakeCoaches: Coach[] = [
@@ -73,6 +75,14 @@ const loadCoaches = async () => {
   }
 };
 
+const selectCoach = (coach: Coach) => {
+  selectedCoach.value = coach;
+};
+
+const closeCoachDetails = () => {
+  selectedCoach.value = null;
+};
+
 const deleteCoach = async (coachId: number) => {
   if (!confirm('Êtes-vous sûr de vouloir supprimer ce coach ?')) return;
   
@@ -80,6 +90,9 @@ const deleteCoach = async (coachId: number) => {
   if (usingFakeData.value) {
     coaches.value = coaches.value.filter(c => c.id !== coachId);
     alert('Coach supprimé (données de démonstration)');
+    if (selectedCoach.value?.id === coachId) {
+      selectedCoach.value = null;
+    }
     return;
   }
 
@@ -87,6 +100,9 @@ const deleteCoach = async (coachId: number) => {
     await coachApi.deleteCoach(coachId);
     alert('Coach supprimé avec succès');
     coaches.value = coaches.value.filter(c => c.id !== coachId);
+    if (selectedCoach.value?.id === coachId) {
+      selectedCoach.value = null;
+    }
   } catch (error) {
     console.error(error);
     alert('Erreur lors de la suppression du coach');
@@ -124,9 +140,9 @@ onMounted(() => {
         </thead>
         <tbody>
           <tr v-for="coach in coaches" :key="coach.id" class="hover:bg-gray-50">
-            <td class="border p-2">{{ coach.name }}</td>
-            <td class="border p-2">{{ coach.lastName }}</td>
-            <td class="border p-2">{{ coach.email }}</td>
+            <td class="border p-2" @click="selectCoach(coach)">{{ coach.name }}</td>
+            <td class="border p-2" @click="selectCoach(coach)">{{ coach.lastName }}</td>
+            <td class="border p-2" @click="selectCoach(coach)">{{ coach.email }}</td>
             <td class="border p-2">
               <button
                 @click="deleteCoach(coach.id)"
@@ -166,6 +182,13 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- Modal d'affichage des détails du coach -->
+    <UserInfoModal 
+      v-if="selectedCoach" 
+      :user="selectedCoach" 
+      @close="closeCoachDetails" 
+    />
   </div>
 </template>
 

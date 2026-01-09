@@ -7,6 +7,12 @@ const props = defineProps<{
   clubId: number;
 }>();
 
+export interface Group {
+    id: number;
+    name: string;
+    id_club: number;
+}
+
 const clubApi = new ClubComposable();
 
 const groups = ref<Group[]>([]);
