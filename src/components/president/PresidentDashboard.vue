@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import CreationAthlete from './CreationAthlete.vue'
 import CreationCoach from './CreationCoach.vue'
@@ -11,6 +11,7 @@ import { useAuthStore } from '../../utils/stores/login'
 import { PresidentComposable } from '../../utils/composables/president'
 import { ClubComposable } from '../../utils/composables/club'
 import type { Athlete, Club, Coach, President } from '../../utils/types'
+import { UserComposable } from '../../utils/composables/user'
 
 const router = useRouter()
 const store = useAuthStore()
@@ -18,11 +19,13 @@ const user = store.currentUser
 
 const userPresident = ref<President | null>(null)
 const club = ref<Club | null>(null)
-const athletes = ref<Athlete[]>([])
+const athletes = reactive<Athlete[]>([])
 const coachesList = ref<Coach[]>([])
+const unhandledAthletes = ref<Athlete[]>([])
 
 const presidentController = new PresidentComposable()
 const clubController = new ClubComposable()
+const userController = new UserComposable()
 
 type Action = 'coach' | 'athletes' | 'stats' | null
 const activeAction = ref<Action>(null)
@@ -44,10 +47,38 @@ onMounted(async () => {
 
   userPresident.value = await presidentController.getPresidentById(user.id)
   club.value = await clubController.getClubById(userPresident.value!.club.id)
+  unhandledAthletes.value = await userController.getUnhandledAthletes()
 
-  athletes.value = club.value?.athletes ?? []
+  athletes.splice(0, athletes.length, ...(club.value?.athletes || []))
   coachesList.value = club.value?.coaches ?? []
+  console.log(unhandledAthletes.value);
+
 })
+
+function associateAthlete(athleteId: number) {
+  clubController.addAthleteToClub(
+    userPresident.value!.club.id,
+    athleteId
+  ).then(async () => {
+    const updatedClub = await clubController.getClubById(userPresident.value!.club.id);
+    athletes.splice(0, athletes.length, ...(updatedClub?.athletes || []));
+    unhandledAthletes.value = await userController.getUnhandledAthletes();
+  })
+}
+
+function dissociateAthlete(athleteId: number) {
+  console.log('dissociation of athlete '+ athleteId);
+  
+  clubController.removeAthleteFromClub(
+    userPresident.value!.club.id,
+    athleteId
+  ).then(async () => {
+    const updatedClub = await clubController.getClubById(userPresident.value!.club.id);
+    athletes.splice(0, athletes.length, ...(updatedClub?.athletes || []));
+    unhandledAthletes.value = await userController.getUnhandledAthletes();
+  })
+}
+
 </script>
 
 <template>
@@ -64,11 +95,11 @@ onMounted(async () => {
         <div class="flex justify-between items-start mb-6">
           <h2 class="text-2xl font-semibold">Informations personnelles</h2>
 
-          <button
-            @click="goToProfile"
+          <button @click="goToProfile"
             class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600 transition-all hover:scale-105">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             Voir le profil
           </button>
@@ -86,28 +117,28 @@ onMounted(async () => {
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- COACHS -->
-        <button
-          @click="activeAction = activeAction === 'coach' ? null : 'coach'"
+        <button @click="activeAction = activeAction === 'coach' ? null : 'coach'"
           class="group relative p-6 bg-slate-800/40 backdrop-blur-md border border-slate-700 rounded-2xl hover:bg-blue-900/40 transition-all hover:scale-105">
           <div class="flex items-center gap-4">
             <div class="p-3 rounded-full bg-blue-500/20 text-blue-400 text-2xl">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
             <span class="font-semibold text-lg">Gérer les coachs</span>
           </div>
         </button>
-        
+
 
         <!-- ATHLETES -->
-        <button
-          @click="activeAction = activeAction === 'athletes' ? null : 'athletes'"
+        <button @click="activeAction = activeAction === 'athletes' ? null : 'athletes'"
           class="group relative p-6 bg-slate-800/40 backdrop-blur-md border border-slate-700 rounded-2xl hover:bg-green-900/40 transition-all hover:scale-105">
           <div class="flex items-center gap-4">
             <div class="p-3 rounded-full bg-green-500/20 text-green-400 text-2xl">
               <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
             <span class="font-semibold text-lg">Gérer les athlètes</span>
@@ -140,8 +171,8 @@ onMounted(async () => {
       </div>
 
       <div v-else-if="activeAction === 'athletes'" class="space-y-8">
-        <CreationAthlete />
-        <DeleteAthlete :athletes="athletes" />
+        <CreationAthlete :athletes="unhandledAthletes" @associate-athlete="associateAthlete" />
+        <DeleteAthlete :athletes="athletes" @delete-athlete="dissociateAthlete" />
       </div>
 
       <div v-else-if="activeAction === 'stats'">

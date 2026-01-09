@@ -14,6 +14,10 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits<{
+  (e: 'deleteAthlete', athleteId: number): void;
+}>();
+
 
 
 const selectAthlete = (athlete: Athlete) => {
@@ -29,7 +33,7 @@ const closeAthleteDetails = () => {
 </script>
 
 <template>
-  <div class="p-6 bg-white rounded-lg shadow-md">
+  <div class="p-6  rounded-lg shadow-md">
     <h3 class="text-xl font-bold mb-4">Voir / Supprimer un athlète</h3>
 
     <!-- Avertissement données de démonstration -->
@@ -53,12 +57,12 @@ const closeAthleteDetails = () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="athlete in athletes" :key="athlete.id" class="hover:bg-gray-50 cursor-pointer">
+          <tr v-for="athlete in athletes" :key="athlete.id" class="hover:bg-gray-50 cursor-pointer ">
             <td class="border p-2" @click="selectAthlete(athlete)">{{ athlete.name }}</td>
             <td class="border p-2" @click="selectAthlete(athlete)">{{ athlete.lastName }}</td>
             <td class="border p-2" @click="selectAthlete(athlete)">{{ athlete.email }}</td>
             <td class="border p-2">
-              <button @click.stop="" class="text-red-600 hover:underline">
+              <button @click.stop="emit('deleteAthlete', athlete.id)" class="text-red-600 hover:underline">
                 Supprimer
               </button>
             </td>
@@ -77,7 +81,7 @@ const closeAthleteDetails = () => {
         <div><span class="font-semibold">Prénom:</span> {{ athlete.name }}</div>
         <div><span class="font-semibold">Nom:</span> {{ athlete.lastName }}</div>
         <div><span class="font-semibold">Email:</span> {{ athlete.email }}</div>
-        <button @click="" class="text-red-600 hover:underline mt-2">
+        <button @click="emit('deleteAthlete', athlete.id)" class="text-red-600 hover:underline mt-2 border p-2 rounded">
           Supprimer
         </button>
       </div>

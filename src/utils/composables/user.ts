@@ -37,6 +37,11 @@ export class UserComposable {
         return response;
     }
 
+    async getUnhandledAthletes(): Promise<Athlete[]> {
+        const response = await API.get(`users/athletes/without-group`);
+        return response;
+    }
+
     // =================================== PUT ===================================
     async updateUserInfo(userId: number, data: Partial<UserInfo>): Promise<UserInfo> {
         if (!this.checker.isUserInfoValid(data)) {

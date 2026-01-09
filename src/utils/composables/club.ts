@@ -58,6 +58,16 @@ export class ClubComposable  {
         return response;
     }
 
+    async addAthleteToClub(clubId: number, athleteId: number): Promise<void> {
+        const response = await API.post(`clubs/${clubId}/athletes/${athleteId}`);
+        return response;
+    }
+
+    async removeAthleteFromClub(clubId: number, athleteId: number): Promise<void> {
+        const response = await API.delete(`clubs/${clubId}/athletes/${athleteId}`);
+        return response;
+    }
+
     // =================================== PUT ===================================
     async updateClub( clubId: number, data: Partial<Club>): Promise<Club> {
         const response = await API.put(`clubs/${clubId}`, data);

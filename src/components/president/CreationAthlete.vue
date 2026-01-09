@@ -4,64 +4,74 @@ import type { Athlete } from '../../utils/types';
 
 //const athletes = ref<Array<Athlete>>([]);
 
-const athletes = ref<Array<Athlete>>([
-  {
-    id: 1,
-    name: 'Lucas',
-    lastName: 'Martin',
-    email: 'lucas.martin@email.com',
-    birthDate: '22/05/2000',
-    phoneNumber: '0612345678',
-    gender: 'M',
-    type: 'ATHLETE',
-    id_league: 0,
-  },
-  {
-    id: 2,
-    name: 'Emma',
-    lastName: 'Durand',
-    email: 'emma.durand@email.com',
-    birthDate: '19/11/1998',
-    phoneNumber: '0698765432',
-    gender: 'F',
-    type: 'ATHLETE',
-    id_league: 0,
-  },
-  {
-    id: 3,
-    name: 'Thomas',
-    lastName: 'Lefevre',
-    email: 'thomas.lefevre@email.com',
-    birthDate: '15/03/1999',
-    phoneNumber: '0654321098',
-    gender: 'M',
-    type: 'ATHLETE',
-    id_league: 0,
-  },
-  {
-    id: 4,
-    name: 'Sarah',
-    lastName: 'Moreau',
-    email: 'sarah.moreau@email.com',
-    birthDate: '22/05/2000',
-    phoneNumber: '0612345678',
-    gender: 'F',
-    type: 'ATHLETE',
-    id_league: 0,
-  },
-  {
-    id: 5,
-    name: 'Nicolas',
-    lastName: 'Bernard',
-    email: 'nicolas.bernard@email.com',
-    birthDate: '10/07/1995',
-    phoneNumber: '0654321098',
-    gender: 'M',
-    type: 'ATHLETE',
-    id_league: 0,
-  },
-]);
+// const athletes = ref<Array<Athlete>>([
+//   {
+//     id: 1,
+//     name: 'Lucas',
+//     lastName: 'Martin',
+//     email: 'lucas.martin@email.com',
+//     birthDate: '22/05/2000',
+//     phoneNumber: '0612345678',
+//     gender: 'M',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 2,
+//     name: 'Emma',
+//     lastName: 'Durand',
+//     email: 'emma.durand@email.com',
+//     birthDate: '19/11/1998',
+//     phoneNumber: '0698765432',
+//     gender: 'F',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 3,
+//     name: 'Thomas',
+//     lastName: 'Lefevre',
+//     email: 'thomas.lefevre@email.com',
+//     birthDate: '15/03/1999',
+//     phoneNumber: '0654321098',
+//     gender: 'M',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 4,
+//     name: 'Sarah',
+//     lastName: 'Moreau',
+//     email: 'sarah.moreau@email.com',
+//     birthDate: '22/05/2000',
+//     phoneNumber: '0612345678',
+//     gender: 'F',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 5,
+//     name: 'Nicolas',
+//     lastName: 'Bernard',
+//     email: 'nicolas.bernard@email.com',
+//     birthDate: '10/07/1995',
+//     phoneNumber: '0654321098',
+//     gender: 'M',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+// ]);
 
+const props = defineProps({
+  athletes: {
+    type: Array as () => Athlete[],
+    required: true,
+  },
+});
+
+const emit = defineEmits<{
+  (e: 'associate-athlete', athleteId: number): void;
+}>();
 /*
 const getAllAthletesWithoutClub = async () => {
   // TODO : appeler l'API pour récupérer les athlètes sans club
@@ -71,16 +81,12 @@ const getAllAthletesWithoutClub = async () => {
 */
 
 const associateAthleteToClub = async (athleteId: number) => {
-  // TODO : appeler l'API pour associer l'athlète au club
-  console.log(`Associer l'athlète avec l'ID ${athleteId} au club`);
-  athletes.value = athletes.value.filter(
-    athlete => athlete.id !== athleteId
-  );
+  emit('associate-athlete', athleteId);
 };
 </script>
 
 <template>
-  <div class="p-4 sm:p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
+  <div class="p-4 sm:p-6  rounded-lg shadow-md max-w-4xl mx-auto">
     <h3 class="text-xl font-bold mb-6 text-center sm:text-left">
       Associer un athlète à votre club
     </h3>
