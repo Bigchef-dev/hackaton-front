@@ -3,6 +3,9 @@ import Home from '../components/Home.vue';
 import HomeConnect from '../components/HomeConnect.vue';
 
 import AdminDashboard from '../components/AdminDashboard.vue';
+import Profile from '../components/profile/Profile.vue';
+import Coach from '../components/coach/CoachDashboard.vue';
+import President from '../components/president/PresidentDashboard.vue';
 import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
 import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
@@ -22,11 +25,6 @@ const routes: Array<RouteRecordRaw> = [
     name: 'homeconnect',
     component: HomeConnect,
   },
-    {
-    path: '/athlete/dashboard',
-    name: 'AthleteDashboard',
-    component: AthleteDashboard,
-  },
   {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
@@ -38,7 +36,25 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginStuff,
   },
   {
-    path: '/athlete',
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
+    props: route => ({
+      user: route.query.user
+    }),
+  },
+  {
+    path: '/coach',
+    name: 'Coach',
+    component: Coach,
+  },
+  {
+    path: '/president',
+    name: 'President',
+    component: President,
+  },
+  {
+    path: '/athlete/dashboard',
     name: 'AthleteDashboard',
     component: AthleteDashboard,
   },
@@ -57,7 +73,6 @@ const router = createRouter({
 
 // Guard de navigation : protège les routes nécessitant une authentification
 router.beforeEach((to, from, next) => {
-    console.log(router.getRoutes());
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const isAuthenticated = checkIsAuthenticated();
 
