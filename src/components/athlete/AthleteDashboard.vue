@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import type { Session, Athlete } from '../../utils/types';
 import ListSeanceView from '../sessionList/ListSessionView.vue';
 import Calendar from '../calendar/CalendarContainer.vue';
+import TrainingLoadAnalysis from '../quotas/quotaView.vue';
 
 interface Props {
   //sessions: Session[];
@@ -79,12 +80,13 @@ const athlete: Athlete = {
     email: "a.dubois@exemple.fr",
     gender: "M",
     type: "ATHLETE",
-    id_league: 12
+    id_league: 12,
+    quota: 7
 };
 
 const props = defineProps<Props>();
 
-type ViewType = 'calendar' | 'list' | 'perf';
+type ViewType = 'calendar' | 'list' | 'charge';
 
 interface ViewOption {
   id: ViewType;
@@ -106,7 +108,7 @@ const viewOptions: ViewOption[] = [
     icon: '📋'
   },
   {
-    id: 'perf',
+    id: 'charge',
     label: 'Analyse de charge',
     labelShort: 'Charge',
     icon: '📊'
@@ -197,8 +199,11 @@ const athleteInitials = computed((): string => {
             <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-700/50 mb-4">
               <span class="text-3xl sm:text-4xl">📊</span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">Analyse de charge</h2>
-            <p class="text-gray-400 text-sm sm:text-base">Cette fonctionnalité sera bientôt disponible</p>
+            <TrainingLoadAnalysis
+              :athlete="athlete"
+              :sessions="sessions"
+              class="w-full"
+            />
           </div>
         </Transition>
       </div>

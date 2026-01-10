@@ -37,6 +37,7 @@ export interface UserInfo {
 
 export interface Athlete extends UserInfo {
     id_league: number;
+    quota?: number;
 }
 
 export interface Coach {
