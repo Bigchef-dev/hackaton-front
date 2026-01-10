@@ -63,8 +63,18 @@ export class ClubComposable  {
         return response;
     }
 
+    async addAthleteToGroup(groupId: number, athleteId: number): Promise<void> {
+        const response = await API.post(`groups/${groupId}/athletes/${athleteId}`);
+        return response;
+    }
+
     async removeAthleteFromClub(clubId: number, athleteId: number): Promise<void> {
         const response = await API.delete(`clubs/${clubId}/athletes/${athleteId}`);
+        return response;
+    }
+
+    async removeAthleteFromGroup(groupId: number, athleteId: number): Promise<void> {
+        const response = await API.delete(`groups/${groupId}/athletes/${athleteId}`);
         return response;
     }
 

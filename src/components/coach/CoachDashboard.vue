@@ -34,7 +34,7 @@ onMounted(async () => {
   console.log(groupList.value);
 
 
-  
+
 
 
 
@@ -44,6 +44,28 @@ onMounted(async () => {
 function addGroup(name: string) {
   clubController.createGroup({ name, clubId: userCoach!.value!.club.id }).then(() => {
     clubController.getClubById(userCoach!.value!.club.id).then((club) => {
+      groupList.value = club.groups || [];
+    });
+  });
+}
+
+function addAthleteToGroup(payload: { groupId: number; athleteId: number }) {
+  console.log("Add Athlete " + payload.athleteId + " to group");
+
+  clubController.addAthleteToGroup(payload.groupId, payload.athleteId).then(() => {
+    clubController.getClubById(userCoach!.value!.club.id).then((club) => {
+      athletesList.value = club.athletes || [];
+      groupList.value = club.groups || [];
+    });
+  });
+}
+
+function removeAthleteFromGroup(payload: { groupId: number; athleteId: number }) {
+  console.log("Remove Athlete " + payload.athleteId + " from group");
+
+  clubController.removeAthleteFromGroup(payload.groupId, payload.athleteId).then(() => {
+    clubController.getClubById(userCoach!.value!.club.id).then((club) => {
+      athletesList.value = club.athletes || [];
       groupList.value = club.groups || [];
     });
   });
@@ -206,8 +228,8 @@ onMounted(() => {
       </div>
 
       <div v-else-if="activeAction === 'athletes' && userCoach">
-        <GestionGroupes :athletes="athletesList" :groups="groupList" :clubId="userCoach?.club.id"
-          @add-group="addGroup" />
+        <GestionGroupes :athletes="athletesList" :groups="groupList" :clubId="userCoach?.club.id" @add-group="addGroup"
+          @add-athlete-to-group="addAthleteToGroup" @remove-athlete-from-group="removeAthleteFromGroup" />
         <!-- TODO : changer l'id par default !!!!!!!!!!!!!!!!! -->
       </div>
 

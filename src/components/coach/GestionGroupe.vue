@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { ClubComposable } from '../../utils/composables/club';
+import { ref, computed, watch } from 'vue';
 import type { Group, Athlete } from '../../utils/types';
 
 const props = defineProps<{
@@ -11,27 +10,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'addGroup', name: string): string;
+  (e: 'removeGroup', groupId: number): number;
+  (e: 'addAthleteToGroup', payload: { groupId: number; athleteId: number }): { groupId: number; athleteId: number };
+  (e: 'removeAthleteFromGroup', payload: { groupId: number; athleteId: number }): { groupId: number; athleteId: number };
 }>();
-
-
-onMounted(() => {
-  console.log('Props groupes:', props.groups);
-  console.log('Props athlètes:', props.athletes);
-
-  // Initialize groupAthletes map
-  const groupAthletesMap: Record<number, Athlete[]> = {};
-
-  props.athletes.forEach(athlete => {
-    athlete.groups!.forEach(groupId => {
-      if (!groupAthletesMap[groupId.id]) {
-        groupAthletesMap[groupId.id] = [];
-      }
-      groupAthletesMap[groupId.id].push(athlete);
-    });
-  });
-
-  groupAthletes.value = groupAthletesMap;
-});
 
 const loading = ref(false);
 const usingFakeData = ref(false);
@@ -46,13 +28,19 @@ const showAddAthletePanel = ref<Record<number, boolean>>({});
 const newGroupName = ref('');
 const creatingGroup = ref(false);
 
-
-
-
-const groupAthletes = ref<Record<number, Athlete[]>>({});
-
-/* Tous les athlètes */
-const allAthletes = ref<Athlete[]>([]);
+// Utiliser computed au lieu de ref pour que groupAthletes soit réactif aux props
+const groupAthletes = computed(() => {
+  const groupAthletesMap: Record<number, Athlete[]> = {};
+  props.athletes.forEach(athlete => {
+    athlete.groups?.forEach(groupId => {
+      if (!groupAthletesMap[groupId.id]) {
+        groupAthletesMap[groupId.id] = [];
+      }
+      groupAthletesMap[groupId.id].push(athlete);
+    });
+  });
+  return groupAthletesMap;
+});
 
 /* ---------------- HELPERS ---------------- */
 
@@ -72,20 +60,21 @@ const toggleGroup = (groupId: number) => {
 const getGroupAthletes = (groupId: number): Athlete[] =>
   groupAthletes.value[groupId] || [];
 
-const getAvailableAthletes = (groupId: number): Athlete[] => {
-  const currentIds = getGroupAthletes(groupId).map(a => a.id);
-  return allAthletes.value.filter(a => !currentIds.includes(a.id));
+const getAllAthletesFromClubNotInGroup = (groupId: number): Athlete[] => {
+  const athletesInGroup = new Set(
+    getGroupAthletes(groupId).map(athlete => athlete.id)
+  );
+
+  return props.athletes.filter(
+    athlete => !athletesInGroup.has(athlete.id)
+  );
 };
-
-
 
 /* ---------------- ACTIONS ---------------- */
 
 const removeAthleteFromGroup = (groupId: number, athleteId: number) => {
   if (!confirm('Êtes-vous sûr de vouloir retirer cet athlète du groupe ?')) return;
-
-  groupAthletes.value[groupId] =
-    groupAthletes.value[groupId].filter(a => a.id !== athleteId);
+  emit('removeAthleteFromGroup', { groupId, athleteId });
 };
 
 const addAthleteToGroup = (groupId: number) => {
@@ -93,7 +82,7 @@ const addAthleteToGroup = (groupId: number) => {
 };
 
 const addAthlete = (groupId: number, athlete: Athlete) => {
-  groupAthletes.value[groupId].push(athlete);
+  emit('addAthleteToGroup', { groupId, athleteId: athlete.id });
 };
 
 /* ---------------- CREATE GROUP ---------------- */
@@ -105,7 +94,6 @@ const createGroup = async () => {
 
   try {
     if (!usingFakeData.value) {
-      // TODO: API create group
       emit('addGroup', newGroupName.value);
     }
 
@@ -145,22 +133,23 @@ const createGroup = async () => {
             </span>
           </div>
 
-          <button v-if="group.name != 'Default Group'" @click.stop="" class="text-red-600 hover:underline text-sm">
+          <button v-if="group.name != 'Default Group'" @click.stop="emit('removeGroup', group.id)" class="text-red-600 hover:underline text-sm">
             Supprimer
           </button>
         </div>
 
         <!-- CONTENT -->
-        <div v-if="isGroupOpen(group.id) " class="bg-gray-50 p-4 border-t">
+        <div v-if="isGroupOpen(group.id)" class="bg-gray-50 p-4 border-t">
           <div class="flex justify-between items-center mb-3">
             <h4 class="font-semibold text-gray-700">Athlètes</h4>
-            <button @click="addAthleteToGroup(group.id)" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">
+            <button v-if="group.name != 'Default Group'" @click="addAthleteToGroup(group.id)"
+              class="bg-blue-600 text-white px-3 py-1 rounded text-sm">
               + Ajouter
             </button>
           </div>
 
           <div v-if="getGroupAthletes(group.id).length === 0" class="text-gray-500">
-            Aucun athlète dans ce groupe
+            {{ group.name != 'Default Group' ? 'Aucun athlète dans ce groupe' : 'Aucun athlète dans le club, contactez votre président pour en ajouter.'}}
           </div>
 
           <ul v-else class="space-y-2">
@@ -174,7 +163,7 @@ const createGroup = async () => {
                   {{ athlete.email }}
                 </div>
               </div>
-              <button @click="removeAthleteFromGroup(group.id, athlete.id)"
+              <button v-if="group.name != 'Default Group'" @click="removeAthleteFromGroup(group.id, athlete.id)"
                 class="text-red-600 hover:underline text-sm">
                 Retirer
               </button>
@@ -190,17 +179,18 @@ const createGroup = async () => {
               </button>
             </div>
 
-            <div v-if="getAvailableAthletes(group.id).length === 0" class="text-gray-500">
+            <div v-if="getAllAthletesFromClubNotInGroup(group.id).length === 0" class="text-gray-500">
               Tous les athlètes sont déjà dans ce groupe
             </div>
 
             <ul v-else class="space-y-2">
-              <li v-for="athlete in getAvailableAthletes(group.id)" :key="athlete.id"
+              <li v-for="athlete in getAllAthletesFromClubNotInGroup(group.id)" :key="athlete.id"
                 class="flex justify-between items-center border rounded p-2">
                 <span>
                   {{ athlete.name }} {{ athlete.lastName }}
                 </span>
-                <button @click="addAthlete(group.id, athlete)" class="text-green-600 text-xl font-bold">
+                <button @click="addAthlete(group.id, athlete)"
+                  class="text-green-600 text-xl font-bold border border-green-600 rounded-full w-7 h-7 flex items-center justify-center hover:bg-green-600 hover:text-white">
                   +
                 </button>
               </li>
