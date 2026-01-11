@@ -24,135 +24,139 @@ const props = defineProps({
 });
 
 const selectedUser = (user: any) => {
-    if (props.isCoach){
-        selectedCoach.value = user as Coach;
-        return;
-    }
-    else {
-        selectedAthlete.value = user as Athlete;
-        return;
-    }
+  if (props.isCoach) {
+    selectedCoach.value = user as Coach;
+  } else {
+    selectedAthlete.value = user as Athlete;
+  }
 };
 
 const closeUserDetails = () => {
-    if (props.isCoach){
-        selectedCoach.value = null;
-        return;
-    }
-    else {
-        selectedAthlete.value = null;
-        return;
-    }
+  if (props.isCoach) {
+    selectedCoach.value = null;
+  } else {
+    selectedAthlete.value = null;
+  }
 };
-
-
-
 </script>
 
 <template>
-  <div class="p-6 bg-white rounded-lg shadow-md">
-    <div v-if= "props.isCoach">
-        <h3 class="text-xl font-bold mb-4">
-            Voir / Supprimer un coach
-        </h3>
-    </div>
-    <div v-else>
-        <h3 class="text-xl font-bold mb-4">
-            Voir / Supprimer un athlète
-        </h3>
-    </div>
+  <div
+    class="relative p-6 rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm hover:border-slate-600 transition-all duration-500"
+  >
+    <!-- Overlay gradient -->
+    <div
+      class="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500"
+      :class="props.isCoach
+        ? 'bg-gradient-to-r from-blue-500/5 to-purple-500/5'
+        : 'bg-gradient-to-r from-green-500/5 to-emerald-500/5'"
+    ></div>
 
-    <!-- Avertissement données de démonstration -->
-    <div v-if="usingFakeData" class="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded">
-      ⚠️ Données de démonstration affichées (erreur de connexion)
-    </div>
+    <div class="relative z-10">
+      <!-- Title -->
+      <h3
+        class="text-xl font-semibold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+      >
+        {{ props.isCoach ? 'Voir / Supprimer un coach' : 'Voir / Supprimer un athlète' }}
+      </h3>
 
-    <div v-if="loading" class="text-gray-500">
-        <div v-if="props.isCoach">
-            Chargement des coachs...
-        </div>
-        <div v-else>
-            Chargement des athlètes...
-        </div>
-    </div>
+      <!-- Fake data warning -->
+      <div
+        v-if="usingFakeData"
+        class="mb-4 p-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 text-yellow-300 text-sm"
+      >
+        ⚠️ Données de démonstration affichées (erreur de connexion)
+      </div>
 
-    <div v-else>
-      <!-- Desktop table -->
-      <table class="hidden md:table w-full border-collapse border border-gray-200">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="border p-2 text-left">Prénom</th>
-            <th class="border p-2 text-left">Nom</th>
-            <th class="border p-2 text-left">Email</th>
-            <th class="border p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user in props.isCoach ? props.coaches : props.athletes" :key="user.id" class="hover:bg-gray-50">
-            <td class="border p-2" @click="selectedUser(user)">{{ user.name }}</td>
-            <td class="border p-2" @click="selectedUser(user)">{{ user.lastName }}</td>
-            <td class="border p-2" @click="selectedUser(user)">{{ user.email }}</td>
-            <td class="border p-2">
-              <button
-                @click=""
-                class="text-red-600 hover:underline"
-              >
-                Supprimer
-              </button>
-            </td>
-          </tr>
-          <tr v-if="coaches.length === 0">
-            <div v-if="isCoach">
-                <td colspan="5" class="text-center p-4 text-gray-500">
-                    Aucun coach disponible
-                </td>
-            </div>
-            <div v-else>
-                <td colspan="5" class="text-center p-4 text-gray-500">
-                    Aucun athlète disponible
-                </td>
-            </div>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Loading -->
+      <div v-if="loading" class="text-slate-400 text-sm">
+        {{ props.isCoach ? 'Chargement des coachs...' : 'Chargement des athlètes...' }}
+      </div>
 
-      <!-- Mobile cards -->
-      <div class="md:hidden space-y-4">
-        <div v-for="user in props.isCoach ? props.coaches : props.athletes" :key="user.id" class="border rounded-lg p-4 shadow-sm bg-gray-50 space-y-2">
-          <div><span class="font-semibold">Prénom:</span> {{ user.name }}</div>
-          <div><span class="font-semibold">Nom:</span> {{ user.lastName }}</div>
-          <div><span class="font-semibold">Email:</span> {{ user.email }}</div>
-          <button
-            @click=""
-            class="text-red-600 hover:underline mt-2"
+      <!-- CONTENT -->
+      <div v-else>
+        <!-- Desktop table -->
+        <table class="hidden md:table w-full border-collapse">
+          <thead>
+            <tr class="bg-slate-800/60 text-slate-300">
+              <th class="p-3 text-left">Prénom</th>
+              <th class="p-3 text-left">Nom</th>
+              <th class="p-3 text-left">Email</th>
+              <th class="p-3 text-left">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              v-for="user in props.isCoach ? props.coaches : props.athletes"
+              :key="user.id"
+              class="border-t border-slate-700 hover:bg-slate-800/40 transition cursor-pointer"
+            >
+              <td class="p-3" @click="selectedUser(user)">{{ user.name }}</td>
+              <td class="p-3" @click="selectedUser(user)">{{ user.lastName }}</td>
+              <td class="p-3" @click="selectedUser(user)">{{ user.email }}</td>
+              <td class="p-3">
+                <button class="text-red-400 hover:text-red-300 transition">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+
+            <tr
+              v-if="(props.isCoach ? props.coaches : props.athletes).length === 0"
+            >
+              <td colspan="4" class="text-center p-6 text-slate-500">
+                {{ props.isCoach ? 'Aucun coach disponible' : 'Aucun athlète disponible' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Mobile cards -->
+        <div class="md:hidden space-y-4">
+          <div
+            v-for="user in props.isCoach ? props.coaches : props.athletes"
+            :key="user.id"
+            class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 transition"
           >
-            Supprimer
-          </button>
-        </div>
-        <div v-if="props.isCoach && coaches.length === 0" class="text-center text-gray-500 p-4">
-          Aucun coach disponible
-        </div>
-        <div v-else-if="!props.isCoach && athletes.length === 0" class="text-center text-gray-500 p-4">
-          Aucun athlète disponible
+            <div class="text-sm"><span class="text-slate-400">Prénom :</span> {{ user.name }}</div>
+            <div class="text-sm"><span class="text-slate-400">Nom :</span> {{ user.lastName }}</div>
+            <div class="text-sm"><span class="text-slate-400">Email :</span> {{ user.email }}</div>
+
+            <button class="mt-3 text-red-400 hover:text-red-300 text-sm">
+              Supprimer
+            </button>
+          </div>
+
+          <div
+            v-if="props.isCoach && props.coaches.length === 0"
+            class="text-center text-slate-500 p-4"
+          >
+            Aucun coach disponible
+          </div>
+
+          <div
+            v-else-if="!props.isCoach && props.athletes.length === 0"
+            class="text-center text-slate-500 p-4"
+          >
+            Aucun athlète disponible
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Modal d'affichage des détails du coach -->
-    <div v-if= "props.isCoach">
-        <UserInfoModal 
-        v-if="selectedCoach" 
-        :user="selectedCoach" 
-        @close="closeUserDetails" 
-        />
-    </div>
-    <div v-else>
-        <UserInfoModal 
-        v-if="selectedAthlete" 
-        :user="selectedAthlete" 
-        @close="closeUserDetails" 
-        />
-    </div>
+    <!-- Modals -->
+    <UserInfoModal
+      v-if="props.isCoach && selectedCoach"
+      :user="selectedCoach"
+      @close="closeUserDetails"
+    />
+
+    <UserInfoModal
+      v-if="!props.isCoach && selectedAthlete"
+      :user="selectedAthlete"
+      @close="closeUserDetails"
+    />
   </div>
 </template>
 
