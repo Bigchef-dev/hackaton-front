@@ -1,175 +1,151 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { AthleteComposable } from '../../utils/composables/athlete';
-import type { Athlete, League } from '../../utils/types';
-import { LeagueComposable } from '../../utils/composables/league';
+import { ref } from 'vue';
+import type { Athlete } from '../../utils/types';
 
+//const athletes = ref<Array<Athlete>>([]);
 
-const athleteApi = new AthleteComposable();
+// const athletes = ref<Array<Athlete>>([
+//   {
+//     id: 1,
+//     name: 'Lucas',
+//     lastName: 'Martin',
+//     email: 'lucas.martin@email.com',
+//     birthDate: '22/05/2000',
+//     phoneNumber: '0612345678',
+//     gender: 'M',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 2,
+//     name: 'Emma',
+//     lastName: 'Durand',
+//     email: 'emma.durand@email.com',
+//     birthDate: '19/11/1998',
+//     phoneNumber: '0698765432',
+//     gender: 'F',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 3,
+//     name: 'Thomas',
+//     lastName: 'Lefevre',
+//     email: 'thomas.lefevre@email.com',
+//     birthDate: '15/03/1999',
+//     phoneNumber: '0654321098',
+//     gender: 'M',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 4,
+//     name: 'Sarah',
+//     lastName: 'Moreau',
+//     email: 'sarah.moreau@email.com',
+//     birthDate: '22/05/2000',
+//     phoneNumber: '0612345678',
+//     gender: 'F',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+//   {
+//     id: 5,
+//     name: 'Nicolas',
+//     lastName: 'Bernard',
+//     email: 'nicolas.bernard@email.com',
+//     birthDate: '10/07/1995',
+//     phoneNumber: '0654321098',
+//     gender: 'M',
+//     type: 'ATHLETE',
+//     id_league: 0,
+//   },
+// ]);
 
-const athletes = ref<Athlete[]>([
-  {
-    id: 0,
-    name: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    birthDate: '',
-    gender: 'X',
-    type: 'ATHLETE',
-    id_league: 0,
+const props = defineProps({
+  athletes: {
+    type: Array as () => Athlete[],
+    required: true,
   },
-]);
-
-const leagueApi = new LeagueComposable();
-const leagues = ref<League[]>([]);
-
-onMounted(async () => {
-  try {
-    leagues.value = await leagueApi.getAllLeagues();
-  } catch (error) {
-    console.error(error);
-    alert('Erreur lors du chargement des ligues');
-  }
 });
 
-const addAthlete = () => {
-  athletes.value.push({
-    id: athletes.value.length,
-    name: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    birthDate: '',
-    gender: 'X',
-    type: 'ATHLETE',
-    id_league: 0,
-  });
+const emit = defineEmits<{
+  (e: 'associate-athlete', athleteId: number): void;
+}>();
+/*
+const getAllAthletesWithoutClub = async () => {
+  // TODO : appeler l'API pour récupérer les athlètes sans club
+  const athletesWithoutClub = await athleteApi.getAllAthletesWithoutClub();
+  athletes.value = athletesWithoutClub;
 };
+*/
 
-const removeAthlete = (index: number) => {
-  if (athletes.value.length > 1) {
-    athletes.value.splice(index, 1);
-  }
-};
-
-const submitAthletes = async () => {
-  if (!athletes.value.length) {
-    alert("Vous n'avez créé aucun athlète");
-    return;
-  }
-
-  try {
-    for (const athlete of athletes.value) {
-      await athleteApi.createAthlete(athlete);
-    }
-
-    alert('Athlète(s) créé(s) avec succès');
-
-    // reset formulaire
-    athletes.value = [athletes.value[0]];
-  } catch (error) {
-    console.error(error);
-    alert('Erreur lors de la création');
-  }
+const associateAthleteToClub = async (athleteId: number) => {
+  emit('associate-athlete', athleteId);
 };
 </script>
 
 <template>
-  <div class="p-4 sm:p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto">
-    <h3 class="text-xl font-bold mb-6 text-center sm:text-left">
-      Créer un athlète
-    </h3>
+  <div
+    class="relative p-6 rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm max-w-4xl mx-auto hover:border-slate-600 transition-all duration-500"
+  >
+    <!-- Overlay décoratif -->
+    <div class="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
 
-    <!-- Athlètes -->
-    <div class="space-y-4">
-      <h4 class="font-semibold text-lg">Athlètes</h4>
-
-      <div
-        v-for="(athlete, index) in athletes"
-        :key="`athlete-${index}`"
-        class="border rounded-lg p-4 space-y-3"
+    <div class="relative z-10">
+      <!-- Titre -->
+      <h3
+        class="text-2xl font-semibold mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
       >
-        <!-- Prénom / Nom -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Prénom</label>
-            <input type="text" v-model="athlete.name" class="w-full border rounded-md p-2" placeholder="Ex : Jean" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Nom</label>
-            <input type="text" v-model="athlete.lastName" class="w-full border rounded-md p-2" placeholder="Ex : Dupont" />
-          </div>
-        </div>
+        Associer un athlète à votre club
+      </h3>
 
-        <!-- Email -->
-        <div>
-          <label class="block text-sm font-medium mb-1">Email</label>
-          <input type="email" v-model="athlete.email" class="w-full border rounded-md p-2" placeholder="Ex : jean.dupont@example.com" />
-        </div>
+      <!-- Athlètes -->
+      <div class="space-y-6">
+        <h4 class="text-lg font-medium text-slate-300">
+          Athlètes disponibles
+        </h4>
 
-        <!-- Téléphone / Date de naissance -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Téléphone</label>
-            <input type="tel" v-model="athlete.phoneNumber" class="w-full border rounded-md p-2" placeholder="Ex : 06 12 34 56 78" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Date de naissance</label>
-            <input type="date" v-model="athlete.birthDate" class="w-full border rounded-md p-2" />
-          </div>
-        </div>
-
-        <!-- Sexe / League -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Sexe</label>
-            <select v-model="athlete.gender" class="w-full border rounded-md p-2">
-              <option value="">Sélectionner</option>
-              <option value="M">Masculin</option>
-              <option value="F">Féminin</option>
-              <option value="X">Autre</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium mb-1">League</label>
-            <select v-model="athlete.id_league" class="w-full border rounded-md p-2">
-              <option :value="0">Sélectionner une ligue</option>
-              <option v-for="league in leagues" :key="league.id" :value="league.id">{{ league.nom }}</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Supprimer un athlète -->
-        <button
-          v-if="athletes.length > 1"
-          @click="removeAthlete(index)"
-          type="button"
-          class="text-red-600 text-sm hover:underline mt-2 w-full sm:w-auto"
+        <!-- Aucun athlète -->
+        <div
+          v-if="athletes.length === 0"
+          class="text-slate-500 italic text-sm"
         >
-          Supprimer cet athlète
-        </button>
+          Aucun athlète sans club pour le moment.
+        </div>
+
+        <!-- Liste des athlètes -->
+        <div
+          v-for="(athlete, index) in athletes"
+          :key="`athlete-${index}`"
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-xl border border-slate-700 bg-slate-800/40 hover:bg-slate-800/60 transition-all duration-300"
+        >
+          <!-- Infos athlète -->
+          <div>
+            <p class="font-medium text-slate-100">
+              {{ athlete.name }} {{ athlete.lastName }}
+            </p>
+            <p class="text-sm text-slate-400">
+              {{ athlete.email }}
+            </p>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex justify-end">
+            <button
+              @click="associateAthleteToClub(athlete.id)"
+              class="px-4 py-2 text-sm font-medium rounded-lg
+                     bg-gradient-to-r from-green-500/20 to-emerald-500/20
+                     border border-green-500/30 text-green-400
+                     hover:bg-green-500/30 hover:scale-105
+                     transition-all duration-300"
+            >
+              Associer au club
+            </button>
+          </div>
+        </div>
       </div>
-
-      <!-- Ajouter un athlète -->
-      <button
-        @click="addAthlete"
-        type="button"
-        class="text-blue-600 font-medium hover:underline text-sm w-full sm:w-auto"
-      >
-        + Ajouter un athlète
-      </button>
-    </div>
-
-    <!-- Submit -->
-    <div class="pt-4">
-      <button
-        @click="submitAthletes"
-        class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 w-full sm:w-auto"
-      >
-        Créer l'athlète{{ athletes.length > 1 ? 's' : '' }}
-      </button>
     </div>
   </div>
 </template>
+

@@ -1,21 +1,46 @@
+export type ViewMode = 'day' | 'week' | 'month';
+export type NavigationDirection = 'today' | 'prev' | 'next';
+
 export interface Session {
     id: number;
     date_session: Date;
-    reccurcivite: number;
+    recurrence: number;
     duree: number;
+    coach?: string;
+    type: 'ENTRAINEMENT' | 'COMPETITION';
+    activities?: Activity[];
     id_sport: number;
+}
+
+export interface SessionCreate {
+    title: string;
+    location?: string;
+    date_session: Date;
+    reccurrence: number;
+    duree: number;
+    coach?: string;
+    type: 'TRAINING' | 'COMPETITION';
+    activities_id?: number[];
+    id_sport: number;
+    group_id: number;
+    coach_id: number;
 }
 
 export interface Activity {
     id: number;
-    theme: string;
-    id_type_stat: number;
+    type: string;
+    baseMetrics: {
+        "name": string;
+        "duration": number;
+        "intensity": "high" | "medium" | "low";
+        "participants": number;
+    };
 }
 
 export interface Group {
     id: number;
     name: string;
-    id_club: number;
+    clubId: number;
 }
 
 export interface UserInfo {
@@ -32,6 +57,8 @@ export interface UserInfo {
 
 export interface Athlete extends UserInfo {
     id_league: number;
+    groups?: Group[];
+    quota?: number;
 }
 
 export interface Coach {
@@ -45,6 +72,7 @@ export interface Coach {
     type: "COACH";
     club: Club;
     sport: Sport[];
+    clubId: number;
 }
 
 export interface President {
@@ -70,16 +98,20 @@ export interface League {
 export interface Sport {
     id: number;
     name: string;
+    leagues?: League[];
 }
 
 export interface Club {
     id: number;
     name: string;
     sports: Sport[];
+    coaches?: Coach[];
+    athletes?: Athlete[];
+    groups?: Group[];
 }
 
 
-interface CreateUserPayload {
+export interface CreateUserPayload {
     name: string;
     lastName: string;
     birthDate: string;
@@ -87,21 +119,37 @@ interface CreateUserPayload {
     email: string;
     gender: "M" | "F" | "X";
     password: "adminpass";
+    type: "ATHLETE" | "COACH" | "PRESIDENT";
+}
+
+export interface CreateUserValue extends CreateUserPayload {
+    clubId?: number;
+    sportIds?: number[];
 }
 
 export interface CreateAthletePayload extends CreateUserPayload {
+    name: string;
+    lastName: string;
+    birthDate: string;
+    phoneNumber: string;
+    email: string;
+    gender: "M" | "F" | "X";
+    password: "adminpass";
+    type: "ATHLETE" | "COACH" | "PRESIDENT";
     sportId: number;
     id_league: number;
 }
 
 export interface CreateCoachPayload extends CreateUserPayload {
-    sportId: number;
+    sportIds: number[];
     clubId: number;
 }
 
 export interface CreatePresidentPayload extends CreateUserPayload {
     clubId: number;
 }
+
+
 export interface CalendarEventType {
     id: number;
     title: string;

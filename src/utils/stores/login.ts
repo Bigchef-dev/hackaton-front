@@ -22,6 +22,7 @@ export const useAuthStore = defineStore('auth', {
         clearUser() {
             this.$patch({
                 currentUser: {
+                    id: 0,
                     name: '',
                     role: UserRole.invite,
                     avatar: ''

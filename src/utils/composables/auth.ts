@@ -65,7 +65,7 @@ export class AuthComposable {
         authToken.value = response.access_token;
         localStorage.setItem('authToken', response.access_token);
         const store = useAuthStore();
-        store.setCurrentUser({ id: 3, name: 'Admin', role: UserRole.coach, avatar: '' });
+        store.setCurrentUser({ id: 3, name: 'Admin', role: UserRole.admin, avatar: '' });
 
         return response;
     }
