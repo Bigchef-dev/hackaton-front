@@ -116,8 +116,7 @@ const showPassword = ref(false);
 // Configuration des rôles
 const roles = [
   { value: 'admin', label: 'Admin', icon: '👑' },
-  { value: 'coach', label: 'Coach', icon: '🏃' },
-  { value: 'athlete', label: 'Athlète', icon: '⚡' }
+  { value: 'user', label: 'Utilisateur', icon: '⚡' }
 ];
 
 // Gestion de la connexion
