@@ -1,9 +1,21 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import SportSelection from './SportSelection.vue';
 import LeagueAthletesList from './LeagueAthleteList.vue';
 import type { League, Athlete, Sport } from '../../utils/types';
+import { SportComposable } from '../../utils/composables/sport';
 
+
+const sportController = new SportComposable();
+const sportList = ref<Sport[]>([]);
+
+
+onMounted(() => {
+  document.title = 'Liste des Ligues – SportTrack';
+  sportController.getAllSports().then((sports) => {
+    sportList.value = sports;
+  });
+});
 
 // Données de démonstration étendues
 const sports = ref<Sport[]>([

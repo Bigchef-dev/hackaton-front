@@ -98,6 +98,7 @@ export interface League {
 export interface Sport {
     id: number;
     name: string;
+    leagues?: League[];
 }
 
 export interface Club {
