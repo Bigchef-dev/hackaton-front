@@ -12,7 +12,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-white" >
         <div>
         <p class="text-sm text-gray-600">Nom</p>
         <p class="text-lg font-semibold text-gray-800">
