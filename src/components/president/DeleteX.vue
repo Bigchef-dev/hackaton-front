@@ -23,6 +23,12 @@ const props = defineProps({
   },
 });
 
+
+const emit = defineEmits<{
+  (e: 'deleteCoach', coachId: number): void;
+  (e: 'deleteAthlete', athleteId: number): void;
+}>();
+
 const selectedUser = (user: any) => {
   if (props.isCoach) {
     selectedCoach.value = user as Coach;
@@ -96,7 +102,7 @@ const closeUserDetails = () => {
               <td class="p-3" @click="selectedUser(user)">{{ user.lastName }}</td>
               <td class="p-3" @click="selectedUser(user)">{{ user.email }}</td>
               <td class="p-3">
-                <button class="text-red-400 hover:text-red-300 transition">
+                <button class="text-red-400 hover:text-red-300 transition" @click="props.isCoach ? emit('deleteCoach', user.id) : emit('deleteAthlete', user.id)">
                   Supprimer
                 </button>
               </td>
@@ -123,7 +129,7 @@ const closeUserDetails = () => {
             <div class="text-sm"><span class="text-slate-400">Nom :</span> {{ user.lastName }}</div>
             <div class="text-sm"><span class="text-slate-400">Email :</span> {{ user.email }}</div>
 
-            <button class="mt-3 text-red-400 hover:text-red-300 text-sm">
+            <button class="mt-3 text-red-400 hover:text-red-300 text-sm" @click="emit('deleteCoach', user.id)">
               Supprimer
             </button>
           </div>
