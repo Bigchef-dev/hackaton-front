@@ -44,7 +44,7 @@ const menuItems = [
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
   { id: 'Login', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.invite] },
   { id: 'League', label: 'Ligues', icon: LeagueIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
-  { id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
+  //{ id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
   { id: 'Logout', label: 'Déconnexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president] }
 ]
 
