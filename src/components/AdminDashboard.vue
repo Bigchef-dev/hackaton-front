@@ -21,7 +21,7 @@
             <div class="flex flex-col md:flex-row gap-6 transition-all">
 
                 <!-- USERS COLUMN -->
-                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
+                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4  md:max-h-[calc(100vh-260px)] md:overflow-y-auto custom-scroll">
 
                     <h2 class="text-xl font-bold text-white mb-4">
                         Users
@@ -88,7 +88,7 @@
                 </div>
 
 
-                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
+                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4  md:max-h-[calc(100vh-260px)] md:overflow-y-auto custom-scroll">
 
                     <h2 class="text-xl font-bold text-white mb-4">
                         Sports
