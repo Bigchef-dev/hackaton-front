@@ -191,7 +191,7 @@ const handleOverlayClick = (e: MouseEvent): void => {
                       
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between gap-3 mb-2">
-                          <h5 class="text-base font-semibold text-white">{{ activity.theme }}</h5>
+                          <h5 class="text-base font-semibold text-white">{{ activity.type }}</h5>
                         </div>
                       </div>
                     </div>

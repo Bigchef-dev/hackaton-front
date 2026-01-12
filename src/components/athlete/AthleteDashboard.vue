@@ -3,12 +3,7 @@ import { ref, computed } from 'vue';
 import type { Session, Athlete } from '../../utils/types';
 import ListSeanceView from '../sessionList/ListSessionView.vue';
 import Calendar from '../calendar/CalendarContainer.vue';
-import TrainingLoadAnalysis from '../quotas/quotaView.vue';
-
-interface Props {
-  //sessions: Session[];
-  //athlete: Athlete;
-}
+import TrainingLoadAnalysis from '../quotas/QuotaView.vue';
 
 const sessions: Session[] = [
   {
@@ -19,7 +14,7 @@ const sessions: Session[] = [
     coach: 'Jean Entraineur',
     type: 'ENTRAINEMENT',
     id_sport: 1,
-    activities: [{ id: 101, theme: 'Échauffement cardio' }, { id: 102, theme: 'Exercices de passes' }]
+    activities: [{ id: 101, type: 'Échauffement cardio', baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5}  }, { id: 102, type: 'Exercices de passes', baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5}  }]
   },
   {
     id: 2,
@@ -29,7 +24,7 @@ const sessions: Session[] = [
     coach: 'Marc Arbitre',
     type: 'COMPETITION',
     id_sport: 1,
-    activities: [{ id: 103, theme: 'Match amical contre l\'équipe B' }]
+    activities: [{ id: 103, type: 'Match amical contre l\'équipe B', baseMetrics : {name: "course",duration:15,intensity: 'high',participants: 5}  }]
   },
   {
     id: 3,
@@ -39,7 +34,7 @@ const sessions: Session[] = [
     coach: 'Lucie Coach',
     type: 'ENTRAINEMENT',
     id_sport: 2,
-    activities: [{ id: 104, theme: 'Renforcement musculaire' }]
+    activities: [{ id: 104, type: 'Renforcement musculaire', baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5}  }]
   },
   {
     id: 4,
@@ -49,7 +44,7 @@ const sessions: Session[] = [
     coach: 'Jean Entraineur',
     type: 'ENTRAINEMENT',
     id_sport: 1,
-    activities: [{ id: 105, theme: 'Tactique et stratégie' }, { id: 106, theme: 'Analyse vidéo' }]
+    activities: [{ id: 105, type: 'Tactique et stratégie', baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5} }, { id: 106, type: 'Analyse vidéo',baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5}  }]
   },
   {
     id: 5,
@@ -58,7 +53,17 @@ const sessions: Session[] = [
     duree: 2,
     type: 'COMPETITION',
     id_sport: 1,
-    activities: [{ id: 107, theme: 'Finale régionale' }]
+    activities: [{ id: 107, type: 'Finale régionale', baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5}  }]
+  },
+    {
+    id: 7,
+    date_session: new Date('2026-01-12T19:20:00'),
+    recurrence: 4,
+    duree: 0.5,
+    coach: 'Jean Entraineur',
+    type: 'ENTRAINEMENT',
+    id_sport: 1,
+    activities: [{ id: 105, type: 'Tactique et stratégie', baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5}  }, { id: 102, type: 'Exercices de passes', baseMetrics: {name: "course",duration:15,intensity: 'high',participants: 5}  }]
   },
   {
     id: 6,
@@ -67,7 +72,7 @@ const sessions: Session[] = [
     duree: 2,
     type: 'COMPETITION',
     id_sport: 1,
-    activities: [{ id: 107, theme: 'Finale régionale' }]
+    activities: [{ id: 107, type: 'Finale régionale', baseMetrics:{name: "course",duration:15,intensity: 'high',participants: 5}  }]
   }
 ];
 
@@ -81,10 +86,8 @@ const athlete: Athlete = {
     gender: "M",
     type: "ATHLETE",
     id_league: 12,
-    quota: 7
+    quota: 8
 };
-
-const props = defineProps<Props>();
 
 type ViewType = 'calendar' | 'list' | 'charge';
 
