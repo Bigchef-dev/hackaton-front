@@ -10,6 +10,7 @@ import AthleteDashboard from '../components/athlete/AthleteDashboard.vue';
 import LoginView from '../components/login/LoginView.vue';
 import { checkIsAuthenticated } from './composables/auth';
 import LoginForm from '../components/LoginForm.vue';
+import LeagueView from '../components/ligue/LeaguesView.vue'
 import LoginStuff from '../components/LoginStuff.vue';
 import Logout from '../components/Logout.vue';
 
@@ -24,6 +25,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'homeconnect',
     component: HomeConnect,
+  },
+    {
+    path: '/league',
+    name: 'League',
+    component: LeagueView,
   },
   {
     path: '/admin/dashboard',
