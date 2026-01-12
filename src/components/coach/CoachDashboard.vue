@@ -6,8 +6,9 @@ import CreationCompetition from './CreationCompetition.vue';
 import GestionGroupes from './GestionGroupe.vue';
 import CoachStat from './CoachStat.vue';
 import InfosPersoCoach from './InfosPersoCoach.vue';
-import { type Athlete, type CalendarEventType, type Coach, type Group } from '../../utils/types';
-import CalandarContainer from '../calandar/CalandarContainer.vue';
+import {  type CalendarEventType, type Group } from '../../utils/types';
+import CalendarContainer from '../calendar/CalendarContainer.vue';
+import { type Athlete, type Session, type Coach } from '../../utils/types';
 import { ClubComposable } from '../../utils/composables/club';
 import { CoachComposable } from '../../utils/composables/coach';
 import { useAuthStore } from '../../utils/stores/login';
@@ -86,45 +87,42 @@ type Action =
 
 const activeAction = ref<Action>(null);
 
-const events = ref<CalendarEventType[]>([]);
+const events = ref<Session[]>([]);
 
 onMounted(() => {
   events.value = [
     {
       id: 1,
-      title: 'Entraînement Technique',
-      description: 'Session de travail technique',
-      start: new Date(2026, 0, 10, 10, 0).toISOString(),
-      end: new Date(2026, 0, 10, 12, 0).toISOString(),
-      type: 'training',
-      location: 'Stade Central',
+      date_session: new Date(2026, 0, 10, 10, 0),
+      type: 'ENTRAINEMENT',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
     },
     {
       id: 2,
-      title: 'Match Officiel',
-      description: 'Match contre rival',
-      start: new Date(2026, 0, 12, 15, 0).toISOString(),
-      end: new Date(2026, 0, 12, 17, 0).toISOString(),
-      type: 'match',
-      location: 'Stade Municipal',
+      date_session: new Date(2026, 0, 12, 15, 0),
+      type: 'COMPETITION',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
     },
     {
       id: 3,
-      title: 'Récupération',
-      description: 'Séance de récupération',
-      start: new Date(2026, 0, 13, 9, 0).toISOString(),
-      end: new Date(2026, 0, 13, 10, 30).toISOString(),
-      type: 'recovery',
-      location: 'Centre de Récupération',
+      date_session: new Date(2026, 0, 13, 9, 0),
+      type: 'ENTRAINEMENT',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
     },
     {
       id: 4,
-      title: 'Préparation Physique',
-      description: 'Renforcement musculaire',
-      start: new Date(2026, 0, 15, 14, 0).toISOString(),
-      end: new Date(2026, 0, 15, 15, 30).toISOString(),
-      type: 'training',
-      location: 'Gymnase',
+      date_session: new Date(2026, 0, 15, 14, 0),
+      type: 'ENTRAINEMENT',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
+
     },
   ];
 });
@@ -153,7 +151,7 @@ onMounted(() => {
     <!-- Calendrier TODO : link -->
     <div class="bg-white rounded-lg shadow-lg p-6">
       <h2 class="text-2xl font-bold text-gray-800 mb-6">Mon Calendrier d'Entraînement</h2>
-      <CalandarContainer :events="events" />
+      <CalendarContainer :events="events" />
     </div>
 
     <!-- Actions rapides -->

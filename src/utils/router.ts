@@ -54,7 +54,7 @@ const routes: Array<RouteRecordRaw> = [
     component: President,
   },
   {
-    path: '/athlete',
+    path: '/athlete/dashboard',
     name: 'AthleteDashboard',
     component: AthleteDashboard,
   },

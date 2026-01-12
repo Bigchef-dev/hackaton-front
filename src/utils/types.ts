@@ -1,15 +1,20 @@
+export type ViewMode = 'day' | 'week' | 'month';
+export type NavigationDirection = 'today' | 'prev' | 'next';
+
 export interface Session {
     id: number;
     date_session: Date;
-    reccurcivite: number;
+    recurrence: number;
     duree: number;
+    coach?: string;
+    type: 'ENTRAINEMENT' | 'COMPETITION';
+    activities?: Activity[];
     id_sport: number;
 }
 
 export interface Activity {
     id: number;
     theme: string;
-    id_type_stat: number;
 }
 
 export interface Group {
@@ -33,6 +38,7 @@ export interface UserInfo {
 export interface Athlete extends UserInfo {
     id_league: number;
     groups?: Group[];
+    quota?: number;
 }
 
 export interface Coach {

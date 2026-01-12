@@ -46,7 +46,7 @@ export class CheckerComposable  {
 
 
     isSessionValid(session: Session): boolean {
-        if (typeof session.reccurcivite !== 'number' || session.reccurcivite < 0) {
+        if (typeof session.recurrence !== 'number' || session.recurrence < 0) {
             return false;
         }
         if (typeof session.duree !== 'number' || session.duree <= 0) {
