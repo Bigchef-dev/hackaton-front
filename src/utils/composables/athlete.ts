@@ -16,7 +16,7 @@ export class AthleteComposable {
         return response.filter((user: any) => user.type === 'ATHLETE');
     }
 
-    async getAthleteById(athleteId: string): Promise<Athlete> {
+    async getAthleteById(athleteId: number): Promise<Athlete> {
         const response = await API.get(`users/${athleteId}`);
         return response;
     }

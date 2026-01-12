@@ -43,6 +43,8 @@ const toggleActivities = (sessionId: number): void => {
 
 <template>
   <div class="w-full">
+
+    <div>{{ sessions }}</div>
     <div v-if="upcomingSessions.length === 0" class="text-center py-12 sm:py-16 md:py-20">
       <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-800/50 mb-4">
         <svg class="w-8 h-8 sm:w-10 sm:h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -26,7 +26,11 @@ export class SessionComposable {
     }
 
     async getSessionsByGroup(groupId: number): Promise<Session[]> {
+        console.log("Calling");
+        
         const response = await API.get(`sceances/by-group/${groupId}`);
+        console.log(response);
+        
         return response;
     }
 

@@ -1,24 +1,22 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import type { Session, Athlete } from '../../utils/types';
+import { type Session, type Athlete, type Group } from '../../utils/types';
 import ListSeanceView from '../sessionList/ListSessionView.vue';
 import Calendar from '../calendar/CalendarContainer.vue';
+import TrainingLoadAnalysis from '../quotas/QuotaView.vue'
 import { AthleteComposable } from '../../utils/composables/athlete';
 import { useAuthStore } from '../../utils/stores/login';
 import { SessionComposable } from '../../utils/composables/session';
 
-interface Props {
-  //sessions: Session[];
-  //athlete: Athlete;
-}
 
 
 const store = useAuthStore();
 const athleteComposable = new AthleteComposable();
 const sessionComposable = new SessionComposable();
+
 const athlete = ref<Athlete | null>(null);
 const sessions = ref<Session[]>([]);
-const props = defineProps<Props>();
+const groups = ref<Group[]>()
 
 type ViewType = 'calendar' | 'list' | 'charge';
 
@@ -52,9 +50,21 @@ const viewOptions: ViewOption[] = [
 const currentView = ref<ViewType>('list');
 
 onMounted(async () => {
-  if (store.currentUser.id) {
-    athlete.value = await athleteComposable.getAthleteById(store.currentUser.id.toString());
-    sessions.value = await sessionComposable.getSessionsByAthlete(store.currentUser.id);
+  console.log(store.currentUser);
+  
+  
+    athlete.value = await athleteComposable.getAthleteById(store.currentUser.id);
+
+    groups.value =  athlete.value.groups
+    console.log("Calling from dash "+ athlete.value.groups);
+
+    
+    for (let i=0; i < groups.value!.length; i++) {
+      if(groups.value){
+          sessions.value = await sessionComposable.getSessionsByGroup(groups.value[i].id);
+      }
+      
+    
   }
 });
 
@@ -120,8 +130,9 @@ const athleteInitials = computed((): string => {
           </div>
         </div>
       </div>
-
+      <p>"session : {{ sessions }}</p>
       <div class="w-full" v-if="athlete">
+        
         <Transition name="slide-fade" mode="out-in">
           <Calendar
             v-if="currentView === 'calendar'"
@@ -144,8 +155,8 @@ const athleteInitials = computed((): string => {
               <span class="text-3xl sm:text-4xl">📊</span>
             </div>
             <TrainingLoadAnalysis
-              :athlete="athlete.value!"
-              :sessions="sessions.value"
+              :athlete="athlete!"
+              :sessions="sessions"
               class="w-full"
             />
           </div>

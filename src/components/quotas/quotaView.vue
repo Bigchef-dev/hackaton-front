@@ -108,7 +108,7 @@ const pastActivityDistribution = computed(() => {
   const distribution: { [key: string]: number } = {};
   
   allActivities.forEach(activity => {
-    const theme = activity.theme;
+    const theme = activity.type;
     distribution[theme] = (distribution[theme] || 0) + 1;
   });
   
@@ -128,7 +128,7 @@ const futureActivityDistribution = computed(() => {
   const distribution: { [key: string]: number } = {};
   
   allActivities.forEach(activity => {
-    const theme = activity.theme;
+    const theme = activity.type;
     distribution[theme] = (distribution[theme] || 0) + 1;
   });
   
