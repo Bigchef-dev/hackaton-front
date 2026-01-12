@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { CoachComposable } from '../../utils/composables/coach';
+import { SportComposable } from '../../utils/composables/sport';
 import type { Coach, CreateCoachPayload } from '../../utils/types';
 
 const coachApi = new CoachComposable();
+const sportApi = new SportComposable();
 
 const coaches = ref<CreateCoachPayload[]>([]);
 
@@ -61,6 +63,16 @@ const submitCoaches = async () => {
   } catch (error) {
     console.error(error);
     alert('Erreur lors de la création des coachs: ' + error);
+  }
+};
+
+const getSportById = async (sportId: number) => {
+  try {
+    const sport = await sportApi.getSportById(sportId.toString());
+    return sport;
+  } catch (error) {
+    console.error('Erreur lors de la récupération du sport :', error);
+    return null;
   }
 };
 </script>
@@ -128,9 +140,11 @@ const submitCoaches = async () => {
             <option value="F">Féminin</option>
           </select>
 
-
-
-          <select v-model="coach.sportId" ></select>
+          <select v-model="coach.sportIds" >
+            <option v-for="id in coach.sportIds" :key="id" :value="id">
+              {{ getSportById(id)?.then(sport => sport ? sport.name : 'Sport inconnu') }}
+            </option>
+          </select>
           
 
           <button v-if="coaches.length > 1" @click="removeCoach(index)" type="button"
