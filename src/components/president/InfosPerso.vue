@@ -14,22 +14,22 @@ const props = defineProps({
 <template>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-white" >
         <div>
-        <p class="text-sm text-gray-600">Nom</p>
-        <p class="text-lg font-semibold text-gray-800">
+        <p class="text-sm ">Nom</p>
+        <p class="text-lg font-semibold ">
             {{ president.name }} {{ president.lastName }}
         </p>
         </div>
 
         <div>
-        <p class="text-sm text-gray-600">Club</p>
-        <p class="text-lg font-semibold text-gray-800">
+        <p class="text-sm ">Club</p>
+        <p class="text-lg font-semibold ">
             {{ president.club.name }}
         </p>
         </div>
 
         <div>
-        <p class="text-sm text-gray-600">Contact</p>
-        <p class="text-lg font-semibold text-gray-800">
+        <p class="text-sm ">Contact</p>
+        <p class="text-lg font-semibold ">
             {{ president.email }}
         </p>
         </div>
