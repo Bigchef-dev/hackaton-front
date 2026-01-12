@@ -12,9 +12,29 @@ export interface Session {
     id_sport: number;
 }
 
+export interface SessionCreate {
+    title: string;
+    location?: string;
+    date_session: Date;
+    reccurrence: number;
+    duree: number;
+    coach?: string;
+    type: 'TRAINING' | 'COMPETITION';
+    activities_id?: number[];
+    id_sport: number;
+    group_id: number;
+    coach_id: number;
+}
+
 export interface Activity {
     id: number;
-    theme: string;
+    type: string;
+    baseMetrics: {
+        "name": string;
+        "duration": number;
+        "intensity": "high" | "medium" | "low";
+        "participants": number;
+    };
 }
 
 export interface Group {
@@ -52,6 +72,7 @@ export interface Coach {
     type: "COACH";
     club: Club;
     sport: Sport[];
+    clubId: number;
 }
 
 export interface President {

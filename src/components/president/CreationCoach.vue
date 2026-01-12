@@ -142,13 +142,13 @@ const submitCoaches = async () => {
       </div>
     </div>
 
-    <button
+    <!-- <button
       @click="addCoach"
       type="button"
       class="text-blue-600 font-medium hover:underline mt-4"
     >
       + Ajouter un coach
-    </button>
+    </button> -->
 
     <!-- Submit -->
     <div class="pt-4">

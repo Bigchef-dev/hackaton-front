@@ -149,8 +149,7 @@ onMounted(() => {
     </div>
 
     <!-- Calendrier TODO : link -->
-    <div class="bg-white rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">Mon Calendrier d'Entraînement</h2>
+    <div class="bg-white rounded-2xl shadow-lg">
       <CalendarContainer :events="events" />
     </div>
 
@@ -218,7 +217,7 @@ onMounted(() => {
     <div v-if="activeAction" class="mt-12 bg-white rounded-lg shadow-md p-8">
 
       <div v-if="activeAction === 'training'" class="space-y-6">
-        <CreationTraining />
+        <CreationTraining :coach="userCoach!" />
       </div>
 
       <div v-else-if="activeAction === 'match'">
