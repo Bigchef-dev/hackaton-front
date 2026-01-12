@@ -1,5 +1,5 @@
 import { apiInstance as API } from "../api";
-import type { Coach, Club } from "../types";
+import type { Coach, Club, CreateCoachPayload } from "../types";
 import { CheckerComposable as Checker } from "./checker";
 
 export class CoachComposable {
@@ -37,7 +37,7 @@ export class CoachComposable {
     }
 
     // =================================== POST ===================================
-    async createCoach(data: Coach): Promise<Coach> {
+    async createCoach(data: CreateCoachPayload): Promise<Coach> {
         if (!this.checker.isCoachValid(data)) {
             throw new Error("Invalid coach data");
         }

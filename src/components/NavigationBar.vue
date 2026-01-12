@@ -33,15 +33,18 @@ const ConnectionIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" s
 
 const SettingsIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`
 
+const LeagueIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="5 5 190 190" width="64" height="64"><g stroke="#ffffff" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M65,45 L65,95 A35,35 0 0,0 135,95 L135,45" /><path d="M65,65 C35,65 35,110 65,115" /><path d="M135,65 C165,65 165,110 135,115" /><path d="M100,130 L100,165" /><path d="M70,165 L130,165" /></g></svg>`
+
 const menuItems = [
   { id: 'home', label: 'Accueil', icon: HomeIcon, roles: [UserRole.invite] },
   { id: 'homeconnect', label: 'Accueil', icon: HomeIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president] },
   { id: 'AthleteDashboard', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
   { id: 'Coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
-  { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
+  { id: 'President', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
   { id: 'Login', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.invite] },
-  { id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
+  { id: 'League', label: 'Ligues', icon: LeagueIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
+  //{ id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
   { id: 'Logout', label: 'Déconnexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president] }
 ]
 

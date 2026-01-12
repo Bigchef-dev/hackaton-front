@@ -1,5 +1,5 @@
 import { apiInstance as API } from "../api";
-import type { Activity, Athlete, Session } from "../types";
+import type { Activity, Athlete, Session, SessionCreate } from "../types";
 import { CheckerComposable as Checker} from "./checker";
 
 export class SessionComposable {
@@ -25,18 +25,23 @@ export class SessionComposable {
         return response;
     }
 
+    async getAllActivities(): Promise<Activity[]> {
+        const response = await API.get(`activites`);
+        return response;
+    }
+
     // =================================== POST ===================================
-    async createSession(data: Session): Promise<Session> {
+    async createSession(data: SessionCreate): Promise<Session> {
         if(!this.checker.isSessionValid(data)) {
             throw new Error("Invalid session data");
         }
-        const response = await API.post("session", data);
+        const response = await API.post("sceances", data);
         return response;
     }
 
     // =================================== PUT ===================================
     async updateSession(id: number, data: Partial<Session>): Promise<Session> {
-        if(!this.checker.isSessionValid(data as Session)) {
+        if(!this.checker.isSessionValid(data as SessionCreate)) {
             throw new Error("Invalid session data");
         }
         const response = await API.put(`session/${id}`, data);

@@ -1,5 +1,5 @@
 import { apiInstance as API } from "../api";
-import type { Athlete, CreateAthletePayload, CreatePresidentPayload, Group, President, Session, UserInfo } from "../types";
+import type { Athlete, Coach, CreateAthletePayload, CreateCoachPayload, CreatePresidentPayload, Group, President, Session, UserInfo } from "../types";
 
 import { CheckerComposable as Checker } from "./checker";
 
@@ -37,6 +37,11 @@ export class UserComposable {
         return response;
     }
 
+    async getUnhandledAthletes(): Promise<Athlete[]> {
+        const response = await API.get(`users/athletes/without-group`);
+        return response;
+    }
+
     // =================================== PUT ===================================
     async updateUserInfo(userId: number, data: Partial<UserInfo>): Promise<UserInfo> {
         if (!this.checker.isUserInfoValid(data)) {
@@ -57,6 +62,11 @@ export class UserComposable {
 
     async createAthlete(data: Partial<CreateAthletePayload>): Promise<Athlete> {
         const res = await API.post("users/athlete", data);
+        return res;
+    }
+
+    async createCoach(data: Partial<CreateCoachPayload>): Promise<Coach> {
+        const res = await API.post("users/coach", data);
         return res;
     }
 

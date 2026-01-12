@@ -21,7 +21,7 @@
             <div class="flex flex-col md:flex-row gap-6 transition-all">
 
                 <!-- USERS COLUMN -->
-                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
+                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4  md:max-h-[calc(100vh-260px)] md:overflow-y-auto custom-scroll">
 
                     <h2 class="text-xl font-bold text-white mb-4">
                         Users
@@ -88,7 +88,7 @@
                 </div>
 
 
-                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4 overflow-auto">
+                <div class="w-full md:w-1/2 bg-gray-900/40 rounded-2xl p-4  md:max-h-[calc(100vh-260px)] md:overflow-y-auto custom-scroll">
 
                     <h2 class="text-xl font-bold text-white mb-4">
                         Sports
@@ -117,7 +117,8 @@
 
 
                 <div v-if="openUserFormModal">
-                    <UserFormModal :clubs="clubs || []" @close="openUserFormModal = false" @submit="addPresident" />
+                    <UserFormModal :sports="sports || []" :clubs="clubs || []" @close="openUserFormModal = false"
+                        @submit="addUser" />
                 </div>
             </div>
         </div>
@@ -126,37 +127,28 @@
         <div v-if="showAdminModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
                 <h2 class="text-2xl font-bold text-white mb-4">Admin Login</h2>
-                
-                <div v-if="adminError" class="bg-red-500/20 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-4">
+
+                <div v-if="adminError"
+                    class="bg-red-500/20 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-4">
                     {{ adminError }}
                 </div>
-                
+
                 <form @submit.prevent="handleAdminLogin" class="space-y-4">
                     <div>
-                        <label for="adminPassword" class="block text-gray-300 mb-2 font-semibold">Mot de passe Admin</label>
-                        <input
-                            id="adminPassword"
-                            v-model="adminPassword"
-                            type="password"
-                            placeholder="••••••••"
+                        <label for="adminPassword" class="block text-gray-300 mb-2 font-semibold">Mot de passe
+                            Admin</label>
+                        <input id="adminPassword" v-model="adminPassword" type="password" placeholder="••••••••"
                             class="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-yellow-500 focus:outline-none"
-                            required
-                        />
+                            required />
                     </div>
-                    
+
                     <div class="flex gap-3">
-                        <button
-                            type="submit"
-                            :disabled="isAdminLoading"
-                            class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition disabled:opacity-50"
-                        >
+                        <button type="submit" :disabled="isAdminLoading"
+                            class="flex-1 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition disabled:opacity-50">
                             {{ isAdminLoading ? 'Connexion...' : 'Confirmer' }}
                         </button>
-                        <button
-                            type="button"
-                            @click="closeAdminModal"
-                            class="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition"
-                        >
+                        <button type="button" @click="closeAdminModal"
+                            class="flex-1 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition">
                             Annuler
                         </button>
                     </div>
@@ -168,7 +160,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { Athlete, Club, CreateAthletePayload, CreatePresidentPayload, President, Sport, UserInfo } from '../utils/types';
+import type { Athlete, Club, Coach, CreateAthletePayload, CreateCoachPayload, CreatePresidentPayload, CreateUserValue, President, Sport, UserInfo } from '../utils/types';
 import UserFormModal from './UserFormModal.vue';
 import ButtonAdd from './ButtonAdd.vue';
 import GenericButton from './GenericButton.vue';
@@ -209,8 +201,8 @@ onMounted(async () => {
     console.log(cards);
     console.log(clubs);
     console.log(sports);
-    
-    
+
+
 });
 
 const handleLogout = () => {
@@ -221,7 +213,7 @@ const handleLogout = () => {
 const handleAdminLogin = async () => {
     adminError.value = '';
     isAdminLoading.value = true;
-    
+
     try {
         await adminLogin(adminPassword.value);
         closeAdminModal();
@@ -261,6 +253,30 @@ function validateDeleteUser(id: number) {
     }
 }
 
+
+function addUser(userData: Partial<CreateUserValue>): Promise<President | Athlete | Coach> {
+    if (userData.name) {
+        switch (userData.type) {
+            case 'PRESIDENT':
+                const data = { name: userData.name, lastName: userData.lastName, email: userData.email, password: userData.password, gender: userData.gender, clubId: userData.clubId, birthDate: userData.birthDate };
+                addPresident(data as Partial<CreatePresidentPayload>);
+                break;
+            case 'ATHLETE':
+                const athleteData = { name: userData.name, birthDate: userData.birthDate, lastName: userData.lastName, email: userData.email, password: userData.password, gender: userData.gender, sportIds: userData.sportIds  };
+                addAthlete(athleteData as Partial<CreateAthletePayload>);
+                break;
+            case 'COACH':
+                const coachData = { name: userData.name, birthDate: userData.birthDate, lastName: userData.lastName, email: userData.email, password: userData.password, gender: userData.gender, clubId: userData.clubId, sportIds: userData.sportIds || [] };
+                addCoach(coachData as Partial<CreateCoachPayload>);
+                break;
+            default:
+                throw new Error('Invalid user role');
+        }
+    }
+    throw new Error('Invalid user data');
+}
+
+
 function addPresident(userData: Partial<CreatePresidentPayload>): Promise<President> {
     if (userData.name) {
         UserController.createPresident(userData as Partial<CreatePresidentPayload>)
@@ -297,6 +313,25 @@ function addAthlete(userData: Partial<CreateAthletePayload>): Promise<Athlete> {
     // Implementation for adding an athlete
 }
 
+function addCoach(userData: Partial<CreateCoachPayload>): Promise<Coach> {
+    if (userData.name) {
+        UserController.createCoach(userData as Partial<CreateCoachPayload>)
+            .then((newUser) => {
+                cards.value?.push(newUser
+                );
+                alert(`User "${newUser.name} ${newUser.lastName}" created successfully!`);
+                return newUser;
+            })
+            .catch((error) => {
+                alert(`Error creating user: ${error.message}`);
+                throw error;
+            });
+    }
+    throw new Error('Invalid user data');
+
+    // Implementation for adding a coach
+}
+
 
 function addClub() {
     const clubName = window.prompt('Enter the name of the new club:');
@@ -312,7 +347,7 @@ function addClub() {
     }
 }
 
-function addSport() {
+async function addSport() {
     const sportName = window.prompt('Enter the name of the new sport:');
     if (sportName) {
         SportController.createSport({ name: sportName })
@@ -322,6 +357,7 @@ function addSport() {
             .catch((error) => {
                 alert(`Error creating sport: ${error.message}`);
             });
+        sports.value = await SportController.getAllSports();
     }
 }
 

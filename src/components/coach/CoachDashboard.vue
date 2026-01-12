@@ -6,8 +6,9 @@ import CreationCompetition from './CreationCompetition.vue';
 import GestionGroupes from './GestionGroupe.vue';
 import CoachStat from './CoachStat.vue';
 import InfosPersoCoach from './InfosPersoCoach.vue';
-import { type Athlete, type CalendarEventType, type Coach } from '../../utils/types';
-import CalandarContainer from '../calandar/CalandarContainer.vue';
+import {  type CalendarEventType, type Group } from '../../utils/types';
+import CalendarContainer from '../calendar/CalendarContainer.vue';
+import { type Athlete, type Session, type Coach } from '../../utils/types';
 import { ClubComposable } from '../../utils/composables/club';
 import { CoachComposable } from '../../utils/composables/coach';
 import { useAuthStore } from '../../utils/stores/login';
@@ -19,6 +20,7 @@ const userCoach = ref<Coach | null>(null);
 const clubController = new ClubComposable();
 const CoachController = new CoachComposable();
 const athletesList = ref<Athlete[]>([]);
+const groupList = ref<Group[]>([]);
 
 onMounted(async () => {
   document.title = 'Tableau de Bord Coach - SportTrack';
@@ -26,22 +28,50 @@ onMounted(async () => {
     router.push({ name: 'Login' });
   }
   userCoach.value = await CoachController.getCoachById(user.id);
-  athletesList.value = await clubController.getClubAthletes(userCoach.value.club.id); // TODO : dynamic club id
+  athletesList.value = (await clubController.getClubById(userCoach.value.club.id)).athletes || []; // TODO : dynamic club id
+  groupList.value = (await clubController.getClubById(userCoach.value.club.id)).groups || [];
 
+  console.log(athletesList.value);
+  console.log(groupList.value);
 
 });
 
 
+function addGroup(name: string) {
+  clubController.createGroup({ name, clubId: userCoach!.value!.club.id }).then(() => {
+    clubController.getClubById(userCoach!.value!.club.id).then((club) => {
+      groupList.value = club.groups || [];
+    });
+  });
+}
 
+function addAthleteToGroup(payload: { groupId: number; athleteId: number }) {
+  console.log("Add Athlete " + payload.athleteId + " to group");
+
+  clubController.addAthleteToGroup(payload.groupId, payload.athleteId).then(() => {
+    clubController.getClubById(userCoach!.value!.club.id).then((club) => {
+      athletesList.value = club.athletes || [];
+      groupList.value = club.groups || [];
+    });
+  });
+}
+
+function removeAthleteFromGroup(payload: { groupId: number; athleteId: number }) {
+  console.log("Remove Athlete " + payload.athleteId + " from group");
+
+  clubController.removeAthleteFromGroup(payload.groupId, payload.athleteId).then(() => {
+    clubController.getClubById(userCoach!.value!.club.id).then((club) => {
+      athletesList.value = club.athletes || [];
+      groupList.value = club.groups || [];
+    });
+  });
+}
 
 const goToProfile = () => {
   router.push({
     name: 'Profile',
   });
 };
-
-
-
 
 type Action =
   | 'training'
@@ -52,49 +82,45 @@ type Action =
 
 const activeAction = ref<Action>(null);
 
-const events = ref<CalendarEventType[]>([]);
+const events = ref<Session[]>([]);
 
 onMounted(() => {
   events.value = [
     {
       id: 1,
-      title: 'Entraînement Technique',
-      description: 'Session de travail technique',
-      start: new Date(2026, 0, 10, 10, 0).toISOString(),
-      end: new Date(2026, 0, 10, 12, 0).toISOString(),
-      type: 'training',
-      location: 'Stade Central',
+      date_session: new Date(2026, 0, 10, 10, 0),
+      type: 'ENTRAINEMENT',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
     },
     {
       id: 2,
-      title: 'Match Officiel',
-      description: 'Match contre rival',
-      start: new Date(2026, 0, 12, 15, 0).toISOString(),
-      end: new Date(2026, 0, 12, 17, 0).toISOString(),
-      type: 'match',
-      location: 'Stade Municipal',
+      date_session: new Date(2026, 0, 12, 15, 0),
+      type: 'COMPETITION',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
     },
     {
       id: 3,
-      title: 'Récupération',
-      description: 'Séance de récupération',
-      start: new Date(2026, 0, 13, 9, 0).toISOString(),
-      end: new Date(2026, 0, 13, 10, 30).toISOString(),
-      type: 'recovery',
-      location: 'Centre de Récupération',
+      date_session: new Date(2026, 0, 13, 9, 0),
+      type: 'ENTRAINEMENT',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
     },
     {
       id: 4,
-      title: 'Préparation Physique',
-      description: 'Renforcement musculaire',
-      start: new Date(2026, 0, 15, 14, 0).toISOString(),
-      end: new Date(2026, 0, 15, 15, 30).toISOString(),
-      type: 'training',
-      location: 'Gymnase',
+      date_session: new Date(2026, 0, 15, 14, 0),
+      type: 'ENTRAINEMENT',
+      duree : 2,
+      recurrence : 0,
+      id_sport : 1
+
     },
   ];
 });
-
 </script>
 
 <template>
@@ -118,9 +144,8 @@ onMounted(() => {
     </div>
 
     <!-- Calendrier TODO : link -->
-    <div class="bg-white rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">Mon Calendrier d'Entraînement</h2>
-      <CalandarContainer :events="events" />
+    <div class="bg-white rounded-2xl shadow-lg">
+      <CalendarContainer :events="events" />
     </div>
 
     <!-- Actions rapides -->
@@ -187,15 +212,16 @@ onMounted(() => {
     <div v-if="activeAction" class="mt-12 bg-white rounded-lg shadow-md p-8">
 
       <div v-if="activeAction === 'training'" class="space-y-6">
-        <CreationTraining />
+        <CreationTraining :coach="userCoach!" :clubId="userCoach!.club.id" />
       </div>
 
       <div v-else-if="activeAction === 'match'">
         <CreationCompetition />
       </div>
 
-      <div v-else-if="activeAction === 'athletes'">
-        <GestionGroupes :club-id="1" />
+      <div v-else-if="activeAction === 'athletes' && userCoach">
+        <GestionGroupes :athletes="athletesList" :groups="groupList" :clubId="userCoach?.club.id" @add-group="addGroup"
+          @add-athlete-to-group="addAthleteToGroup" @remove-athlete-from-group="removeAthleteFromGroup" />
         <!-- TODO : changer l'id par default !!!!!!!!!!!!!!!!! -->
       </div>
 

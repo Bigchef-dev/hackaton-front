@@ -5,11 +5,10 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import router from '../utils/router';
-import { useAuthStore } from '../utils/stores/login';
-const store = useAuthStore();
+import { logout } from '../utils/composables/auth';
 
 const handleLogout = () => {
-    store.clearUser();
+    logout();
     router.push('/');
 };
 onMounted(() => {
