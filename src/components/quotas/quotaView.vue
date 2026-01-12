@@ -15,7 +15,6 @@ interface Props {
 
 const props = defineProps<Props>();
 
-// Seuils basés sur le quota de l'athlète
 const weeklyQuota = computed(() => props.athlete.quota || 8);
 const thresholds = computed(() => ({
   weeklyHoursWarning: weeklyQuota.value * 0.8,
@@ -24,7 +23,6 @@ const thresholds = computed(() => ({
 
 const analysisWeeks = ref(4);
 
-// Fonction générique pour calculer la charge
 const calculateTrainingLoad = (periodStart: Date, periodEnd: Date, isPast: boolean = false) => {
   const allOccurrences: Session[] = [];
   props.sessions.forEach(session => {
@@ -91,7 +89,6 @@ const calculateTrainingLoad = (periodStart: Date, periodEnd: Date, isPast: boole
   };
 };
 
-// Charge des 4 dernières semaines
 const pastTrainingLoad = computed(() => {
   const now = new Date();
   const weeksAgo = new Date(now);
@@ -99,7 +96,6 @@ const pastTrainingLoad = computed(() => {
   return calculateTrainingLoad(weeksAgo, now, true);
 });
 
-// Charge des 4 prochaines semaines
 const futureTrainingLoad = computed(() => {
   const now = new Date();
   const weeksFromNow = new Date(now);
@@ -107,7 +103,6 @@ const futureTrainingLoad = computed(() => {
   return calculateTrainingLoad(now, weeksFromNow, false);
 });
 
-// Distribution des activités pour le passé
 const pastActivityDistribution = computed(() => {
   const allActivities = pastTrainingLoad.value.allOccurrences.flatMap(s => s.activities || []);
   const distribution: { [key: string]: number } = {};
@@ -128,7 +123,6 @@ const pastActivityDistribution = computed(() => {
     .sort((a, b) => b.count - a.count);
 });
 
-// Distribution des activités pour le futur
 const futureActivityDistribution = computed(() => {
   const allActivities = futureTrainingLoad.value.allOccurrences.flatMap(s => s.activities || []);
   const distribution: { [key: string]: number } = {};
@@ -149,7 +143,6 @@ const futureActivityDistribution = computed(() => {
     .sort((a, b) => b.count - a.count);
 });
 
-// Alertes (basées sur le futur uniquement)
 const alerts = computed(() => {
   const currentWeekData = futureTrainingLoad.value.weeklyData[0];
   const alertsList: { type: 'warning' | 'danger'; message: string }[] = [];
@@ -174,13 +167,8 @@ const alerts = computed(() => {
 
 <template>
   <div class="w-full space-y-6">
-    <!-- Alertes -->
     <TrainingAlerts :alerts="alerts" />
-    
-    <!-- Info quota -->
     <QuotaCard :weekly-quota="weeklyQuota" />
-
-    <!-- Titre de section : 4 dernières semaines -->
     <div class="flex items-center gap-3 pt-4">
       <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
       <h2 class="text-2xl font-bold text-white flex items-center gap-2">
@@ -189,29 +177,22 @@ const alerts = computed(() => {
       </h2>
       <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
     </div>
-
-    <!-- Statistiques principales - Passé -->
     <TrainingStats 
       :training-load="pastTrainingLoad"
       variant="past"
     />
-
-    <!-- Graphique de charge hebdomadaire - Passé -->
     <WeeklyLoadChart 
       :weekly-data="pastTrainingLoad.weeklyData"
       :thresholds="thresholds"
       variant="past"
       title="Évolution de la charge (4 dernières semaines)"
     />
-
-    <!-- Distribution des activités - Passé -->
     <ActivityDistribution 
       :distribution="pastActivityDistribution"
       :total-sessions="pastTrainingLoad.totalSessions"
       variant="past"
     />
 
-    <!-- Titre de section : 4 prochaines semaines -->
     <div class="flex items-center gap-3 pt-8">
       <div class="h-px flex-1 bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
       <h2 class="text-2xl font-bold text-white flex items-center gap-2">
@@ -221,13 +202,11 @@ const alerts = computed(() => {
       <div class="h-px flex-1 bg-gradient-to-r from-transparent via-blue-600 to-transparent"></div>
     </div>
 
-    <!-- Statistiques principales - Futur -->
     <TrainingStats 
       :training-load="futureTrainingLoad"
       variant="future"
     />
 
-    <!-- Graphique de charge hebdomadaire - Futur -->
     <WeeklyLoadChart 
       :weekly-data="futureTrainingLoad.weeklyData"
       :thresholds="thresholds"
@@ -235,8 +214,6 @@ const alerts = computed(() => {
       variant="future"
       title="Charge prévue (4 prochaines semaines)"
     />
-
-    <!-- Distribution des activités - Futur -->
     <ActivityDistribution 
       :distribution="futureActivityDistribution"
       :total-sessions="futureTrainingLoad.totalSessions"

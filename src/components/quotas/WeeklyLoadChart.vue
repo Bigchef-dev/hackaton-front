@@ -66,7 +66,6 @@ const getBarClasses = (hours: number): string => {
             ]"
           ></div>
           
-          <!-- Lignes de seuil pour le futur uniquement -->
           <template v-if="variant === 'future' && maxHours > 0">
             <div
               :style="{ left: `${getBarHeight(thresholds.weeklyHoursWarning, maxHours)}%` }"
