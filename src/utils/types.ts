@@ -127,12 +127,20 @@ export interface CreateUserValue extends CreateUserPayload {
 }
 
 export interface CreateAthletePayload extends CreateUserPayload {
+    name: string;
+    lastName: string;
+    birthDate: string;
+    phoneNumber: string;
+    email: string;
+    gender: "M" | "F" | "X";
+    password: "adminpass";
+    type: "ATHLETE" | "COACH" | "PRESIDENT";
     sportId: number;
     id_league: number;
 }
 
 export interface CreateCoachPayload extends CreateUserPayload {
-    sportId: number;
+    sportIds: number[];
     clubId: number;
 }
 

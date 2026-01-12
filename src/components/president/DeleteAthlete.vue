@@ -62,7 +62,7 @@ const closeAthleteDetails = () => {
             <td class="border p-2" @click="selectAthlete(athlete)">{{ athlete.lastName }}</td>
             <td class="border p-2" @click="selectAthlete(athlete)">{{ athlete.email }}</td>
             <td class="border p-2">
-              <button @click.stop="emit('deleteAthlete', athlete.id)" class="text-red-600 hover:underline">
+              <button @click="emit('deleteAthlete', athlete.id)" class="border p-2 text-red-600 hover:underline">
                 Supprimer
               </button>
             </td>

@@ -11,6 +11,7 @@ import { ClubComposable } from '../../utils/composables/club'
 import type { Athlete, Club, Coach, President } from '../../utils/types'
 import DeleteX from './DeleteX.vue'
 import { UserComposable } from '../../utils/composables/user'
+import DeleteAthlete from './DeleteAthlete.vue'
 
 const router = useRouter()
 const store = useAuthStore()
@@ -160,7 +161,7 @@ function dissociateAthlete(athleteId: number) {
         </button>
 
         <!-- COACHS -->
-        <button
+        <!-- <button
           @click="activeAction = activeAction === 'coach' ? null : 'coach'"
           class="group relative p-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-2xl hover:border-slate-600 transition-all duration-500 cursor-pointer overflow-hidden">
           <div 
@@ -185,7 +186,7 @@ function dissociateAthlete(athleteId: number) {
               </p>
             </div>
           </div>
-        </button>
+        </button> -->
       </div>
     </section>
 
@@ -203,7 +204,8 @@ function dissociateAthlete(athleteId: number) {
               </svg>
               Liste des athlètes
             </h3>
-            <DeleteX :athletes="athletes" :isCoach="false" :coaches="[]" />
+            <!-- <DeleteX :athletes="athletes" :isCoach="false" :coaches="[]" /> -->
+             <DeleteAthlete :athletes="athletes" @dissociateAthlete="dissociateAthlete" />
             <button @click="activeAction = 'athletes'" class="mt-4 px-4 py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg text-green-400 hover:bg-green-500/30 transition-all hover:scale-105">
               + Ajouter un athlète
             </button>
@@ -218,22 +220,22 @@ function dissociateAthlete(athleteId: number) {
               Liste des coachs
             </h3>
             <DeleteX :coaches="coachesList" :isCoach="true" :athletes="[]" />
-            <button @click="activeAction = 'coach'" class="mt-4 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-lg text-blue-400 hover:bg-blue-500/30 transition-all hover:scale-105">
+            <!-- <button @click="activeAction = 'coach'" class="mt-4 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-lg text-blue-400 hover:bg-blue-500/30 transition-all hover:scale-105">
               + Ajouter un coach
-            </button>
+            </button> -->
           </div>
         </div>
 
         <div v-else-if="activeAction === 'coach'" class="space-y-8">
-          <div class="p-6 bg-slate-800/40 rounded-xl border border-slate-700/50">
+          <!-- <div class="p-6 bg-slate-800/40 rounded-xl border border-slate-700/50">
             <h3 class="text-xl font-semibold mb-4 flex items-center gap-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
               Ajouter un coach
             </h3>
-            <CreationCoach />
-          </div>
+            <CreationCoach :club="club!"/>
+          </div> -->
           <div class="p-6 bg-slate-800/40 rounded-xl border border-slate-700/50">
             <h3 class="text-xl font-semibold mb-4 flex items-center gap-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

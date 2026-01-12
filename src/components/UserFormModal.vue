@@ -147,7 +147,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { UserRole, type Club, type CreatePresidentPayload, type CreateUserPayload, type CreateUserValue, type President, type Sport } from '../utils/types';
-import { OrganizeImportsMode } from 'typescript';
 
 
 
