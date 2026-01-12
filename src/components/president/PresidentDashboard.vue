@@ -179,7 +179,7 @@ function addAthlete(athlete: number) {
       </div>
 
       <div v-else-if="activeAction === 'coach'" class="space-y-8">
-        <CreationCoach />
+        <!-- <CreationCoach /> -->
         <DeleteX :coaches="coachesList" :is-coach="true" :athletes="[]" @delete-coach="deleteCoach" @delete-athlete="deleteAthlete" />
       </div>
 
