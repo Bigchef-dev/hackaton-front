@@ -4,7 +4,7 @@
 
 avoir lancé le back-end présent ici : https://gitlab2.istic.univ-rennes1.fr/mguinche/hackaton
 
-Node.js / npm
+Node.js / npm 
 
 ## Démarrage
 

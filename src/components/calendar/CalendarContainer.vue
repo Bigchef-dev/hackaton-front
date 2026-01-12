@@ -65,7 +65,6 @@ const visibleEvents = computed(() => {
     end = monthEnd.value;
   }
 
-  // Filtrer les événements qui ont au moins une occurrence dans la période
   return props.events.filter(event => {
     return hasOccurrenceInPeriod(event, start, end);
   });

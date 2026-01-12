@@ -16,7 +16,6 @@ const emit = defineEmits<{
   'event-click': [event: Session];
 }>();
 
-// Gestion du tooltip
 const tooltipVisible = ref(false);
 const tooltipEvent = ref<Session | null>(null);
 const tooltipX = ref(0);
@@ -53,10 +52,9 @@ const handleMouseLeave = () => {
   hideTooltip();
 };
 
-// Heures d'affichage (6h - 22h)
 const hours = Array.from({ length: 17 }, (_, i) => i + 6);
 
-// Organiser les événements par jour avec récurrence
+// Organiser les événements par jour avec récurrence (IA)
 const eventsByDay = computed(() => {
   const weekStart = props.weekDays[0];
   const weekEnd = props.weekDays[props.weekDays.length - 1];

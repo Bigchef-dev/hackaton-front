@@ -17,7 +17,6 @@ const emit = defineEmits<{
   'event-click': [event: Session];
 }>();
 
-// Gestion du tooltip
 const tooltipVisible = ref(false);
 const tooltipEvent = ref<Session | null>(null);
 const tooltipX = ref(0);
@@ -35,7 +34,7 @@ const hideTooltip = () => {
   tooltipEvent.value = null;
 };
 
-// Organiser les événements par jour avec récurrence
+// Organiser les événements par jour avec récurrence (IA)
 const eventsByDay = computed(() => {
   // Trouver le début et la fin de la grille affichée
   const gridStart = props.monthGrid[0];
@@ -58,7 +57,6 @@ const eventsByDay = computed(() => {
   return result;
 });
 
-// Jours de la semaine
 const weekDaysShort = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const weekDaysMedium = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 </script>

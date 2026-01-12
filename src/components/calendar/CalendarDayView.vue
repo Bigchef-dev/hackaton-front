@@ -14,10 +14,9 @@ const emit = defineEmits<{
   'event-click': [event: Session];
 }>();
 
-// Heures d'affichage (6h - 22h)
 const hours = Array.from({ length: 17 }, (_, i) => i + 6);
 
-// Filtrer les événements du jour avec récurrence
+// Filtrer les événements du jour avec récurrence (IA)
 const dayEvents = computed(() => {
   const dayStart = new Date(props.currentDate);
   dayStart.setHours(0, 0, 0, 0);
@@ -32,27 +31,22 @@ const dayEvents = computed(() => {
     allOccurrences.push(...occurrences);
   });
   
-  // Trier par heure
   return allOccurrences.sort((a, b) => 
     new Date(a.date_session).getTime() - new Date(b.date_session).getTime()
   );
 });
 
-// Calculer la position et hauteur de chaque événement
 const positionedEvents = computed(() => {
   return dayEvents.value.map((event: Session) => {
     const startDate = new Date(event.date_session);
     const startHour = startDate.getHours();
     const startMinutes = startDate.getMinutes();
     
-    // Position en pixels depuis 6h (1 heure = 100px)
     const top = (startHour - 6) * 100 + (startMinutes / 60) * 100;
     
-    // Hauteur basée sur la durée
     let height;
     const duree = event.duree || 1;
     
-    // Détecter si c'est en heures (valeur <= 24) ou en minutes (valeur > 24)
     if (duree <= 24) {
       height = duree * 100;
     } else {

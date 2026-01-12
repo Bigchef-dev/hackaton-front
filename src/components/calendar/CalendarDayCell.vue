@@ -24,7 +24,6 @@ const visibleEventsDesktop = props.events.slice(0, 3);
 const hasMoreMobile = props.events.length > 2;
 const hasMoreDesktop = props.events.length > 3;
 
-// Indicateurs de type d'événements
 const eventTypes = new Set(props.events.map(e => e.type));
 const hasENTRAINEMENT = eventTypes.has('ENTRAINEMENT');
 const hasCOMPETITION = eventTypes.has('COMPETITION');
@@ -37,7 +36,7 @@ const handleMouseEnter = (event: Session, e: MouseEvent) => {
     const x = rect.left + rect.width / 2;
     const y = rect.top;
     emit('show-tooltip', event, x, y);
-  }, 500); // Délai de 500ms avant d'afficher le tooltip
+  }, 500); 
 };
 
 const handleMouseLeave = () => {
@@ -53,7 +52,6 @@ const handleTouchStart = (event: Session, e: TouchEvent) => {
   const x = rect.left + rect.width / 2;
   const y = rect.top;
   
-  // Sur mobile, appui long de 700ms
   hoverTimeout = window.setTimeout(() => {
     emit('show-tooltip', event, x, y);
   }, 700);
