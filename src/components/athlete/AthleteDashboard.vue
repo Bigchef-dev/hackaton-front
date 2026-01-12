@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import type { Session, Athlete } from '../../utils/types';
 import ListSeanceView from '../sessionList/ListSessionView.vue';
 import Calendar from '../calendar/CalendarContainer.vue';
-import TrainingLoadAnalysis from '../quotas/quotaView.vue';
+import TrainingLoadAnalysis from '../quotas/QuotaView.vue';
 
 interface Props {
   //sessions: Session[];
@@ -81,7 +81,7 @@ const athlete: Athlete = {
     gender: "M",
     type: "ATHLETE",
     id_league: 12,
-    quota: 7
+    quota: 8
 };
 
 const props = defineProps<Props>();
