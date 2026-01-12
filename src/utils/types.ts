@@ -12,15 +12,35 @@ export interface Session {
     id_sport: number;
 }
 
+export interface SessionCreate {
+    title: string;
+    location?: string;
+    date_session: Date;
+    reccurrence: number;
+    duree: number;
+    coach?: string;
+    type: 'TRAINING' | 'COMPETITION';
+    activities_id?: number[];
+    id_sport: number;
+    group_id: number;
+    coach_id: number;
+}
+
 export interface Activity {
     id: number;
-    theme: string;
+    type: string;
+    baseMetrics: {
+        "name": string;
+        "duration": number;
+        "intensity": "high" | "medium" | "low";
+        "participants": number;
+    };
 }
 
 export interface Group {
     id: number;
     name: string;
-    id_club: number;
+    clubId: number;
 }
 
 export interface UserInfo {
@@ -37,6 +57,7 @@ export interface UserInfo {
 
 export interface Athlete extends UserInfo {
     id_league: number;
+    groups?: Group[];
     quota?: number;
 }
 
@@ -51,6 +72,7 @@ export interface Coach {
     type: "COACH";
     club: Club;
     sport: Sport[];
+    clubId: number;
 }
 
 export interface President {
@@ -82,10 +104,13 @@ export interface Club {
     id: number;
     name: string;
     sports: Sport[];
+    coaches?: Coach[];
+    athletes?: Athlete[];
+    groups?: Group[];
 }
 
 
-interface CreateUserPayload {
+export interface CreateUserPayload {
     name: string;
     lastName: string;
     birthDate: string;
@@ -93,6 +118,12 @@ interface CreateUserPayload {
     email: string;
     gender: "M" | "F" | "X";
     password: "adminpass";
+    type: "ATHLETE" | "COACH" | "PRESIDENT";
+}
+
+export interface CreateUserValue extends CreateUserPayload {
+    clubId?: number;
+    sportIds?: number[];
 }
 
 export interface CreateAthletePayload extends CreateUserPayload {
@@ -107,6 +138,19 @@ export interface CreateCoachPayload extends CreateUserPayload {
 
 export interface CreatePresidentPayload extends CreateUserPayload {
     clubId: number;
+}
+
+
+export interface CalendarEventType {
+    id: number;
+    title: string;
+    description?: string;
+    start: string; // ISO date string
+    end: string; // ISO date string
+    type: 'training' | 'match' | 'recovery' | 'cours' | 'td' | 'tp' | 'examen' | 'projet' | 'conference' | 'reunion';
+    location?: string;
+    instructor?: string;
+    // Authentication types*
 }
 export interface LoginCredentials {
     email: string;

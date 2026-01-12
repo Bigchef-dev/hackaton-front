@@ -1,4 +1,4 @@
-import type { Session, UserInfo } from "../types";
+import type { Session, SessionCreate, UserInfo } from "../types";
 
 
 export class CheckerComposable  {
@@ -45,8 +45,8 @@ export class CheckerComposable  {
     }
 
 
-    isSessionValid(session: Session): boolean {
-        if (typeof session.recurrence !== 'number' || session.recurrence < 0) {
+    isSessionValid(session: SessionCreate): boolean {
+        if (typeof session.reccurrence !== 'number' || session.reccurrence < 0) {
             return false;
         }
         if (typeof session.duree !== 'number' || session.duree <= 0) {

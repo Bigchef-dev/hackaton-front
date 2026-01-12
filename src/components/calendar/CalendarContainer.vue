@@ -88,64 +88,30 @@ const handleEventClick = (event: Session): void => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-2 sm:p-4 lg:p-6">
-    <div class="calendar-container max-w-[1600px] h-[900px] overflow-auto">
+  <div class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-2 sm:p-4 lg:p-6 rounded-2xl">
+    <div class="calendar-container max-w-[1600px] h-[800px] overflow-auto">
       <div class="calendar-header sticky top-2 z-30 mb-4 sm:mb-6">
-        <CalendarHeader 
-          :current-date="currentDate" 
-          :view-mode="viewMode" 
-          :week-start="weekStart" 
-          :week-end="weekEnd"
-          :month-start="monthStart" 
-          @view-change="handleViewChange" 
-          @navigate="handleNavigate" 
-        />
+        <CalendarHeader :current-date="currentDate" :view-mode="viewMode" :week-start="weekStart" :week-end="weekEnd"
+          :month-start="monthStart" @view-change="handleViewChange" @navigate="handleNavigate" />
       </div>
 
       <div class="calendar-content">
-        <Transition
-          mode="out-in"
-          enter-active-class="transition-all duration-300 ease-out"
-          leave-active-class="transition-all duration-200 ease-in"
-          enter-from-class="opacity-0 translate-x-4"
-          leave-to-class="opacity-0 -translate-x-4"
-        >
-          <CalendarDayView 
-            v-if="viewMode === 'day'"
-            key="day-view"
-            :events="visibleEvents" 
-            :current-date="currentDate"
-            :is-today="isToday"
-            @event-click="handleEventClick" 
-          />
+        <Transition mode="out-in" enter-active-class="transition-all duration-300 ease-out"
+          leave-active-class="transition-all duration-200 ease-in" enter-from-class="opacity-0 translate-x-4"
+          leave-to-class="opacity-0 -translate-x-4">
+          <CalendarDayView v-if="viewMode === 'day'" key="day-view" :events="visibleEvents" :current-date="currentDate"
+            :is-today="isToday" @event-click="handleEventClick" />
 
-          <CalendarWeekView 
-            v-else-if="viewMode === 'week'" 
-            key="week-view"
-            :events="visibleEvents" 
-            :week-days="weekDays" 
-            :is-today="isToday"
-            @event-click="handleEventClick" 
-          />
+          <CalendarWeekView v-else-if="viewMode === 'week'" key="week-view" :events="visibleEvents"
+            :week-days="weekDays" :is-today="isToday" @event-click="handleEventClick" />
 
-          <CalendarMonthView 
-            v-else 
-            key="month-view"
-            :events="visibleEvents" 
-            :month-grid="monthGrid" 
-            :current-month="monthStart"
-            :is-same-month="isSameMonth" 
-            :is-today="isToday" 
-            @event-click="handleEventClick" 
-          />
+          <CalendarMonthView v-else key="month-view" :events="visibleEvents" :month-grid="monthGrid"
+            :current-month="monthStart" :is-same-month="isSameMonth" :is-today="isToday"
+            @event-click="handleEventClick" />
         </Transition>
       </div>
 
-      <EventDetailsModal 
-        :is-open="isModalOpen" 
-        :event="selectedEvent" 
-        @close="closeModal" 
-      />
+      <EventDetailsModal :is-open="isModalOpen" :event="selectedEvent" @close="closeModal" />
     </div>
   </div>
 </template>

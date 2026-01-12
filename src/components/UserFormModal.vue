@@ -57,7 +57,7 @@
                             placeholder="john.doe@example.com" />
                     </div>
 
-        
+
 
 
                     <!-- Address (spans 2 columns)
@@ -79,15 +79,46 @@
                         </select>
                     </div>
 
+                    <div>
+                        <label class="block text-gray-300 font-medium mb-2 text-sm">Role</label>
+
+                        <select v-model="formData.type" required
+                            class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
+                            <option value="PRESIDENT">President</option>
+                            <option value="COACH">Coach</option>
+                            <option value="ATHLETE">Athlete</option>
+                        </select>
+                    </div>
 
                     <!-- club selection -->
-                    <div >
+                    <div v-if="formData.type !== 'ATHLETE' " >
                         <label class="block text-gray-300 font-medium mb-2 text-sm">Club</label>
                         <select v-model="formData.clubId" required
                             class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
                             <option value="" disabled>Select a club</option>
                             <option v-for="club in clubs" :key="club.id" :value="club.id">
                                 {{ club.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <!-- club selection -->
+                    <div v-if="formData.type === 'COACH' || formData.type === 'ATHLETE' " >
+                        <label class="block text-gray-300 font-medium mb-2 text-sm">Sport</label>
+                        <select v-model="formData.sportIds" required
+                            class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
+                            <option value="" disabled>Select a sport</option>
+                            <option v-for="sport in sports" :key="sport.id" :value="[sport.id]">
+                                {{ sport.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div v-if="formData.type === 'ATHLETE' && formData.sportIds ">
+                        <label class="block text-gray-300 font-medium mb-2 text-sm">League</label>
+                        <select v-model="formData.clubId" required
+                            class="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm">
+                            <option value="" disabled>Select a league</option>
+                            <option v-for="league in sports[formData.sportIds[0] || 0]" :key="league" :value="league">
+                                {{ league }}
                             </option>
                         </select>
                     </div>
@@ -115,16 +146,21 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import type { Club, CreatePresidentPayload, President } from '../utils/types';
+import { UserRole, type Club, type CreatePresidentPayload, type CreateUserPayload, type CreateUserValue, type President, type Sport } from '../utils/types';
+import { OrganizeImportsMode } from 'typescript';
 
 
 
 
 const props = defineProps<{
     clubs: Array<Club>;
+    sports: Array<Sport>;
 }>();
 
-const formData = reactive<Partial<CreatePresidentPayload>>({
+const roles = UserRole;
+
+
+const formData = reactive<Partial<CreateUserValue>>({
     name: '',
     lastName: '',
     birthDate: '',
@@ -132,13 +168,18 @@ const formData = reactive<Partial<CreatePresidentPayload>>({
     email: '',
     gender: 'X',
     password: 'adminpass',
-    clubId: 0,
+    type: 'ATHLETE',
+    clubId: undefined,
+    sportIds: [],
+
 
 });
 
+
+
 const emit = defineEmits<{
     (e: 'close'): void;
-    (e: 'submit', formData: Partial<President>): void;
+    (e: 'submit', formData: Partial<CreateUserValue>): void;
 }>();
 
 
