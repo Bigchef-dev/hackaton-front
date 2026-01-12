@@ -17,7 +17,7 @@ export class SportComposable  {
     }
 
     async getSportById(sportId: string): Promise<Sport> {
-        const response = await API.get(`sports/${sportId}`);
+        const response = await API.get(`sport/${sportId}`);
         return response;
     }
 

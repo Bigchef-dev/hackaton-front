@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref, toRaw } from 'vue';
 import { CoachComposable } from '../../utils/composables/coach';
 import { SportComposable } from '../../utils/composables/sport';
-import type { Coach, CreateCoachPayload } from '../../utils/types';
+import type { CreateCoachPayload, CreateUserValue } from '../../utils/types';
 
 const coachApi = new CoachComposable();
 const sportApi = new SportComposable();
@@ -10,16 +10,18 @@ const sportApi = new SportComposable();
 const coaches = ref<CreateCoachPayload[]>([]);
 
 const createEmptyCoach = (): CreateCoachPayload => ({
-  name: '',
-  lastName: '',
-  email: '',
-  phoneNumber: '',
-  birthDate: '',
-  gender: 'X',
-  clubId: 0,
-  password: 'adminpass',
-  type: 'COACH',
-  sportIds: [1],
+  name: "Marie",
+  lastName: "Martin",
+  birthDate: "1985-05-20T00:00:00.000Z",
+  gender: "F",
+  email: "marie.martin@example.com",
+  phoneNumber: "+33687654321",
+  password: "adminpass",
+  type: "COACH",
+  clubId: 1,
+  sportIds: [
+    1
+  ]
 });
 
 onMounted(() => {
@@ -49,10 +51,21 @@ const submitCoaches = async () => {
       alert('Veuillez remplir au moins le prénom, nom et email pour chaque coach');
       return;
     }
+
+    if (!coach.clubId || coach.clubId <= 0) {
+      alert('Veuillez sélectionner un club valide');
+      return;
+    }
+
+    if (!coach.sportIds || !coach.sportIds.length) {
+      alert('Veuillez sélectionner au moins un sport');
+      return;
+    }
   }
 
   try {
     for (const coach of coaches.value) {
+      console.log('Payload envoyé:', coach);
       await coachApi.createCoach(coach);
     }
 

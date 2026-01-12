@@ -38,11 +38,11 @@ export class CoachComposable {
 
     // =================================== POST ===================================
     async createCoach(data: CreateCoachPayload): Promise<Coach> {
-        if (!this.checker.isCoachValid(data)) {
-            throw new Error("Invalid coach data");
-        }
+       // if (!this.checker.isCoachValid(data)) {
+        //     throw new Error("Invalid coach data");
+        // }
 
-        const response = await API.post("coaches", data);
+        const response = await API.post("users/coach", data);
         return response;
     }
 
