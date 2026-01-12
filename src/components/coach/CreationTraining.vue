@@ -13,6 +13,7 @@ const groupsClub = ref<Group[]>([]);
 
   const props = defineProps<{
     coach: Coach;
+    clubId: number;
   }>();
 
 onMounted(() => {
@@ -21,7 +22,7 @@ onMounted(() => {
     console.log('Activités préexistantes :', activities);
   });
 
-  clubController.getClubById(props.coach.clubId).then((club) => {
+  clubController.getClubById(props.clubId).then((club) => {
     groupsClub.value = club.groups || [];
   });
 });

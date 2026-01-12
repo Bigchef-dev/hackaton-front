@@ -34,11 +34,6 @@ onMounted(async () => {
   console.log(athletesList.value);
   console.log(groupList.value);
 
-
-
-
-
-
 });
 
 
@@ -217,7 +212,7 @@ onMounted(() => {
     <div v-if="activeAction" class="mt-12 bg-white rounded-lg shadow-md p-8">
 
       <div v-if="activeAction === 'training'" class="space-y-6">
-        <CreationTraining :coach="userCoach!" />
+        <CreationTraining :coach="userCoach!" :clubId="userCoach!.club.id" />
       </div>
 
       <div v-else-if="activeAction === 'match'">
