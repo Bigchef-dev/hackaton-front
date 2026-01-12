@@ -109,7 +109,7 @@ const duration = computed(() => {
                 >
                   <div class="flex items-center gap-2 flex-1 min-w-0">
                     <span class="text-xs font-bold text-slate-500 flex-shrink-0">{{ index + 1 }}.</span>
-                    <span class="text-xs text-slate-300 truncate">{{ activity.theme }}</span>
+                    <span class="text-xs text-slate-300 truncate">{{ activity.type }}</span>
                   </div>
                 </div>
               </div>
