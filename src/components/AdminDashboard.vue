@@ -347,7 +347,7 @@ function addClub() {
     }
 }
 
-function addSport() {
+async function addSport() {
     const sportName = window.prompt('Enter the name of the new sport:');
     if (sportName) {
         SportController.createSport({ name: sportName })
@@ -357,6 +357,7 @@ function addSport() {
             .catch((error) => {
                 alert(`Error creating sport: ${error.message}`);
             });
+        sports.value = await SportController.getAllSports();
     }
 }
 
