@@ -18,4 +18,4 @@ Ce projet est la partie front d'un site de club d'Ultimate Frisbee. Il à été 
 
 Le style n'a pas été dissocié du code principalement par manque de temps et rend donc complexe le changement de style si le club le souhaite. La personnalisation des pages pour un club est complexe à implémenter en extention
 
-Le style à été grandement généré par IA car ce n'était pas un point charnière et que le résultat proposé correspondait à nos besoin.
+Le style a en partie été généré par IA car ce n'était pas un point charnière et que le résultat proposé correspondait à nos besoin.
