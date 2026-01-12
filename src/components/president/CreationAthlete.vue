@@ -86,46 +86,63 @@ const associateAthleteToClub = async (athleteId: number) => {
 </script>
 
 <template>
-  <div class="p-4 sm:p-6  rounded-lg shadow-md max-w-4xl mx-auto">
-    <h3 class="text-xl font-bold mb-6 text-center sm:text-left">
-      Associer un athlète à votre club
-    </h3>
+  <div
+    class="relative p-6 rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm max-w-4xl mx-auto hover:border-slate-600 transition-all duration-500"
+  >
+    <!-- Overlay décoratif -->
+    <div class="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
 
-    <!-- Athlètes -->
-    <div class="space-y-4">
-      <h4 class="font-semibold text-lg">Athlètes disponibles</h4>
-
-      <!-- Aucun athlète -->
-      <div
-        v-if="athletes.length === 0"
-        class="text-sm text-gray-500 italic"
+    <div class="relative z-10">
+      <!-- Titre -->
+      <h3
+        class="text-2xl font-semibold mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
       >
-        Aucun athlète sans club pour le moment.
-      </div>
+        Associer un athlète à votre club
+      </h3>
 
-      <!-- Liste des athlètes -->
-      <div
-        v-for="(athlete, index) in athletes"
-        :key="`athlete-${index}`"
-        class="border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 hover:shadow-sm transition"
-      >
-        <!-- Infos athlète -->
-        <div class="flex items-center gap-4">
+      <!-- Athlètes -->
+      <div class="space-y-6">
+        <h4 class="text-lg font-medium text-slate-300">
+          Athlètes disponibles
+        </h4>
+
+        <!-- Aucun athlète -->
+        <div
+          v-if="athletes.length === 0"
+          class="text-slate-500 italic text-sm"
+        >
+          Aucun athlète sans club pour le moment.
+        </div>
+
+        <!-- Liste des athlètes -->
+        <div
+          v-for="(athlete, index) in athletes"
+          :key="`athlete-${index}`"
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-5 rounded-xl border border-slate-700 bg-slate-800/40 hover:bg-slate-800/60 transition-all duration-300"
+        >
+          <!-- Infos athlète -->
           <div>
-            <p class="font-medium text-gray-900">
+            <p class="font-medium text-slate-100">
               {{ athlete.name }} {{ athlete.lastName }}
             </p>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-slate-400">
               {{ athlete.email }}
             </p>
           </div>
-        </div>
 
-        <!-- Actions -->
-        <div class="flex justify-end">
-          <button @click="associateAthleteToClub(athlete.id)" class="px-4 py-2 text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 transition">
-            Associer au club
-          </button>
+          <!-- Actions -->
+          <div class="flex justify-end">
+            <button
+              @click="associateAthleteToClub(athlete.id)"
+              class="px-4 py-2 text-sm font-medium rounded-lg
+                     bg-gradient-to-r from-green-500/20 to-emerald-500/20
+                     border border-green-500/30 text-green-400
+                     hover:bg-green-500/30 hover:scale-105
+                     transition-all duration-300"
+            >
+              Associer au club
+            </button>
+          </div>
         </div>
       </div>
     </div>
