@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import type { Session, Athlete } from '../../utils/types';
 import ListSeanceView from '../sessionList/ListSessionView.vue';
 import Calendar from '../calendar/CalendarContainer.vue';
-import TrainingLoadAnalysis from '../quotas/QuotaView.vue';
+import TrainingLoadAnalysis from '../quotas/quotaView.vue';
 
 const sessions: Session[] = [
   {

@@ -108,15 +108,15 @@ const pastActivityDistribution = computed(() => {
   const distribution: { [key: string]: number } = {};
   
   allActivities.forEach(activity => {
-    const theme = activity.theme;
-    distribution[theme] = (distribution[theme] || 0) + 1;
+    const type = activity.type;
+    distribution[type] = (distribution[type] || 0) + 1;
   });
   
   const total = allActivities.length;
   
   return Object.entries(distribution)
-    .map(([theme, count]) => ({
-      theme,
+    .map(([type, count]) => ({
+      type,
       count,
       percentage: (count / total) * 100
     }))
@@ -128,15 +128,15 @@ const futureActivityDistribution = computed(() => {
   const distribution: { [key: string]: number } = {};
   
   allActivities.forEach(activity => {
-    const theme = activity.theme;
-    distribution[theme] = (distribution[theme] || 0) + 1;
+    const type = activity.type;
+    distribution[type] = (distribution[type] || 0) + 1;
   });
   
   const total = allActivities.length;
   
   return Object.entries(distribution)
-    .map(([theme, count]) => ({
-      theme,
+    .map(([type, count]) => ({
+      type,
       count,
       percentage: (count / total) * 100
     }))

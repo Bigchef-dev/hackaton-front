@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface ActivityDistributionItem {
-  theme: string;
+  type: string;
   count: number;
   percentage: number;
 }
@@ -38,11 +38,11 @@ const getActivityColor = (index: number): string => {
     <div v-if="distribution.length > 0" class="space-y-4">
       <div
         v-for="(activity, index) in distribution"
-        :key="activity.theme"
+        :key="activity.type"
         class="space-y-2"
       >
         <div class="flex items-center justify-between text-sm">
-          <span class="text-gray-300 font-medium">{{ activity.theme }}</span>
+          <span class="text-gray-300 font-medium">{{ activity.type }}</span>
           <span class="text-white font-bold">{{ activity.count }} ({{ activity.percentage.toFixed(1) }}%)</span>
         </div>
         
