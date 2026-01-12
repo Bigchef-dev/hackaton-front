@@ -1,5 +1,21 @@
-# Vue 3 + TypeScript + Vite
+# Projet Hackathon
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup lang="ts">` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Prérequis
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+avoir lancé le back-end présent ici : https://gitlab2.istic.univ-rennes1.fr/mguinche/hackaton
+
+Node.js / npm
+
+## Démarrage
+
+Lancer le site :
+
+npm run
+
+## Choix de conception
+
+Ce projet est la partie front d'un site de club d'Ultimate Frisbee. Il à été pensé pour faire la majorité du travail afin de simplifier la base de donnée au maximum. Il est décomposé en différents composants facilement modifiables pour permettre un évolution facile si le besoin s'en fait sentir.
+
+Le style n'a pas été dissocié du code principalement par manque de temps et rend donc complexe le changement de style si le club le souhaite. La personnalisation des pages pour un club est complexe à implémenter en extention
+
+Le style à été grandement généré par IA car ce n'était pas un point charnière et que le résultat proposé correspondait à nos besoin.
