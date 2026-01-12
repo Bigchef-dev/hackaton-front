@@ -10,25 +10,25 @@ const features = [
     icon: '👥',
     title: 'Gestion des athlètes',
     description: 'Gérez les profils des joueurs, leurs informations sportives, niveaux et appartenance aux groupes d\'entraînement.',
-    color: 'from-indigo-500 to-blue-200'
+    color: 'from-purple-600 to-pink-500'
   },
   {
     icon: '📅',
     title: 'Planification des séances',
     description: 'Créez et planifiez vos entraînements et compétitions avec ou sans récurrence, assignez les coachs et les athlètes.',
-    color: 'from-indigo-500 to-blue-200'
+    color: 'from-purple-600 to-pink-500'
   },
   {
     icon: '🎯',
     title: 'Gestion des activités',
     description: 'Définissez les activités sportives par séance : renforcement, placement, compétition et collectez les données de performance.',
-    color: 'from-indigo-500 to-blue-200'
+    color: 'from-purple-600 to-pink-500'
   },
   {
     icon: '🔐',
     title: 'Authentification & rôles',
     description: 'Système de connexion sécurisé avec gestion des droits : administrateur, président, coach et athlète disposent d\'interfaces adaptées.',
-    color: 'from-indigo-500 to-blue-200'
+    color: 'from-purple-600 to-pink-500'
   }
 ]
 
@@ -121,7 +121,7 @@ const scrollToWho = () => {
         </div>
 
         <div class="mt-20 animate-bounce">
-          <svg class="w-6 h-6 mx-auto text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 mx-auto text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" @click="scrollToFeatures">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
           </svg>
         </div>
@@ -144,11 +144,11 @@ const scrollToWho = () => {
             :key="index"
             @mouseenter="activeFeature = index"
             @mouseleave="activeFeature = null"
-            class="group relative p-8 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl hover:border-slate-600 transition-all duration-300 cursor-pointer"
-            :class="activeFeature === index ? 'scale-105 shadow-2xl' : 'hover:scale-102'"
+            class="group relative p-8 bg-slate-800/40 backdrop-blur-md border border-white/5 rounded-2xl hover:bg-slate-800/60 hover:border-white/10 transition-all duration-300 cursor-pointer"
+            :class="activeFeature === index ? 'scale-105 ' : 'hover:scale-102'"
           >
             <div 
-              class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"
+              class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               :class="`bg-gradient-to-r ${feature.color}`"
             ></div>
 
@@ -246,9 +246,8 @@ const scrollToWho = () => {
             </div>
           </div>
         </div>
-
         <div class="mt-8 pt-8 border-t border-slate-800 text-center text-sm text-slate-600">
-          <p>2025 • By Pingouin Corp.</p>
+          <p>2026 • By Pingouin Corp.</p>
         </div>
       </div>
     </footer>

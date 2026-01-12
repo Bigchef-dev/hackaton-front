@@ -1,29 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useRouter} from 'vue-router'
-import { useSidebar } from '../utils/composabes/useNavBar'
+import { useSidebar } from '../utils/composables/useNavBar'
+import { UserRole } from '../utils/types'
+import { useAuthStore } from '../utils/stores/login'
 const { isSidebarOpen, isMobileMenuOpen, mobileMenuHeight } = useSidebar()
 
 const activeRoute = ref('dashboard')
 const mobileMenuRef = ref<HTMLElement | null>(null)
 
 const router = useRouter()
+const store = useAuthStore()
+const currentUser = computed(() => store.currentUser)
 
-enum UserRole {
-  invite = 'INVITE',
-  admin = 'ADMIN',
-  coach = 'COACH',
-  athlete = 'ATHLETE',
-  president = 'PRESIDENT'
-}
 
-// Simuler un utilisateur connecté (en attendant authantification ok)
-//TODO
-const currentUser = ref({
-  name: 'Admin Martin',
-  role: UserRole.admin,
-  avatar: "M"
-})
+
 
 const nomApp = 'Ultimate Sports'
 
@@ -43,13 +34,15 @@ const ConnectionIcon = `<svg class="w-6 h-6" fill="none" stroke="currentColor" s
 const SettingsIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`
 
 const menuItems = [
-  { id: 'dashboard', label: 'Tableau de bord', icon: HomeIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
-  { id: 'athlete', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
-  { id: 'coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
+  { id: 'home', label: 'Accueil', icon: HomeIcon, roles: [UserRole.invite] },
+  { id: 'homeconnect', label: 'Accueil', icon: HomeIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president] },
+  { id: 'AthleteDashboard', label: 'Athlète', icon: UsersIcon, roles: [UserRole.athlete] },
+  { id: 'Coach', label: 'Coach', icon: UsersIcon, roles: [UserRole.coach] },
   { id: 'presidence', label: 'Présidence', icon: UsersIcon, roles: [UserRole.president] },
   { id: 'AdminDashboard', label: 'Administration', icon: UsersIcon, roles: [UserRole.admin] },
-  { id: 'connection', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
+  { id: 'Login', label: 'Connexion', icon: ConnectionIcon, roles: [UserRole.invite] },
   { id: 'settings', label: 'Paramètres', icon: SettingsIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president, UserRole.invite] },
+  { id: 'Logout', label: 'Déconnexion', icon: ConnectionIcon, roles: [UserRole.admin, UserRole.coach, UserRole.athlete, UserRole.president] }
 ]
 
 const filteredMenuItems = computed(() => 
@@ -63,9 +56,9 @@ const toggleSidebar = () => {
 const updateMobileMenuHeight = () => {
   nextTick(() => {
     if (mobileMenuRef.value && isMobileMenuOpen.value) {
-      mobileMenuHeight.value = 50 + mobileMenuRef.value.scrollHeight
+      mobileMenuHeight.value = 64 + mobileMenuRef.value.scrollHeight
     } else {
-      mobileMenuHeight.value = 50
+      mobileMenuHeight.value = 64
     }
   })
 }
@@ -77,7 +70,7 @@ const toggleMobileMenu = () => {
 
 const navigateTo = (id:string) => {
   activeRoute.value = id
-  isMobileMenuOpen.value = false
+  isMobileMenuOpen.value = true
   updateMobileMenuHeight()
   router.push({ name: id })
   
@@ -95,15 +88,13 @@ watch(isMobileMenuOpen, () => {
 
 <template>
   <div>
-    <!-- Desktop Sidebar -->
     <aside
       :class="[
-        'hidden lg:flex flex-col fixed left-0 top-0 bottom-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white transition-all duration-300 ease-in-out shadow-2xl',
+        'hidden lg:flex flex-col fixed left-0 top-0 bottom-0 h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-2xl overflow-x-hidden',
         isSidebarOpen ? 'w-70' : 'w-20'
       ]"
-      style="z-index: 40;"
+      style="z-index: 40; transition: width 300ms ease-in-out;"
     >
-      <!-- Header -->
       <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
         <div 
           :class="[
@@ -130,8 +121,7 @@ watch(isMobileMenuOpen, () => {
         </button>
       </div>
 
-      <!-- Navigation Items -->
-      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto overflow-x-hidden">
         <button
           v-for="item in filteredMenuItems"
           :key="item.id"
@@ -156,7 +146,6 @@ watch(isMobileMenuOpen, () => {
         </button>
       </nav>
 
-      <!-- User Profile -->
       <div :class="['p-4 border-t border-slate-700 flex-shrink-0', isSidebarOpen ? '' : 'flex justify-center']">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0">
@@ -170,9 +159,9 @@ watch(isMobileMenuOpen, () => {
       </div>
     </aside>
 
-    <!-- Mobile Top Navigation -->
-    <header class="lg:hidden fixed top-0 left-0 right-0 bg-slate-900 text-white shadow-lg z-50">
-      <div class="flex items-center justify-between p-4">
+    <header class="lg:hidden fixed top-0 left-0 right-0 text-white shadow-lg z-50">
+      <div class="absolute inset-0 bg-slate-800 -z-10"></div>
+      <div class="relative flex items-center justify-between p-4 bg-slate-900">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold">
             {{ getInitials(nomApp) }}
@@ -194,50 +183,44 @@ watch(isMobileMenuOpen, () => {
           </svg>
         </button>
       </div>
-
-      <!-- Mobile Menu Dropdown -->
-      <Transition
-        enter-active-class="transition-all duration-300 ease-in-out"
-        enter-from-class="max-h-0 opacity-0"
-        enter-to-class="max-h-screen opacity-100"
-        leave-active-class="transition-all duration-300 ease-in-out"
-        leave-from-class="max-h-screen opacity-100"
-        leave-to-class="max-h-0 opacity-0"
+      <nav 
+        ref="mobileMenuRef"
+        :class="[
+          'relative border-t border-slate-700 bg-slate-800 overflow-hidden transition-all duration-500 ease-in-out',
+          isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        ]"
+        :style="{ 
+          maxHeight: isMobileMenuOpen ? mobileMenuRef?.scrollHeight + 'px' : '0px',
+          transition: 'max-height 500ms ease-in-out, opacity 500ms ease-in-out'
+        }"
       >
-        <nav 
-          v-show="isMobileMenuOpen" 
-          ref="mobileMenuRef"
-          class="border-t border-slate-700 bg-slate-800 overflow-hidden max-h-[calc(100vh-4rem)] overflow-y-auto"
+        <button
+          v-for="item in filteredMenuItems"
+          :key="item.id"
+          @click="navigateTo(item.id)"
+          :class="[
+            'w-full flex items-center space-x-4 px-6 py-4 transition-all duration-200',
+            activeRoute === item.id
+              ? 'bg-gradient-to-r from-blue-600 to-purple-600 border-l-4 border-white'
+              : 'hover:bg-slate-700 active:bg-slate-600'
+          ]"
         >
-          <button
-            v-for="item in filteredMenuItems"
-            :key="item.id"
-            @click="navigateTo(item.id)"
-            :class="[
-              'w-full flex items-center space-x-4 px-6 py-4 transition-all duration-200',
-              activeRoute === item.id
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 border-l-4 border-white'
-                : 'hover:bg-slate-700 active:bg-slate-600'
-            ]"
-          >
-            <div v-html="item.icon" class="w-5 h-5 flex-shrink-0 flex items-center" />
-            <span class="font-medium">{{ item.label }}</span>
-          </button>
-          
-          <!-- Mobile User Profile -->
-          <div class="border-t border-slate-700 p-4 bg-slate-900">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center font-semibold">
-                {{ currentUser.avatar }}
-              </div>
-              <div>
-                <p class="font-medium text-sm">{{ currentUser.name }}</p>
-                <p class="text-xs text-slate-400 capitalize">{{ currentUser.role }}</p>
-              </div>
+          <div v-html="item.icon" class="w-5 h-5 flex-shrink-0 flex items-center" />
+          <span class="font-medium">{{ item.label }}</span>
+        </button>
+        
+        <div class="border-t border-slate-700 p-4 bg-slate-900">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center font-semibold">
+              {{ currentUser.avatar }}
+            </div>
+            <div>
+              <p class="font-medium text-sm">{{ currentUser.name }}</p>
+              <p class="text-xs text-slate-400 capitalize">{{ currentUser.role }}</p>
             </div>
           </div>
-        </nav>
-      </Transition>
+        </div>
+      </nav>
     </header>
   </div>
 </template>

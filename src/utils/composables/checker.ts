@@ -1,4 +1,4 @@
-import type { Club, Session, UserInfo } from "../types";
+import type { Session, UserInfo } from "../types";
 
 
 export class CheckerComposable  {
@@ -35,7 +35,6 @@ export class CheckerComposable  {
             "lastName",
             "birthDate",
             "phoneNumber",
-            "adress",
             "email",
             "gender",
         ];
@@ -62,6 +61,14 @@ export class CheckerComposable  {
 
     isAtheleteValid(athlete: Partial<UserInfo>): boolean {
         return this.isUserInfoValid(athlete) && this.isUserInfoComplete(athlete) && this.isLeagueIdValid(athlete.id);
+    }
+
+    isCoachValid(coach: Partial<UserInfo>): boolean {
+        return this.isUserInfoValid(coach) && this.isUserInfoComplete(coach) && this.isClubIdValid(coach.id);
+    }
+
+    isClubIdValid(clubId: number | undefined): boolean {
+        return typeof clubId === 'number' && clubId > 0;
     }
 
     isValidClub(club: {name: string}): boolean {

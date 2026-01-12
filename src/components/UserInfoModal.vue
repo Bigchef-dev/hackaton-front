@@ -32,13 +32,13 @@
                                         {{ user?.email }}
                                     </span>
                                 </div>
-                                <div
+                                <!-- <div
                                     class="text-sm text-gray-600 border border-gray-300 rounded-2xl flex items-center gap-2 p-2 w-full">
                                     <span class="text-center flex-1">
                                         {{ user?.adress }}
 
                                     </span>
-                                </div>
+                                </div> -->
                                 <div
                                     class="text-sm text-gray-600 border border-gray-300 rounded-2xl flex items-center gap-2 p-2">
                                     <div>
