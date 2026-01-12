@@ -1,89 +1,23 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import type { Session, Athlete } from '../../utils/types';
 import ListSeanceView from '../sessionList/ListSessionView.vue';
 import Calendar from '../calendar/CalendarContainer.vue';
-import TrainingLoadAnalysis from '../quotas/QuotaView.vue';
+import { AthleteComposable } from '../../utils/composables/athlete';
+import { useAuthStore } from '../../utils/stores/login';
+import { SessionComposable } from '../../utils/composables/session';
 
 interface Props {
   //sessions: Session[];
   //athlete: Athlete;
 }
 
-const sessions: Session[] = [
-  {
-    id: 1,
-    date_session: new Date('2026-01-09T19:00:00'),
-    recurrence: 7,
-    duree: 1.5,
-    coach: 'Jean Entraineur',
-    type: 'ENTRAINEMENT',
-    id_sport: 1,
-    activities: [{ id: 101, theme: 'Échauffement cardio' }, { id: 102, theme: 'Exercices de passes' }]
-  },
-  {
-    id: 2,
-    date_session: new Date('2026-01-14T18:30:00'),
-    recurrence: 0,
-    duree: 2,
-    coach: 'Marc Arbitre',
-    type: 'COMPETITION',
-    id_sport: 1,
-    activities: [{ id: 103, theme: 'Match amical contre l\'équipe B' }]
-  },
-  {
-    id: 3,
-    date_session: new Date('2026-01-15T10:00:00'),
-    recurrence: 7,
-    duree: 1,
-    coach: 'Lucie Coach',
-    type: 'ENTRAINEMENT',
-    id_sport: 2,
-    activities: [{ id: 104, theme: 'Renforcement musculaire' }]
-  },
-  {
-    id: 4,
-    date_session: new Date('2026-01-16T14:00:00'),
-    recurrence: 0,
-    duree: 3, 
-    coach: 'Jean Entraineur',
-    type: 'ENTRAINEMENT',
-    id_sport: 1,
-    activities: [{ id: 105, theme: 'Tactique et stratégie' }, { id: 106, theme: 'Analyse vidéo' }]
-  },
-  {
-    id: 5,
-    date_session: new Date('2026-01-18T15:00:00'),
-    recurrence: 0,
-    duree: 2,
-    type: 'COMPETITION',
-    id_sport: 1,
-    activities: [{ id: 107, theme: 'Finale régionale' }]
-  },
-  {
-    id: 6,
-    date_session: new Date('2026-03-17T09:00:00'),
-    recurrence: 0,
-    duree: 2,
-    type: 'COMPETITION',
-    id_sport: 1,
-    activities: [{ id: 107, theme: 'Finale régionale' }]
-  }
-];
 
-const athlete: Athlete = {
-    id: 42,
-    name: "Alexandre",
-    lastName: "Dubois",
-    birthDate: "1998-05-15",
-    phoneNumber: "0612345678",
-    email: "a.dubois@exemple.fr",
-    gender: "M",
-    type: "ATHLETE",
-    id_league: 12,
-    quota: 8
-};
-
+const store = useAuthStore();
+const athleteComposable = new AthleteComposable();
+const sessionComposable = new SessionComposable();
+const athlete = ref<Athlete | null>(null);
+const sessions = ref<Session[]>([]);
 const props = defineProps<Props>();
 
 type ViewType = 'calendar' | 'list' | 'charge';
@@ -116,8 +50,17 @@ const viewOptions: ViewOption[] = [
 ];
 
 const currentView = ref<ViewType>('list');
+
+onMounted(async () => {
+  if (store.currentUser.id) {
+    athlete.value = await athleteComposable.getAthleteById(store.currentUser.id.toString());
+    sessions.value = await sessionComposable.getSessionsByAthlete(store.currentUser.id);
+  }
+});
+
 const athleteInitials = computed((): string => {
-  return `${athlete.name[0]}${athlete.lastName[0]}`;
+  if (!athlete.value) return '';
+  return `${athlete.value.name[0]}${athlete.value.lastName[0]}`;
 });
 </script>
 
@@ -132,7 +75,7 @@ const athleteInitials = computed((): string => {
           
           <div class="flex-1 min-w-0">
             <h1 class="text-lg sm:text-2xl md:text-3xl font-bold text-white truncate">
-              {{ athlete.name }} {{ athlete.lastName }}
+              {{ athlete?.name }} {{ athlete?.lastName }}
             </h1>
             <p class="text-gray-400 text-xs sm:text-sm md:text-base">Athlète</p>
           </div>
@@ -177,12 +120,13 @@ const athleteInitials = computed((): string => {
           </div>
         </div>
       </div>
-      <div class="w-full">
+
+      <div class="w-full" v-if="athlete">
         <Transition name="slide-fade" mode="out-in">
           <Calendar
             v-if="currentView === 'calendar'"
             :events="sessions"
-            :athlete="athlete"
+            :athlete="athlete!"
             class="w-full"
           />
           <ListSeanceView
@@ -200,8 +144,8 @@ const athleteInitials = computed((): string => {
               <span class="text-3xl sm:text-4xl">📊</span>
             </div>
             <TrainingLoadAnalysis
-              :athlete="athlete"
-              :sessions="sessions"
+              :athlete="athlete.value!"
+              :sessions="sessions.value"
               class="w-full"
             />
           </div>

@@ -11,41 +11,44 @@ export class AthleteComposable {
 
     // =================================== GET ===================================
     async getAllAthletes(): Promise<Athlete[]> {
-        const response = await API.get("athletes");
-        return response;
+        const response = await API.get("users");
+        // Filter for athletes
+        return response.filter((user: any) => user.type === 'ATHLETE');
     }
 
     async getAthleteById(athleteId: string): Promise<Athlete> {
-        const response = await API.get(`athletes/${athleteId}`);
+        const response = await API.get(`users/${athleteId}`);
         return response;
     }
 
-    async getAthleteLeague(athleteId: string): Promise<League> {
-        const response = await API.get(`athletes/${athleteId}/league`);
+    async getAthletesWithoutGroup(): Promise<Athlete[]> {
+        const response = await API.get("users/athletes/without-group");
         return response;
     }
 
     // =================================== PUT ===================================
-    async updateAthlete( athleteId: number, data: Athlete): Promise<Athlete> {
-        if(!this.checker.isAtheleteValid(data as Athlete)) {
-            throw new Error("Invalid athlete data");
-        }
-        const response = await API.put(`athletes/${athleteId}`, data);
+    async setAthleteLeague(athleteId: number, leagueId: number): Promise<Athlete> {
+        const response = await API.put(`users/athlete/${athleteId}/league`, { leagueId });
+        return response;
+    }
+
+    async updateSeuilEntrainement(athleteId: number, seuilEntrainement: number): Promise<Athlete> {
+        const response = await API.put(`users/athlete/${athleteId}/seuil-entrainement`, { seuilEntrainement });
         return response;
     }
 
     // =================================== POST ===================================
-    async createAthlete(data:Athlete): Promise<Athlete> {
-        if(!this.checker.isAtheleteValid(data)) {
+    async createAthlete(data: Omit<Athlete, 'id'>): Promise<Athlete> {
+        if(!this.checker.isAtheleteValid(data as Athlete)) {
             throw new Error("Invalid athlete data");
         }
-        const response = await API.post("athletes", data);
+        const response = await API.post("users/athlete", data);
         return response;
     }
 
     // =================================== DELETE ===================================
     async deleteAthlete(athleteId: number): Promise<void> {
-        const response = await API.delete(`athletes/${athleteId}`);
+        const response = await API.delete(`users/${athleteId}`);
         return response;
     }
 }
