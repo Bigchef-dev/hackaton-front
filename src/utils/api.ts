@@ -77,5 +77,7 @@ export class API {
 
 }
 
-export const apiInstance = new API("http://localhost:3001");
+const defaultBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim() || "/api";
+
+export const apiInstance = new API(defaultBaseUrl);
 
